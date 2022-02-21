@@ -1,2 +1,1 @@
 # Yandex.Lyceum.Cloud
-
