@@ -1,0 +1,21 @@
+.my_header {
+    margin-top: 11px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+.center_div {
+    background: #EEE;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    padding: 4%;
+}
+.sized_div {
+    height: 20em;
+    width: 20em;
+    margin: -7em 0 0 -8em;
+}
+a#index_no_have_account{
+    padding-bottom: 1000px;
+}
