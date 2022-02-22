@@ -12,7 +12,7 @@
     {% for file in files %}
         <div class="alert alert-info">
             <h2>{{ file.name  }}</h2>
-            <button>Скачать</button>
+            <a href="{{ file.path }}" class="btn">Скачать</a>
         </div>
     {% endfor %}
 {% endblock %}
