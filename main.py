@@ -57,6 +57,7 @@ class User(db.Model, UserMixin):
 
 class File(db.Model):
     file_id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, nullable=False)
     name = db.Column(db.String(32), nullable=False)
     path = db.Column(db.String(32+32+16), nullable=False)
 
@@ -80,8 +81,9 @@ def my_render_template(*args, **kwargs):
 
 # SMART PAGES
 @app.route('/account', methods=['POST', 'GET'])
-@login_required
 def account():
+    if current_user.is_anonymous:
+        return redirect('/')
     if request.method == 'POST':
         if request.files:
             try:
