@@ -58,7 +58,7 @@ class User(db.Model, UserMixin):
 class File(db.Model):
     file_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(32), nullable=False)
-    path = db.Column(db.String(64), nullable=False)
+    path = db.Column(db.String(32+32+16), nullable=False)
 
 
 # LOGIN
@@ -73,16 +73,23 @@ def logout():
     logout_user()
     return redirect('/')
 
+
+def my_render_template(*args, **kwargs):
+    return render_template(*args, **kwargs, login=current_user.is_authenticated)
+
+
 # SMART PAGES
 @app.route('/account', methods=['POST', 'GET'])
 @login_required
 def account():
     if request.method == 'POST':
         if request.files:
-            save_file(request.files['File'])
-
+            try:
+                save_file(request.files['File'])
+            except IsADirectoryError:
+                pass
     files = get_files_for(current_user)
-    return render_template('/account.html', files=files)
+    return my_render_template('/account.html', files=files)
 
 
 @app.route('/' + UPLOAD_FOLDER + '/<string:user_login>' + '/<string:filename>')
@@ -92,6 +99,35 @@ def download(user_login: str, filename: str):
         return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], user_login),
                                    filename, as_attachment=True)
     return 'Файл не найден :('
+
+
+def remove_file(user_login, filename):
+    path = os.path.join(user_login, filename)
+    full_path = os.path.join('static', 'files', path)
+    user = User.query.filter_by(name=user_login).one()
+    if full_path not in user.files.split(';'):
+        return
+    File.query.filter_by(path=path).delete()
+    db.session.commit()
+    files = user.files.split(';')
+    print('files:', files)
+    files.remove(full_path)
+    user.files = ';'.join(files)
+    db.session.commit()
+    try:
+        os.remove(full_path)
+    except FileNotFoundError:
+        print(f'Файл {full_path} не существует')
+    print('remove', full_path)
+    print(user.files)
+
+
+@app.route('/remove/' + UPLOAD_FOLDER + '/<string:user_login>' + '/<string:filename>')
+@login_required
+def remove(user_login: str, filename: str):
+    if current_user.name == user_login:
+        remove_file(user_login, filename)
+    return redirect('/account')
 
 
 def get_files_for(user):
@@ -107,22 +143,37 @@ def get_files_for(user):
     return files
 
 
-def is_incorrect_data(name, password):
-    return (name_in_db(name) or len(name) < 4 or not name.isidentifier()
-            or len(password) < 4 or len(name) > 32 or len(password) > 128)
+def check_incorrect_data(name: str, password: str, repeat_password: str) -> str:
+    if len(name) < 4:
+        return 'Логин должен состоять из более чем 4 символов'
+    if len(name) > 32:
+        return 'Максимальный размер логина - 32 символа'
+    if not name.isalnum():
+        return 'Имя не должно содержать спец.символов'
+    if name_in_db(name):
+        return 'Пользователь с таким логином уже существует'
+    if len(password) < 4:
+        return 'Пароль должен состоять из более чем 4 символов'
+    if len(name) > 100:
+        return 'Максимальный размер пароль - 100 символов'
+    if password != repeat_password:
+        return 'Пароли не совпадают'
+    return ''
 
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
+    if current_user.is_authenticated:
+        return redirect('/account')
     if request.method == 'POST':
         print(request.form)
         name = request.form['Login']
         email = request.form['Email']
         password = request.form['Password']
         repeat_password = request.form['RepeatPassword']
-
-        if is_incorrect_data(name, password) or password != repeat_password:
-            return redirect('/register')
+        message = check_incorrect_data(name, password, repeat_password)
+        if message:
+            return render_template('register.html', message=message)
         return add_new_user(name, password, email)
     else:
         return render_template('register.html')
@@ -147,6 +198,8 @@ def add_new_user(name, password, email):
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     message = ''
+    if current_user.is_authenticated:
+        return redirect('/account')
     if request.method == 'POST':
         print(request.form)
         username = request.form.get('Login')
@@ -161,9 +214,34 @@ def login():
     return render_template('login.html', message=message)
 
 
+def index_revert(path: str):
+    for num, i in reversed(tuple(enumerate(path))):
+        if i == '(':
+            print(f'{num=}')
+            return num
+
+
+def is_numbered(path):
+    return path.endswith(')') and '(' in path and path[index_revert(path) + 1:-1].isnumeric()
+
+
+def add_numbered(path):
+    number = 1
+    ext = ''
+    if '.' in path:
+        ext = '.' + path.split('.')[-1]
+        path = '.'.join(path.split('.')[:-1])
+    if is_numbered(path):
+        number = int(path[index_revert(path) + 1:-1]) + 1
+        path = path[:index_revert(path)]
+    return path + f'({number}){ext}'
+
+
 def save_file(file):
     filename = secure_filename(file.filename)
     path = os.path.join(app.config['UPLOAD_FOLDER'], current_user.name, filename)
+    while os.path.isfile(path):
+        path = add_numbered(path)
     file.save(path)
     if current_user.files:
         current_user.files += f'{path};'
@@ -183,37 +261,45 @@ def confirm_login(name, password):
         if key_from_db == key:
             files = File.query.all()
             return render_template('account.html', files=files)
-    return render_template('login_error.html')
+    return render_template('login.html', message='Неверный логин или пароль')
 
 
 def name_in_db(name: str):
-    print(name, 'in', User.query.filter_by(name=name).all())
-    return name in map(lambda x: x.name, User.query.filter_by(name=name).all())
+    return name.lower() in map(lambda x: x.name.lower(), User.query.filter_by(name=name).all())
 
 
 # PAGES
-@app.route('/incorrect_password')
-def incorrect_password():
-    return render_template('login_error.html')
-
-
 @app.route('/success_register')
 def success_register():
-    return render_template('success_register.html')
+    return my_render_template('success_register.html')
 
 
 @app.route('/support')
 def support():
-    return render_template('support.html')
+    return my_render_template('support.html')
 
 
 @app.route('/')
 @app.route('/home')
 def index():
-    print(current_user.is_authenticated)
     if current_user.is_authenticated:
         return redirect('/account')
     return render_template('index.html')
+
+
+@app.route('/premium')
+def premium():
+    return my_render_template('premium.html')
+
+
+@app.route('/about')
+def about():
+    return my_render_template('about.html')
+
+
+@app.route('/politic')
+def politic():
+    return my_render_template('politic.html')
 
 
 if __name__ == "__main__":

@@ -6,9 +6,10 @@
 <div class="container col-xl-10 col-xxl-8 px-4 py-5">
       <div class="col-md-10 mx-auto col-lg-5">
         <form class="p-4 p-md-5 border rounded-3 bg-light" method="post">
+          <p>{{ message }}</p>
           <div class="form-floating mb-3">
             <input type="text" name='Login' class="form-control" id="floatingLogin" placeholder="Login">
-            <label for="floatingLogin">Логин</label>
+            <label for="floatingLogin">Логин<small>*</small></label>
           </div>
           <div class="form-floating mb-3">
             <input type="email" name="Email" class="form-control" id="floatingEmail" placeholder="name@example.com">
@@ -16,15 +17,15 @@
           </div>
           <div class="form-floating mb-3">
             <input type="password" name="Password" class="form-control" id="floatingPassword" placeholder="Password">
-            <label for="floatingPassword">Пароль</label>
+            <label for="floatingPassword">Пароль<small>*</small></label>
           </div>
           <div class="form-floating mb-3">
             <input type="password" name="RepeatPassword" class="form-control" id="floatingPasswordRepeat" placeholder="Password">
-            <label for="floatingPasswordRepeat">Повторите пароль</label>
+            <label for="floatingPasswordRepeat">Повторите пароль<small>*</small></label>
           </div>
           <button class="w-100 btn btn-lg btn-primary" type="submit">Создать аккаунт</button>
           <hr class="my-4">
-          <small class="text-muted">Создав аккаунт, Вы подтверждаете согласие с <a href="#">Политикой сайта</a></small>
+          <small class="text-muted">Создав аккаунт, Вы подтверждаете согласие с <a href="/politic">Политикой сайта</a></small>
         </form>
       </div>
     </div>
