@@ -17,7 +17,7 @@ login_manager = LoginManager(app)
 
 
 # CONFIGURATE
-TEST = False
+TEST = True
 UPLOAD_FOLDER = 'static/files'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -71,7 +71,7 @@ def load_user(user_id):
 @login_required
 def logout():
     logout_user()
-
+    return redirect('/')
 
 # SMART PAGES
 @app.route('/account', methods=['POST', 'GET'])
@@ -210,6 +210,9 @@ def support():
 @app.route('/')
 @app.route('/home')
 def index():
+    print(current_user.is_authenticated)
+    if current_user.is_authenticated:
+        return redirect('/account')
     return render_template('index.html')
 
 
