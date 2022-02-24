@@ -17,7 +17,7 @@ login_manager = LoginManager(app)
 
 
 # CONFIGURATE
-TEST = True
+TEST = False
 UPLOAD_FOLDER = 'static/files'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -313,4 +313,4 @@ if __name__ == "__main__":
     if TEST:
         app.run(debug=True, port=8080)
     else:
-        serve(app, port=8080)
+        serve(app, port=80)
