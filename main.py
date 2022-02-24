@@ -65,7 +65,7 @@ class User(db.Model, UserMixin):
 
 class File(db.Model):
     file_id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.DateTime, nullable=False)
+    # date = db.Column(db.DateTime, nullable=False)  # Пока что не работает
     name = db.Column(db.String(32), nullable=False)
     path = db.Column(db.String(32+32+16), nullable=False)
 
