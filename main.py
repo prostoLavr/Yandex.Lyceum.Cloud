@@ -304,6 +304,11 @@ def politic():
     return my_render_template('politic.html')
 
 
+@app.route('/yandex_baf6d04d550034ad.html')
+def yandex_check():
+    return render_template('/yandex_baf6d04d550034ad.html')
+
+
 if __name__ == "__main__":
     if TEST:
         app.run(debug=True, port=8080)
