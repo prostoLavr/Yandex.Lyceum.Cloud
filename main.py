@@ -11,19 +11,29 @@ import os
 import hashlib
 
 
+
+# Жалкие попытки подключить https
+#from OpenSSL import SSL
+# print(dir(SSL))
+# context = SSL.Context(SSL.SSL3_VERSION)
+# context.use_privatekey_file('hello')
+# context.use_certificate_file('ssl/certificate.crt')
+
+
 # CREATE
 app = Flask(__name__)
 login_manager = LoginManager(app)
 
 
 # CONFIGURATE
-TEST = False
+TEST = True
 UPLOAD_FOLDER = 'static/files'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_LENGTH'] = 256 * 1024 * 1024
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'hello'
+
 
 
 # DATABASE
@@ -311,6 +321,6 @@ def yandex_check():
 
 if __name__ == "__main__":
     if TEST:
-        app.run(debug=True, port=8080)
+        app.run(debug=True, port=8080, ssl_context=context)
     else:
         serve(app, port=80)
