@@ -1,12 +1,11 @@
-import hashlib
-import os
-from waitress import serve
-from werkzeug.utils import secure_filename
-
 # url_for function is used by html pages
 from flask import Flask, render_template, url_for, request, redirect, send_from_directory
 from flask_login import LoginManager, UserMixin, login_required, login_user, current_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
+
+from waitress import serve
+from werkzeug.utils import secure_filename
+
 import os
 import hashlib
 
@@ -33,7 +32,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_LENGTH'] = 256 * 1024 * 1024
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'hello'
-
 
 
 # DATABASE
@@ -321,6 +319,6 @@ def yandex_check():
 
 if __name__ == "__main__":
     if TEST:
-        app.run(debug=True, port=8080, ssl_context=context)
+        app.run(debug=True, port=8080)
     else:
         serve(app, port=80)
