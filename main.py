@@ -319,6 +319,8 @@ def yandex_check():
 
 if __name__ == "__main__":
     if TEST:
-        app.run(debug=True, port=8080)
+        print('RUN TEST')
+        app.run(debug=True, port=80)
     else:
+        print('RUN STABLE')
         serve(app, port=80)
