@@ -25,7 +25,7 @@ login_manager = LoginManager(app)
 
 
 # CONFIGURATE
-TEST = False 
+TEST = True 
 UPLOAD_FOLDER = 'static/files'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
