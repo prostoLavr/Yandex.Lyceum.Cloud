@@ -25,7 +25,7 @@ login_manager = LoginManager(app)
 
 
 # CONFIGURATE
-TEST = False
+TEST = True
 UPLOAD_FOLDER = 'static/files'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -64,9 +64,10 @@ class User(db.Model, UserMixin):
 
 
 class File(db.Model):
-    file_id = db.Column(db.Integer, primary_key=True)
+    #file_id = db.Column(db.Integer, primary_key=True)
     # date = db.Column(db.DateTime, nullable=False)  # Пока что не работает
-    name = db.Column(db.String(32), nullable=False)
+    name = db.Column(db.String(32), primary_key=True, nullable=False)
+    desc = db.Column(db.Text, nullable=False)
     path = db.Column(db.String(32+32+16), nullable=False)
 
 
@@ -93,9 +94,10 @@ def account():
     if current_user.is_anonymous:
         return redirect('/')
     if request.method == 'POST':
+        desc = request.form["desc"]
         if request.files:
             try:
-                save_file(request.files['File'])
+                save_file(request.files['File'], desc)
             except IsADirectoryError:
                 pass
     files = get_files_for(current_user)
@@ -145,11 +147,13 @@ def get_files_for(user):
         return []
 
     class FileObj:
-        def __init__(self, path: str, name: str):
-            self.path, self.name = path, name
+        def __init__(self, path: str, name: str, desc: str):
+            self.path, self.name, self.desc = path, name, desc
     files = []
     for file_path in user.files.split(';')[:-1]:
-        files.append(FileObj(file_path, os.path.split(file_path)[-1]))
+        name = os.path.split(file_path)[-1]
+        print(File.query.get(name))
+        files.append(FileObj(file_path, name, File.query.get(name).desc))
     return files
 
 
@@ -247,7 +251,7 @@ def add_numbered(path):
     return path + f'({number}){ext}'
 
 
-def save_file(file):
+def save_file(file, desc):
     filename = secure_filename(file.filename)
     path = os.path.join(app.config['UPLOAD_FOLDER'], current_user.name, filename)
     while os.path.isfile(path):
@@ -257,8 +261,7 @@ def save_file(file):
         current_user.files += f'{path};'
     else:
         current_user.files = f'{path};'
-    print(current_user.files)
-    db.session.add(File(name=filename, path=path))
+    db.session.add(File(name=filename, path=path, desc=desc))
     db.session.commit()
 
 

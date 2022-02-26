@@ -1,8 +1,11 @@
 import os
+import shutil
 from main import db
 
 
-os.system('rm data.db')
-os.system('rm -rf static/files')
-os.system('mkdir static/files')
+if os.path.exists('data.db'):
+    os.remove('data.db')
+if os.path.exists('static/files'):
+    shutil.rmtree('static/files')
+os.mkdir('static/files')
 db.create_all()
