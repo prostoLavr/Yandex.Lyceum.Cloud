@@ -38,8 +38,8 @@
                     <a type="button" href="/remove/{{ file.path }}" class="btn btn-sm btn-outline-secondary">Удалить</a>
                     <a type="button" href="{{ file.path }}" class="btn btn-sm btn-outline-secondary">Скачать</a>
                   </div>
-                  <small class="text-muted">{{file.desc}}</small>
-                  <small class="text-muted">Дата</small>
+                  <small class="text-muted">{{ file.desc }}</small>
+                  <small class="text-muted">{{ file.date.date() }}</small>
                 </div>
               </div>
             </div>

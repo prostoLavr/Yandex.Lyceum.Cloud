@@ -8,6 +8,7 @@ from werkzeug.utils import secure_filename
 
 import os
 import hashlib
+from datetime import datetime
 
 
 
@@ -64,11 +65,11 @@ class User(db.Model, UserMixin):
 
 
 class File(db.Model):
-    #file_id = db.Column(db.Integer, primary_key=True)
-    # date = db.Column(db.DateTime, nullable=False)  # Пока что не работает
+    # file_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(32), primary_key=True, nullable=False)
     desc = db.Column(db.Text, nullable=False)
     path = db.Column(db.String(32+32+16), nullable=False)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
 
 
 # LOGIN
@@ -146,13 +147,14 @@ def get_files_for(user):
         return []
 
     class FileObj:
-        def __init__(self, path: str, name: str, desc: str):
+        def __init__(self, path: str, name: str, desc: str, date):
             self.path, self.name, self.desc = path, name, desc
+            self.date = date
     files = []
     for file_path in user.files.split(';')[:-1]:
         name = os.path.split(file_path)[-1]
-        print(File.query.get(name))
-        files.append(FileObj(file_path, name, File.query.get(name).desc))
+        f = File.query.get(name)
+        files.append(FileObj(file_path, name, f.desc, f.date))
     return files
 
 
