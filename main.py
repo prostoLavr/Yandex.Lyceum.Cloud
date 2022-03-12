@@ -113,12 +113,11 @@ def download(user_login: str, filename: str):
 
 
 def remove_file(user_login, filename):
-    path = os.path.join(user_login, filename)
-    full_path = os.path.join('static', 'files', path)
+    full_path = os.path.join(app.config['UPLOAD_FOLDER'], user_login, filename)
     user = User.query.filter_by(name=user_login).one()
     if full_path not in user.files.split(';'):
         return
-    File.query.filter_by(path=path).delete()
+    File.query.filter_by(path=full_path).delete()
     db.session.commit()
     files = user.files.split(';')
     print('files:', files)
@@ -129,8 +128,8 @@ def remove_file(user_login, filename):
         os.remove(full_path)
     except FileNotFoundError:
         print(f'Файл {full_path} не существует')
-    print('remove', full_path)
-    print(user.files)
+    #print('remove', full_path)
+    #print(user.files)
 
 
 @app.route('/remove/' + UPLOAD_FOLDER + '/<string:user_login>' + '/<string:filename>')
