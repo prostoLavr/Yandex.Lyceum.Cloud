@@ -1,6 +1,7 @@
-from app import app, db, UPLOAD_FOLDER
+from app1 import db, UPLOAD_FOLDER
+import app
 from flask_login import login_required, login_user, current_user, logout_user
-from flask import render_template, url_for, request, redirect, send_from_directory
+from flask import render_template, request, redirect, send_from_directory
 
 import os
 

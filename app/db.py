@@ -1,4 +1,5 @@
-from app import app, UPLOAD_FOLDER, login_manager
+from app1 import UPLOAD_FOLDER, login_manager
+import app
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import current_user, UserMixin
 from werkzeug.utils import secure_filename
@@ -37,7 +38,7 @@ def add_new_user(name, password, email):
         print(e)
         return False
     else:
-        os.mkdir(os.path.join('app', 'static', 'files', user.name))
+        os.mkdir(os.path.join('app1', 'static', 'files', user.name))
         return True
 
 
@@ -47,7 +48,7 @@ def save_file(file, desc):
     while os.path.isfile(path):
         path = add_numbered(path)
     os.system('pwd')
-    file.save(os.path.join('app', path))
+    file.save(os.path.join('app1', path))
     if current_user.files:
         current_user.files += f'{path};'
     else:
