@@ -12,4 +12,4 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'hello'
 
 
-from app1 import views
+from app import views
