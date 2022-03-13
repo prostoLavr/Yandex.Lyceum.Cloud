@@ -1,6 +1,9 @@
 # Yandex.Lyceum.Cloud
+
 install:
-* pip install uwsgi
+* uwsgi 
+* uwsgi-plugin-python3 
 
 run: 
+* cd Yandex.Lyceum.Cloud
 * uwsgi --ini ./uwsgi.ini
