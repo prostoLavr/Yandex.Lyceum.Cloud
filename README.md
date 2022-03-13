@@ -1,9 +1,12 @@
 # Yandex.Lyceum.Cloud
 
-install:
-* uwsgi 
-* uwsgi-plugin-python3 
+Installing:
+* packeges:
+  * uwsgi 
+  * uwsgi-plugin-python3 or uwsgi-plugin-python
+* edit uwsgi.ini: <br> if you have uwsgi-plugin-python3 <br>then use "plugins=python3" <br>else use "plugins=python"
 
-run: 
-* cd Yandex.Lyceum.Cloud
-* uwsgi --ini ./uwsgi.ini
+
+Running: 
+*     cd /path/to/Yandex.Lyceum.Cloud
+*      uwsgi --ini ./uwsgi.ini
