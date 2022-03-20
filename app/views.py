@@ -9,7 +9,15 @@ def my_render_template(*args, **kwargs):
     return render_template(*args, **kwargs, login=current_user.is_authenticated)
 
 
+
 # SMART PAGES
+@app.route('/messenger')
+@login_required
+def messenger():
+    user_friends = db.get_friends_for_user(current_user)
+    return my_render_template('messenger.html', users=user_friends)
+
+
 @app.route('/logout/')
 @login_required
 def logout():

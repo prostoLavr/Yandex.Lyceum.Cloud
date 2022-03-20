@@ -25,6 +25,11 @@ def login_user(name, password):
     return None
 
 
+def get_friends_for_user(user):
+    # need to add friends system
+    return User.query.all()
+
+
 def add_new_user(name, password, email):
     user = User(name=name, password=b'', email=email, salt=b'')
     user.set_password(password)
