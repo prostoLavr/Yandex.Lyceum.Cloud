@@ -1,6 +1,6 @@
 import os
 import shutil
-from app.db import db_obj
+from app.db_manager import db_obj
 
 files_path = '../app/static/files'
 if os.path.exists('data.db'):

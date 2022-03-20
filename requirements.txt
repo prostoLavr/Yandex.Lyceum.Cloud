@@ -5,3 +5,5 @@ flask_sqlalchemy
 Werkzeug~=2.0.3
 
 uwsgi
+SQLAlchemy==1.4.32
+waitress~=2.1.1

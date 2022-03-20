@@ -2,8 +2,13 @@ from flask import Flask
 
 from flask_login import LoginManager
 
+
+from .data import db_session
+
+
 app = Flask(__name__)
 login_manager = LoginManager(app)
+db_session.global_init("app/db/data.db")
 UPLOAD_FOLDER = 'static/files'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../sqlite/data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

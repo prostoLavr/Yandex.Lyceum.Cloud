@@ -1,4 +1,7 @@
-from app import app, db, UPLOAD_FOLDER
+from . import app, UPLOAD_FOLDER
+from .data.users import User
+from .data.files import File
+
 from flask_login import login_required, login_user, current_user, logout_user
 from flask import render_template, url_for, request, redirect, send_from_directory
 
@@ -59,7 +62,7 @@ def register():
         email = request.form['Email']
         password = request.form['Password']
         repeat_password = request.form['RepeatPassword']
-        message = db.check_incorrect_data(name, password, repeat_password)
+        message = check_incorrect_data(name, password, repeat_password)
         if message:
             return render_template('register.html', message=message)
         is_success = db.add_new_user(name, password, email)
@@ -101,6 +104,10 @@ def support():
 
 
 @app.route('/')
+def root():
+    return '<h1>Hello, World!</h1>'
+
+
 @app.route('/home')
 def index():
     if current_user.is_authenticated:
