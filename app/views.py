@@ -1,6 +1,4 @@
-from . import app, UPLOAD_FOLDER
-from .data.users import User
-from .data.files import File
+from . import app, UPLOAD_FOLDER, db_manager
 
 from flask_login import login_required, login_user, current_user, logout_user
 from flask import render_template, url_for, request, redirect, send_from_directory
@@ -24,14 +22,8 @@ def logout():
 def account():
     if not current_user.is_authenticated:
         return redirect('/')
-    if request.method == 'POST':
-        desc = request.form["desc"]
-        if request.files:
-            try:
-                db.save_file(request.files['File'], desc)
-            except IsADirectoryError:
-                pass
-    files = db.get_files_for(current_user)
+    db_manager.save_file(request)
+    files = db_manager.get_files_for(current_user)
     return my_render_template('/account.html', files=files)
 
 
@@ -39,7 +31,7 @@ def account():
 @login_required
 def remove(user_login: str, filename: str):
     if current_user.name == user_login:
-        db.remove_file(user_login, filename)
+        db_manager.remove_file(user_login, filename)
     return redirect('/account')
 
 
@@ -57,19 +49,11 @@ def register():
     if current_user.is_authenticated:
         return redirect('/account')
     if request.method == 'POST':
-        print(request.form)
-        name = request.form['Login']
-        email = request.form['Email']
-        password = request.form['Password']
-        repeat_password = request.form['RepeatPassword']
-        message = check_incorrect_data(name, password, repeat_password)
-        if message:
-            return render_template('register.html', message=message)
-        is_success = db.add_new_user(name, password, email)
-        if is_success:
-            return redirect('/success_register')
+        error_message = db_manager.add_new_user(request.form)
+        if error_message:
+            return render_template('register.html', message=error_message)
         else:
-            return render_template('register.html', message="Не удалось создать аккаунт. Повторите попытку позже")
+            return my_render_template('success_register.html')
     else:
         return render_template('register.html')
 
@@ -83,7 +67,7 @@ def login():
         print(request.form)
         username = request.form.get('Login')
         password = request.form.get('Password')
-        user = db.login_user(username, password)
+        user = db_manager.login_user(username, password)
         if user is not None:
             login_user(user)
             return redirect('/account')
@@ -92,23 +76,12 @@ def login():
     return render_template('login.html', message=message)
 
 
-# PAGES
-@app.route('/success_register')
-def success_register():
-    return my_render_template('success_register.html')
-
-
 @app.route('/support')
 def support():
     return my_render_template('support.html')
 
 
 @app.route('/')
-def root():
-    return '<h1>Hello, World!</h1>'
-
-
-@app.route('/home')
 def index():
     if current_user.is_authenticated:
         return redirect('/account')

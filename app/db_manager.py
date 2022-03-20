@@ -1,11 +1,14 @@
+import datetime
+
 from . import UPLOAD_FOLDER, login_manager, db_session
 from flask_login import current_user
 from werkzeug.utils import secure_filename
-from data.users import User
-from data.files import File
+from .data.users import User
+from .data.files import File
 
 import hashlib
 import os
+import uuid
 
 
 @login_manager.user_loader
@@ -15,7 +18,8 @@ def load_user(user_id):
 
 
 def login_user(name, password):
-    user = User.query.filter_by(name=name).first()
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter_by(name=name).first()
     if user is not None:
         key_from_db, salt = user.password, user.salt
         key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000, dklen=128)
@@ -24,9 +28,17 @@ def login_user(name, password):
     return None
 
 
-def add_new_user(name, password, email):
-    user = User(name=name, password=b'', email=email, salt=b'')
-    user.set_password(password)
+def add_new_user(form: dict) -> str:
+    name = form['Login']
+    email = form['Email']
+    password = form['Password']
+    repeat_password = form['RepeatPassword']
+
+    error_message = check_incorrect_data(name, password, repeat_password)
+    if error_message:
+        return error_message
+
+    user = User(name=name, password=b'', email=email, salt=b'').with_password(password)
     try:
         db_sess = db_session.create_session()
         db_sess.add(user)
@@ -35,70 +47,63 @@ def add_new_user(name, password, email):
         print('ERROR ADD REGISTERED USER TO DB')
         print(e.__class__.__name__)
         print(e)
-        return False
-    else:
-        os.mkdir(os.path.join('app', 'static', 'files', user.name))
-        return True
+        return 'Не удалось создать аккаунт. Повторите попытку позднее'
+    return ''
 
 
-def save_file(file, desc):
+def save_file(request):
+    if request.method != 'POST':
+        return
+    file = request.files['File']
+    desc = request.form["desc"]
+
+    path = UPLOAD_FOLDER
+    while os.path.exists(path):
+        path = os.path.join(UPLOAD_FOLDER, uuid.uuid4().hex)
+
     filename = secure_filename(file.filename)
-    path = os.path.join(UPLOAD_FOLDER, current_user.name, filename)
-    while os.path.isfile(path):
-        path = add_numbered(path)
-    file.save(os.path.join('app', path))
-    if current_user.files:
-        current_user.files += f'{path};'
-    else:
-        current_user.files = f'{path};'
+    while os.path.isfile(filename):
+        filename = add_numbered(filename)
 
-
-
-    file = File(name=filename, path=path, desc=desc)
+    file.save(path)
+    file = File(name=filename, path=path, desc=desc, date=datetime.date.today())
+    print(file)
     db_sess = db_session.create_session()
+    current_user.add_file(file.id)
     db_sess.add(file)
     db_sess.commit()
 
 
-def remove_file(user_login, filename):
-    path = os.path.join(user_login, filename)
-    full_path = os.path.join('static', 'files', path)
-    user = User.query.filter_by(name=user_login).one()
-    if full_path not in user.files.split(';'):
+def remove_file(user, file_id):
+    if file_id not in user.get_files():
         return
-    File.query.filter_by(path=path).delete()
-    db_obj.session.commit()
-    files = user.files.split(';')
-    print('files:', files)
-    files.remove(full_path)
-    user.files = ';'.join(files)
-    db_obj.session.commit()
+    db_sess = db_session.create_session()
+    file = db_sess.query(File).filter_by(id=file_id).first()
     try:
-        os.remove(full_path)
+        os.remove(file.path)
     except FileNotFoundError:
-        print(f'Файл {full_path} не существует')
-    print('remove', full_path)
-    print(user.files)
+        print(f'Файл {file.path} не существует')
+    db_sess.delete(file)
+    user.remove_file(file.id)
+    db_sess.commit()
 
 
 def get_files_for(user):
     if not user.files:
         return []
-
-    class FileObj:
-        def __init__(self, path: str, name: str, desc: str):
-            self.path, self.name, self.desc = path, name, desc
-
+    db_sess = db_session.create_session()
     files = []
-    for file_path in user.files.split(';')[:-1]:
-        name = os.path.split(file_path)[-1]
-        print(File.query.get(name))
-        files.append(FileObj(file_path, name, File.query.get(name).desc))
+    print('files:', user.get_files())
+    for file_id in user.get_files():
+        file = db_sess.query(File).filter_by(id=file_id).first()
+        if file is not None:
+            files.append(file)
     return files
 
 
 def name_in_db(name: str):
-    return name.lower() in map(lambda x: x.name.lower(), User.query.filter_by(name=name).all())
+    db_sess = db_session.create_session()
+    return name.lower() in map(lambda x: x.name.lower(), db_sess.query(User).all())
 
 
 def check_incorrect_data(name: str, password: str, repeat_password: str) -> str:
@@ -113,7 +118,7 @@ def check_incorrect_data(name: str, password: str, repeat_password: str) -> str:
     if len(password) < 4:
         return 'Пароль должен состоять из более чем 4 символов'
     if len(name) > 100:
-        return 'Максимальный размер пароль - 100 символов'
+        return 'Максимальный размер пароля - 100 символов'
     if password != repeat_password:
         return 'Пароли не совпадают'
     return ''
