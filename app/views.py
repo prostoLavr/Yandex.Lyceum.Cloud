@@ -18,6 +18,14 @@ def messenger():
     return my_render_template('messenger.html', users=user_friends)
 
 
+@app.route('/messenger/<user_id>')
+@login_required
+def chat(user_id):
+    messages = db.get_messages_for_users(current_user.id, user_id)
+    user_friend = db.load_user(user_id)
+    return my_render_template('chat.html', messages=messages, friend=user_friend)
+
+
 @app.route('/logout/')
 @login_required
 def logout():

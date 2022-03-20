@@ -2,6 +2,7 @@ from app import app, UPLOAD_FOLDER, login_manager
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import current_user, UserMixin
 from werkzeug.utils import secure_filename
+from datetime import datetime
 
 import hashlib
 import os
@@ -27,7 +28,7 @@ def login_user(name, password):
 
 def get_friends_for_user(user):
     # need to add friends system
-    return User.query.all()
+    return db_obj.session.query(User).all()
 
 
 def add_new_user(name, password, email):
@@ -92,6 +93,29 @@ class File(db_obj.Model):
     name = db_obj.Column(db_obj.String(32), primary_key=True, nullable=False)
     desc = db_obj.Column(db_obj.Text, nullable=False)
     path = db_obj.Column(db_obj.String(32 + 32 + 16), nullable=False)
+
+
+class Message(db_obj.Model):
+    file_id = db_obj.Column(db_obj.Integer, primary_key=True)
+    sent_date = db_obj.Column(db_obj.DateTime, default=datetime.utcnow)
+    text = db_obj.Column(db_obj.Text, nullable=False)
+    sender_id = db_obj.Column(db_obj.Integer, db_obj.ForeignKey('users.id'))
+    receiver_id = db_obj.Column(db_obj.Integer, db_obj.ForeignKey('users.id'))
+
+
+def get_messages_for_users(user1_id, user2_id):
+    messages1 = db_obj.session.query(Message).filter(Message.sender_id == user1_id,
+                                                    Message.receiver_id == user2_id)
+    messages2 = db_obj.session.query(Message).filter(Message.sender_id == user2_id,
+                                                    Message.receiver_id == user1_id)
+    messages = []
+    for i in messages1:
+        messages.append(i)
+    for i in messages2:
+        messages.append(i)
+    messages = sorted(messages, key=lambda m: m.sent_date)
+    return messages
+
 
 
 def remove_file(user_login, filename):
