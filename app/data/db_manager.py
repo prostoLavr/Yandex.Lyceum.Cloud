@@ -7,6 +7,7 @@ import transliterate
 from .users import User
 from .files import File
 from .messages import Message
+from . import config
 
 import hashlib
 import os
@@ -83,7 +84,7 @@ def save_file(request):
         filename = transliterate.translit(filename, reversed=True)
     filename = secure_filename(filename)
 
-    file.save(os.path.join('app', '../static', 'files', path))
+    file.save(os.path.join(config.files_path, path))
     file = File(name=filename, path=path, desc=desc, date=datetime.date.today())
     db_sess = db_session.create_session()
     db_sess.add(file)
@@ -98,7 +99,7 @@ def remove_file(user, file_id):
     db_sess = db_session.create_session()
     file = db_sess.query(File).filter_by(id=file_id).first()
     try:
-        os.remove(file.path)
+        os.remove(os.path.join(config.files_path, file.path))
     except FileNotFoundError:
         print(f'Файл {file.path} не существует')
     db_sess.delete(file)
@@ -113,8 +114,8 @@ def download_file(user, file_id):
         return
     db_sess = db_session.create_session()
     file = db_sess.query(File).filter_by(id=file_id).first()
-    print('download', os.path.join('app', '../static', 'files', file.path))
-    return send_from_directory(directory='app/static/files', path=file.path, as_attachment=True)
+    print('download', os.path.join(config.files_path, file.path))
+    return send_from_directory(directory=os.path.join(config.files_path, file.path), path=file.path, as_attachment=True)
 
 
 def get_files_for(user):
