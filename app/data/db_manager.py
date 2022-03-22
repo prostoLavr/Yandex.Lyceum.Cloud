@@ -121,8 +121,8 @@ def get_files_for(user):
     if not user.files:
         return []
     db_sess = db_session.create_session()
-    print('user have', db_sess.query(File).filter(File.id in user.get_files()).all())
-    return db_sess.query(File).filter(File.id in user.get_files()).all()
+    print('user have', db_sess.query(File).filter(File.id.in_(user.get_files())).all())
+    return db_sess.query(File).filter(File.id.in_(user.get_files())).all()
 
 
 def name_in_db(name: str):
