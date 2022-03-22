@@ -15,13 +15,16 @@
           <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
             <a class="me-3 py-2 text-dark text-decoration-none" href="/premium">Премиум</a>
             <a class="me-3 py-2 text-dark text-decoration-none" href="/support">Поддержка</a>
+            <a class="me-3 py-2 text-dark text-decoration-none" href="/about">Мы</a>
             {% if login %}
-            <a class="me-3 py-2 text-dark text-decoration-none" href="/messenger">Меседжер </a>
-            <a class="me-3 py-2 text-dark text-decoration-none" href="/about">О нас</a>
-            <a class="py-2 text-dark text-decoration-none" href="/logout">Выйти</a>
+              <a class="me-3 py-2 text-dark text-decoration-none" href="/account">Хранилище</a>
+              <a class="me-3 py-2 text-dark text-decoration-none" href="/messenger">Меседжер</a>
+              <a class="py-2 text-dark text-decoration-none" href="/logout">Выйти</a>
             {% else %}
-            <a class="py-2 text-dark text-decoration-none" href="/about">О нас</a>
+              <a class="me-3 py-2 text-dark text-decoration-none" href="/login">Войти</a>
+              <a class="py-2 text-dark text-decoration-none" href="/register">Регистрация</a>
             {% endif %}
+
           </nav>
         </div>
         {% block body %}{% endblock %}
