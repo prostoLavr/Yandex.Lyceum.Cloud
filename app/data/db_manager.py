@@ -7,6 +7,7 @@ import transliterate
 from .users import User
 from .files import File
 from .messages import Message
+from . import config
 
 import hashlib
 import os
@@ -83,7 +84,7 @@ def save_file(request):
         filename = transliterate.translit(filename, reversed=True)
     filename = secure_filename(filename)
 
-    file.save(os.path.join('app', '../static', 'files', path))
+    file.save(os.path.join(config.files_path, path))
     file = File(name=filename, path=path, desc=desc, date=datetime.date.today())
     db_sess = db_session.create_session()
     db_sess.add(file)
