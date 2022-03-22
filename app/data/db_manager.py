@@ -30,6 +30,13 @@ def get_messages_for_users(user1_id, user2_id):
     return messages
 
 
+def add_message(m, id1, id2):
+    db_sess = db_session.create_session()
+    mes = Message(text=m, sender_id=id2, receiver_id=id1)
+    db_sess.add(mes)
+    db_sess.commit()
+
+
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()

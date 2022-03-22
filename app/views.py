@@ -87,9 +87,12 @@ def messenger():
     return my_render_template('messenger.html', users=user_friends)
 
 
-@app.route('/messenger/<user_id>')
+@app.route('/messenger/<user_id>', methods=['POST', 'GET'])
 @login_required
 def chat(user_id):
+    if request.method == 'POST':
+        message = request.form['message']
+        db_manager.add_message(message, user_id, current_user.id)
     messages = db_manager.get_messages_for_users(current_user.id, user_id)
     user_friend = db_manager.load_user(user_id)
     return my_render_template('chat.html', messages=messages, friend=user_friend)
