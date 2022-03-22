@@ -83,7 +83,7 @@ def login():
 @app.route('/messenger')
 @login_required
 def messenger():
-    user_friends = db_manager.get_fr(current_user.id, )
+    user_friends = db_manager.get_friends(current_user.id, )
     return my_render_template('messenger.html', users=user_friends)
 
 

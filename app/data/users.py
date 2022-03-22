@@ -29,8 +29,6 @@ class User(SqlAlchemyBase, UserMixin):
         return self
 
     def get_files(self):
-        if not self.files:
-            return []
         return self.files[:-1].split(';')
 
     def get_given_files(self):
