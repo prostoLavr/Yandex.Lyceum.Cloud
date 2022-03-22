@@ -99,7 +99,7 @@ def remove_file(user, file_id):
     db_sess = db_session.create_session()
     file = db_sess.query(File).filter_by(id=file_id).first()
     try:
-        os.remove(file.path)
+        os.remove(os.path.join(config.files_path, file.path))
     except FileNotFoundError:
         print(f'Файл {file.path} не существует')
     db_sess.delete(file)
@@ -114,8 +114,8 @@ def download_file(user, file_id):
         return
     db_sess = db_session.create_session()
     file = db_sess.query(File).filter_by(id=file_id).first()
-    print('download', os.path.join('app', '../static', 'files', file.path))
-    return send_from_directory(directory='app/static/files', path=file.path, as_attachment=True)
+    print('download', os.path.join(config.files_path, file.path))
+    return send_from_directory(directory=os.path.join(config.files_path, file.path), path=file.path, as_attachment=True)
 
 
 def get_files_for(user):
