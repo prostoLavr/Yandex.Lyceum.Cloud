@@ -1,6 +1,6 @@
 from app import login_manager, db_session
 from flask_login import current_user
-from flask import send_from_directory
+from flask import send_file
 from werkzeug.utils import secure_filename
 import transliterate
 
@@ -107,15 +107,14 @@ def remove_file(user, file_id):
     db_sess.commit()
 
 
-def download_file(user, file_id):
-    print('users files:', user.get_files() + user.get_given_files())
-    print('file_id', file_id)
-    if str(file_id) not in user.get_files() and file_id not in user.get_given_files():
-        return
+def download_file(user, file_path):
     db_sess = db_session.create_session()
-    file = db_sess.query(File).filter_by(id=file_id).first()
-    print('download', os.path.join(config.files_path, file.path))
-    return send_from_directory(directory=os.path.join(config.files_path, file.path), path=file.path, as_attachment=True)
+    file = db_sess.query(File).filter_by(path=file_path).first()
+    if not (file.id in user.get_files() + user.get_given_files()):
+        return ''
+    full_file_path = os.path.join(config.shorts_files_path, file.path)
+    print('download', full_file_path)
+    return send_file(full_file_path, download_name=file.name, as_attachment=True)
 
 
 def get_files_for(user):
