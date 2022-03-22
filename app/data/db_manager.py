@@ -93,11 +93,12 @@ def save_file(request):
     db_sess.commit()
 
 
-def remove_file(user, file_id):
-    if file_id not in user.get_files():
-        return
+def remove_file(user, file_path):
     db_sess = db_session.create_session()
-    file = db_sess.query(File).filter_by(id=file_id).first()
+    print(file_path)
+    file = db_sess.query(File).filter_by(path=file_path).first()
+    if file.id not in user.get_files():
+        return
     try:
         os.remove(os.path.join(config.files_path, file.path))
     except FileNotFoundError:

@@ -32,9 +32,7 @@ class User(SqlAlchemyBase, UserMixin):
         return [int(i) for i in self.files[:-1].split(';')]
 
     def get_given_files(self):
-        if not self.given_files:
-            return []
-        return self.given_files[:-1].split(';')
+        return [int(i) for i in self.files[:-1].split(';')]
 
     def add_file(self, file_id):
         self.files += (str(file_id) + ';')
@@ -43,14 +41,14 @@ class User(SqlAlchemyBase, UserMixin):
         self.given_files += (str(file_id) + ';')
 
     def remove_file(self, file_id):
-        files = self.get_files()
+        files = self.files[:-1].split(';')
         files.remove(str(file_id))
-        ';'.join(files) + ';'
+        self.files = ';'.join(files) + ';'
 
     def remove_given_file(self, file_id):
-        given_files = self.get_given_files()
+        given_files = self.given_files[:-1].split(';')
         given_files.remove(str(file_id))
-        ';'.join(given_files) + ';'
+        self.given_files = ';'.join(given_files) + ';'
 
     def __repr__(self):
         return f'<User {self.id}>'
