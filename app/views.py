@@ -1,7 +1,8 @@
-from . import app, db_manager
+from . import app
+from .data import db_manager
 
 from flask_login import login_required, login_user, current_user, logout_user
-from flask import render_template, url_for, request, redirect
+from flask import render_template, request, redirect
 
 
 def my_render_template(*args, **kwargs):

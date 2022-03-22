@@ -1,12 +1,12 @@
-from . import login_manager, db_session
+from app import login_manager, db_session
 from flask_login import current_user
 from flask import send_from_directory
 from werkzeug.utils import secure_filename
 import transliterate
 
-from .data.users import User
-from .data.files import File
-from .data.messages import Message
+from .users import User
+from .files import File
+from .messages import Message
 
 import hashlib
 import os
@@ -23,15 +23,9 @@ def get_friends_for_user(user):
 
 def get_messages_for_users(user1_id, user2_id):
     db_sess = db_session.create_session()
-    messages1 = db_sess.query(Message).filter(Message.sender_id == user1_id,
-                                              Message.receiver_id == user2_id)
-    messages2 = db_sess.query(Message).filter(Message.sender_id == user2_id,
-                                              Message.receiver_id == user1_id)
-    messages = []
-    for i in messages1:
-        messages.append(i)
-    for i in messages2:
-        messages.append(i)
+    messages1 = db_sess.query(Message).filter_by(sender_id=user1_id, receiver_id=user2_id).all()
+    messages2 = db_sess.query(Message).filter_by(sender_id=user2_id, receiver_id=user1_id).all()
+    messages = messages1 + messages2
     messages = sorted(messages, key=lambda m: m.sent_date)
     return messages
 
@@ -89,7 +83,7 @@ def save_file(request):
         filename = transliterate.translit(filename, reversed=True)
     filename = secure_filename(filename)
 
-    file.save(os.path.join('app', 'static', 'files', path))
+    file.save(os.path.join('app', '../static', 'files', path))
     file = File(name=filename, path=path, desc=desc, date=datetime.date.today())
     db_sess = db_session.create_session()
     db_sess.add(file)
@@ -119,7 +113,7 @@ def download_file(user, file_id):
         return
     db_sess = db_session.create_session()
     file = db_sess.query(File).filter_by(id=file_id).first()
-    print('download', os.path.join('app', 'static', 'files', file.path))
+    print('download', os.path.join('app', '../static', 'files', file.path))
     return send_from_directory(directory='app/static/files', path=file.path, as_attachment=True)
 
 
