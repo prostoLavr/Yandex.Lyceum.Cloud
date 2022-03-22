@@ -112,7 +112,7 @@ def download_file(user, file_id):
         return
     db_sess = db_session.create_session()
     file = db_sess.query(File).filter_by(id=file_id).first()
-    print('download', os.path.join('app/static/files', file.path))
+    print('download', os.path.join('app', 'static', 'files', file.path))
     return send_from_directory(directory='app/static/files', path=file.path, as_attachment=True)
 
 

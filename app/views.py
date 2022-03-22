@@ -79,6 +79,21 @@ def login():
     return render_template('login.html', message=message)
 
 
+@app.route('/messenger')
+@login_required
+def messenger():
+    user_friends = db_manager.get_fr(current_user.id, )
+    return my_render_template('messenger.html', users=user_friends)
+
+
+@app.route('/messenger/<user_id>')
+@login_required
+def chat(user_id):
+    messages = db_manager.get_messages_for_users(current_user.id, user_id)
+    user_friend = db_manager.load_user(user_id)
+    return my_render_template('chat.html', messages=messages, friend=user_friend)
+
+
 @app.route('/support')
 def support():
     return my_render_template('support.html')

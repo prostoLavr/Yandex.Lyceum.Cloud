@@ -4,6 +4,7 @@ from datetime import datetime
 
 
 class Message(SqlAlchemyBase):
+    __tablename__ = 'massages'
     file_id = sa.Column(sa.Integer, primary_key=True)
     sent_date = sa.Column(sa.DateTime, default=datetime.utcnow)
     text = sa.Column(sa.Text, nullable=False)
