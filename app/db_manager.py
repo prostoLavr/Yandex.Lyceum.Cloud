@@ -14,6 +14,13 @@ import uuid
 import datetime
 
 
+
+def get_friends_for_user(user):
+    # need to add friends system
+    db_sess = db_session.create_session()
+    return db_sess.query(User).all()
+
+
 def get_messages_for_users(user1_id, user2_id):
     db_sess = db_session.create_session()
     messages1 = db_sess.query(Message).filter(Message.sender_id == user1_id,

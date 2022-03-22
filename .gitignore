@@ -1,7 +1,6 @@
 .idea/
 *.db
 __pycache__/
-files/
+app/static/files
 ssl/
 certificate/
-
