@@ -14,7 +14,6 @@ import uuid
 import datetime
 
 
-
 def get_friends_for_user(user):
     # need to add friends system
     db_sess = db_session.create_session()
@@ -57,7 +56,8 @@ def add_new_user(form: dict) -> str:
     if error_message:
         return error_message
 
-    user = User(name=name, password=b'', email=email, salt=b'').with_password(password)
+    user = User().with_password(password)
+    user.name, user.email = name, email
     try:
         db_sess = db_session.create_session()
         db_sess.add(user)
