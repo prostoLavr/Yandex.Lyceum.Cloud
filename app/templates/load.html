@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}
+Яндекс.Лицей.Облако
+{% endblock %}
+{% block body %}
+  <form method=post enctype=multipart/form-data>
+    <p><input id="file-input" hidden type=file name=File>
+  <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">Загрузка файла</h1>
+        <p class="lead text-muted"><b>Описание файла</b><br>
+          <textarea name="desc" id="desc" class="form-control"></textarea><br>
+        </p>
+        <p>
+          <label for="file-input" class="btn btn-secondary my-2">Выберите файл</label>
+          <input class="btn btn-primary my-2" type=submit value=Загрузить>
+        </p>
+      </div>
+    </div>
+  </section>
+  </form>
+{% endblock %}

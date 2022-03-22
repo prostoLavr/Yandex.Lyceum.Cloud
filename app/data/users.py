@@ -13,7 +13,7 @@ class User(SqlAlchemyBase, UserMixin):
     email = sa.Column(sa.String)
     salt = sa.Column(sa.LargeBinary, nullable=False)
     password = sa.Column(sa.LargeBinary, nullable=False)
-    files = sa.Column(sa.Text)  # User's files
+    files = sa.Column(sa.Text, nullable=False, default='')  # User's files
     given_files = sa.Column(sa.Text)  # Files that was given by other users
 
     def check_password(self, password):
@@ -32,16 +32,17 @@ class User(SqlAlchemyBase, UserMixin):
         return self.files[:-1].split(';')
 
     def get_given_files(self):
+        if not self.given_files:
+            return []
         return self.given_files[:-1].split(';')
 
     def add_file(self, file_id):
-        if self.files:
-            self.files += (str(file_id) + ';')
-        else:
-            self.files = str(file_id) + ';'
+        if not self.files:
+            return []
+        self.files += (str(file_id) + ';')
 
     def add_given_file(self, file_id):
-        self.given_files.append(str(file_id) + ';')
+        self.given_files += (str(file_id) + ';')
 
     def remove_file(self, file_id):
         files = self.get_files()

@@ -1,14 +1,16 @@
-import datetime
-
 from . import UPLOAD_FOLDER, login_manager, db_session
 from flask_login import current_user
+from flask import send_from_directory
 from werkzeug.utils import secure_filename
+import transliterate
+
 from .data.users import User
 from .data.files import File
 
 import hashlib
 import os
 import uuid
+import datetime
 
 
 @login_manager.user_loader
@@ -52,25 +54,24 @@ def add_new_user(form: dict) -> str:
 
 
 def save_file(request):
-    if request.method != 'POST':
-        return
     file = request.files['File']
     desc = request.form["desc"]
 
-    path = UPLOAD_FOLDER
+    path = uuid.uuid4().hex
     while os.path.exists(path):
-        path = os.path.join(UPLOAD_FOLDER, uuid.uuid4().hex)
+        path = uuid.uuid4().hex
 
-    filename = secure_filename(file.filename)
-    while os.path.isfile(filename):
-        filename = add_numbered(filename)
+    filename = file.filename
+    if transliterate.detect_language(filename):
+        filename = transliterate.translit(filename, reversed=True)
+    filename = secure_filename(filename)
 
-    file.save(path)
+    file.save(os.path.join('app', 'static', 'files', path))
     file = File(name=filename, path=path, desc=desc, date=datetime.date.today())
-    print(file)
     db_sess = db_session.create_session()
-    current_user.add_file(file.id)
     db_sess.add(file)
+    user = db_sess.query(User).filter_by(id=current_user.id).first()
+    user.add_file(file.id)
     db_sess.commit()
 
 
@@ -88,17 +89,23 @@ def remove_file(user, file_id):
     db_sess.commit()
 
 
+def download_file(user, file_id):
+    print('users files:', user.get_files() + user.get_given_files())
+    print('file_id', file_id)
+    if str(file_id) not in user.get_files() and file_id not in user.get_given_files():
+        return
+    db_sess = db_session.create_session()
+    file = db_sess.query(File).filter_by(id=file_id).first()
+    print('download', os.path.join('app/static/files', file.path))
+    return send_from_directory(directory='app/static/files', path=file.path, as_attachment=True)
+
+
 def get_files_for(user):
     if not user.files:
         return []
     db_sess = db_session.create_session()
-    files = []
-    print('files:', user.get_files())
-    for file_id in user.get_files():
-        file = db_sess.query(File).filter_by(id=file_id).first()
-        if file is not None:
-            files.append(file)
-    return files
+    print('user have', db_sess.query(File).filter(File.id in user.get_files()).all())
+    return db_sess.query(File).filter(File.id in user.get_files()).all()
 
 
 def name_in_db(name: str):
@@ -127,7 +134,6 @@ def check_incorrect_data(name: str, password: str, repeat_password: str) -> str:
 def index_revert(path: str):
     for num, i in reversed(tuple(enumerate(path))):
         if i == '(':
-            print(f'{num=}')
             return num
 
 

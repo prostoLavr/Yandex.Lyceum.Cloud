@@ -1,9 +1,7 @@
-from . import app, UPLOAD_FOLDER, db_manager
+from . import app, db_manager
 
 from flask_login import login_required, login_user, current_user, logout_user
-from flask import render_template, url_for, request, redirect, send_from_directory
-
-import os
+from flask import render_template, url_for, request, redirect
 
 
 def my_render_template(*args, **kwargs):
@@ -18,30 +16,36 @@ def logout():
     return redirect('/')
 
 
-@app.route('/account', methods=['POST', 'GET'])
+@app.route('/account')
 def account():
     if not current_user.is_authenticated:
         return redirect('/')
-    db_manager.save_file(request)
     files = db_manager.get_files_for(current_user)
     return my_render_template('/account.html', files=files)
 
 
-@app.route('/remove/' + UPLOAD_FOLDER + '/<string:user_login>' + '/<string:filename>')
+@app.route('/load', methods=['GET', 'POST'])
+def load():
+    if request.method == 'POST':
+        db_manager.save_file(request)
+        return redirect('/account')
+    return my_render_template('load.html')
+
+
+@app.route('/remove/<string:file_id>')
 @login_required
-def remove(user_login: str, filename: str):
-    if current_user.name == user_login:
-        db_manager.remove_file(user_login, filename)
+def remove(file_id):
+    db_manager.remove_file(current_user, file_id)
     return redirect('/account')
 
 
-@app.route('/' + UPLOAD_FOLDER + '/<string:user_login>' + '/<string:filename>')
+@app.route('/download/<string:file_id>')
 @login_required
-def download(user_login: str, filename: str):
-    if current_user.name == user_login:
-        return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], user_login),
-                                   filename, as_attachment=True)
-    return 'Файл не найден :('
+def download(file_id):
+    res = db_manager.download_file(current_user, file_id)
+    if res is None:
+        return 'Файл не найден :('
+    return res
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -64,7 +68,6 @@ def login():
     if current_user.is_authenticated:
         return redirect('/account')
     if request.method == 'POST':
-        print(request.form)
         username = request.form.get('Login')
         password = request.form.get('Password')
         user = db_manager.login_user(username, password)
