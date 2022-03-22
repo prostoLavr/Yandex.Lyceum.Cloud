@@ -1,4 +1,4 @@
-from . import UPLOAD_FOLDER, login_manager, db_session
+from . import login_manager, db_session
 from flask_login import current_user
 from flask import send_from_directory
 from werkzeug.utils import secure_filename
@@ -6,11 +6,27 @@ import transliterate
 
 from .data.users import User
 from .data.files import File
+from .data.messages import Message
 
 import hashlib
 import os
 import uuid
 import datetime
+
+
+def get_messages_for_users(user1_id, user2_id):
+    db_sess = db_session.create_session()
+    messages1 = db_sess.query(Message).filter(Message.sender_id == user1_id,
+                                              Message.receiver_id == user2_id)
+    messages2 = db_sess.query(Message).filter(Message.sender_id == user2_id,
+                                              Message.receiver_id == user1_id)
+    messages = []
+    for i in messages1:
+        messages.append(i)
+    for i in messages2:
+        messages.append(i)
+    messages = sorted(messages, key=lambda m: m.sent_date)
+    return messages
 
 
 @login_manager.user_loader
