@@ -35,7 +35,11 @@
                     <span class="message-data-time">{{ mes.sent_date.time() }}</span>
                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
                 </div>
-                <div class="message other-message float-right">{{ mes.text }}</div>
+                {% if mes.sender_id == friend.id %}
+                    <div class="message other-message float-right">{{ mes.text }}</div>
+                {% else %}
+                    <div class="message my-message">{{ mes.text }}</div>
+                {% endif %}
             </li>
             {% endfor %}
         </ul>

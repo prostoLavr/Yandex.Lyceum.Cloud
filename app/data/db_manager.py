@@ -25,7 +25,7 @@ def get_messages_for_users(user1_id, user2_id):
     db_sess = db_session.create_session()
     messages1 = db_sess.query(Message).filter_by(sender_id=user1_id, receiver_id=user2_id).all()
     messages2 = db_sess.query(Message).filter_by(sender_id=user2_id, receiver_id=user1_id).all()
-    messages = messages1 + messages2
+    messages = list(set(messages1 + messages2))
     messages = sorted(messages, key=lambda m: m.sent_date)
     return messages
 
