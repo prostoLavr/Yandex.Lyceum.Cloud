@@ -112,6 +112,7 @@ body{
     margin-bottom: 15px
 }
 
+
 .chat .chat-history .message-data img {
     border-radius: 40px;
     width: 40px
@@ -202,6 +203,11 @@ body{
     float: right
 }
 
+.text-right {
+    margin-left: 95%
+
+}
+
 .clearfix:after {
     visibility: hidden;
     display: block;
@@ -217,7 +223,7 @@ body{
         width: 100%;
         overflow-x: auto;
         background: #fff;
-        left: -800px;
+        left: -400px;
         display: none
     }
     .chat-app .people-list.open {

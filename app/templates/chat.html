@@ -30,17 +30,22 @@
     <div class="chat-history">
         <ul class="m-b-0">
             {% for mes in messages %}
-            <li class="clearfix">
-                <div class="message-data text-right">
-                    <span class="message-data-time">{{ mes.sent_date.time() }}</span>
-                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
-                </div>
-                {% if mes.sender_id == friend.id %}
-                    <div class="message other-message float-right">{{ mes.text }}</div>
-                {% else %}
+            {% if mes.sender_id == friend.id %}
+                <li class="clearfix">
+                    <div class="message-data">
+                        <span class="message-data-time">{{ mes.sent_date.strftime('%H:%M') }}</span>
+                    </div>
                     <div class="message my-message">{{ mes.text }}</div>
-                {% endif %}
-            </li>
+                </li>
+            {% else %}
+                <li class="clearfix">
+                    <div class="message-data text-right">
+                        <span class="message-data-time">{{ mes.sent_date.strftime('%H:%M') }}</span>
+                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
+                    </div>
+                    <div class="message other-message float-right"> {{ mes.text }} </div>
+                </li>
+            {% endif %}
             {% endfor %}
         </ul>
     </div>
