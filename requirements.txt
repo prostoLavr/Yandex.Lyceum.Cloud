@@ -4,7 +4,6 @@ flask_sqlalchemy
 
 Werkzeug~=2.0.3
 
-uwsgi
 SQLAlchemy~=1.4.31
 waitress~=2.1.1
 transliterate~=1.10.2
