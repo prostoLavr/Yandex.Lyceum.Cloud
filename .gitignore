@@ -4,4 +4,5 @@ __pycache__/
 files/
 ssl/
 *.log
+venv/
 
