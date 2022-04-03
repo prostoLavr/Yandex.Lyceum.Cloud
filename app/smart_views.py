@@ -100,3 +100,11 @@ def index():
     if current_user.is_authenticated:
         return redirect('/cloud')
     return my_render_template('', 'index.html')
+
+
+@app.route('/account')
+def account():
+    if current_user.is_anonymous:
+        return redirect('/')
+    return my_render_template('', 'account.html')
+
