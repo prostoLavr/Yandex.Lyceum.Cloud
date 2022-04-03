@@ -1,6 +1,6 @@
 from app import login_manager, db_session
 from flask_login import current_user
-from flask import send_file
+from flask import send_file, render_template
 from werkzeug.utils import secure_filename
 import transliterate
 
@@ -13,6 +13,10 @@ import hashlib
 import os
 import uuid
 import datetime
+
+
+def my_render_template(*args, **kwargs):
+    return render_template(*args, **kwargs, login=current_user.is_authenticated)
 
 
 def get_friends_for_user(user):

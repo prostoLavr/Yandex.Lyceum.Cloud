@@ -15,4 +15,4 @@ app.config['UPLOAD_FOLDER'] = config.files_path
 app.config['SECRET_KEY'] = 'hello'
 
 
-from app import views
+from . import smart_views, views
