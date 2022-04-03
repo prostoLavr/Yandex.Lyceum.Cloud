@@ -15,8 +15,12 @@ import uuid
 import datetime
 
 
-def my_render_template(*args, **kwargs):
-    return render_template(*args, **kwargs, login=current_user.is_authenticated)
+def my_render_template(active='', *args, **kwargs):
+    pages = ['cloud', 'messanger', 'premium', 'support', 'about']
+    is_active_pages = [False] * len(pages)
+    if active in pages:
+        is_active_pages[pages.index(active)] = True
+    return render_template(*args, **kwargs, login=current_user.is_authenticated, pages=is_active_pages)
 
 
 def get_friends_for_user(user):

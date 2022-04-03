@@ -6,17 +6,17 @@ from flask import render_template
 
 @app.route('/premium')
 def premium():
-    return my_render_template('premium.html')
+    return my_render_template('premium', 'premium.html')
 
 
 @app.route('/about')
 def about():
-    return my_render_template('about.html')
+    return my_render_template('about', 'about.html')
 
 
 @app.route('/politic')
 def politic():
-    return my_render_template('politic.html')
+    return my_render_template('', 'politic.html')
 
 
 @app.route('/yandex_baf6d04d550034ad.html')
@@ -26,4 +26,4 @@ def yandex_check():
 
 @app.route('/support')
 def support():
-    return my_render_template('support.html')
+    return my_render_template('support', 'support.html')
