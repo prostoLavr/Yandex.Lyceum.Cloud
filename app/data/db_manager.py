@@ -112,34 +112,48 @@ def save_file(request):
 
 def remove_file(user, file_path):
     db_sess = db_session.create_session()
-    print(file_path)
-    file = db_sess.query(File).filter_by(path=file_path).first()
-    if file.id not in user.get_files():
+    file = find_file(user, file_path)
+    if not file:
         return
     try:
         os.remove(os.path.join(config.files_path, file.path))
     except FileNotFoundError:
         print(f'Файл {file.path} не существует')
-    db_sess.delete(file)
     user.remove_file(file.id)
+    db_sess.delete(file)
     db_sess.commit()
 
 
 def download_file(user, file_path):
-    db_sess = db_session.create_session()
-    file = db_sess.query(File).filter_by(path=file_path).first()
-    if not (file.id in user.get_files() + user.get_given_files()):
-        return ''
+    file = find_file(user, file_path)
+    if not file:
+        return
     full_file_path = os.path.join(config.shorts_files_path, file.path)
     print('download', full_file_path)
     return send_file(full_file_path, download_name=file.name, as_attachment=True)
+
+
+def find_file(user, file_path):
+    db_sess = db_session.create_session()
+    file = db_sess.query(File).filter_by(path=file_path).first()
+    db_sess.close()
+    if not (file.id in user.get_files() + user.get_given_files()):
+        return None
+    return file
+
+
+def edit_file(file_path, form):
+    db_sess = db_session.create_session()
+    file = db_sess.query(File).filter_by(path=file_path).one()
+    file.name = form['name']
+    file.desc = form['desc']
+    db_sess.commit()
 
 
 def get_files_for(user):
     if not user.files:
         return []
     db_sess = db_session.create_session()
-    print('user have', db_sess.query(File).filter(File.id.in_(user.get_files())).all())
     return db_sess.query(File).filter(File.id.in_(user.get_files())).all()
 
 
