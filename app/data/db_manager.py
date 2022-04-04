@@ -18,7 +18,8 @@ import datetime
 def my_render_template(*args, **kwargs):
     active_page = kwargs.get('active_page')
     page = active_page if active_page else '.'.join(args[0].split('.')[:-1])
-    pages = ['cloud', 'messanger', 'premium', 'support', 'about']
+    print('page', page)
+    pages = ['cloud', 'messenger', 'premium', 'support', 'about']
     is_active_pages = [False] * len(pages)
     if page in pages:
         is_active_pages[pages.index(page)] = True
@@ -112,8 +113,9 @@ def save_file(request):
 
 def remove_file(user, file_path):
     db_sess = db_session.create_session()
-    file = find_file(user, file_path)
-    if not file:
+    file = db_sess.query(File).filter_by(path=file_path).first()
+    db_sess.close()
+    if file.id not in user.get_files():
         return
     try:
         os.remove(os.path.join(config.files_path, file.path))
@@ -125,8 +127,10 @@ def remove_file(user, file_path):
 
 
 def download_file(user, file_path):
-    file = find_file(user, file_path)
-    if not file:
+    db_sess = db_session.create_session()
+    file = db_sess.query(File).filter_by(path=file_path).first()
+    db_sess.close()
+    if not file or not user or file.id not in user.get_files() + user.get_given_files():
         return
     full_file_path = os.path.join(config.shorts_files_path, file.path)
     print('download', full_file_path)
@@ -137,8 +141,8 @@ def find_file(user, file_path):
     db_sess = db_session.create_session()
     file = db_sess.query(File).filter_by(path=file_path).first()
     db_sess.close()
-    if not (file.id in user.get_files() + user.get_given_files()):
-        return None
+    if not file or not user or not (file.id in user.get_files() + user.get_given_files()):
+        return
     return file
 
 

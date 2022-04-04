@@ -27,3 +27,8 @@ def yandex_check():
 @app.route('/support')
 def support():
     return my_render_template('support.html')
+
+
+@app.route('/file_not_found')
+def file_not_found():
+    return my_render_template('file_not_found.html')

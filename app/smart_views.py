@@ -18,7 +18,7 @@ def cloud():
     if not current_user.is_authenticated:
         return redirect('/')
     files = db_manager.get_files_for(current_user)
-    return my_render_template('/cloud.html', files=files)
+    return my_render_template('cloud.html', files=files)
 
 
 @app.route('/load', methods=['GET', 'POST'])
@@ -41,7 +41,7 @@ def remove(file_id):
 def download(file_id):
     res = db_manager.download_file(current_user, file_id)
     if res is None:
-        return 'Файл не найден :('
+        return redirect('/file_not_found')
     return res
 
 
@@ -116,4 +116,6 @@ def edit_file(file_path):
         db_manager.edit_file(file_path, request.form)
         return redirect('/cloud')
     file_to_edit = db_manager.find_file(current_user, file_path)
+    if not file_to_edit:
+        return redirect('/file_not_found')
     return my_render_template('file.html', file=file_to_edit)
