@@ -15,11 +15,13 @@ import uuid
 import datetime
 
 
-def my_render_template(active='', *args, **kwargs):
+def my_render_template(*args, **kwargs):
+    active_page = kwargs.get('active_page')
+    page = active_page if active_page else '.'.join(args[0].split('.')[:-1])
     pages = ['cloud', 'messanger', 'premium', 'support', 'about']
     is_active_pages = [False] * len(pages)
-    if active in pages:
-        is_active_pages[pages.index(active)] = True
+    if page in pages:
+        is_active_pages[pages.index(page)] = True
     return render_template(*args, **kwargs, login=current_user.is_authenticated, pages=is_active_pages)
 
 

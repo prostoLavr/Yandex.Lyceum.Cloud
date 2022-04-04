@@ -18,7 +18,7 @@ def cloud():
     if not current_user.is_authenticated:
         return redirect('/')
     files = db_manager.get_files_for(current_user)
-    return my_render_template('cloud', '/cloud.html', files=files)
+    return my_render_template('/cloud.html', files=files)
 
 
 @app.route('/load', methods=['GET', 'POST'])
@@ -26,7 +26,7 @@ def load():
     if request.method == 'POST':
         db_manager.save_file(request)
         return redirect('/cloud')
-    return my_render_template('cloud', 'load.html')
+    return my_render_template('load.html', active_page='cloud')
 
 
 @app.route('/remove/<string:file_id>')
@@ -52,11 +52,11 @@ def register():
     if request.method == 'POST':
         error_message = db_manager.add_new_user(request.form)
         if error_message:
-            return my_render_template('', 'register.html', message=error_message)
+            return my_render_template('register.html', message=error_message)
         else:
-            return my_render_template('', 'success_register.html')
+            return my_render_template('success_register.html')
     else:
-        return my_render_template('', 'register.html')
+        return my_render_template('register.html')
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -73,7 +73,7 @@ def login():
             return redirect('/cloud')
         else:
             message = 'Неверный логин или пароль'
-    return my_render_template('', 'login.html', message=message)
+    return my_render_template('login.html', message=message)
 
 
 @app.route('/messenger')
@@ -81,7 +81,7 @@ def messenger():
     if current_user.is_anonymous:
         return redirect('/')
     user_friends = db_manager.get_friends_for_user(current_user.id)
-    return my_render_template('messanger', 'messenger.html', users=user_friends)
+    return my_render_template('messenger.html', users=user_friends)
 
 
 @app.route('/messenger/<user_id>', methods=['POST', 'GET'])
@@ -92,19 +92,19 @@ def chat(user_id):
         db_manager.add_message(message, user_id, current_user.id)
     messages = db_manager.get_messages_for_users(current_user.id, user_id)
     user_friend = db_manager.load_user(user_id)
-    return my_render_template('messanger', 'chat.html', messages=messages, friend=user_friend)
+    return my_render_template('chat.html', messages=messages, friend=user_friend, active_page='messanger')
 
 
 @app.route('/')
 def index():
     if current_user.is_authenticated:
         return redirect('/cloud')
-    return my_render_template('', 'index.html')
+    return my_render_template('index.html')
 
 
 @app.route('/account')
 def account():
     if current_user.is_anonymous:
         return redirect('/')
-    return my_render_template('', 'account.html')
+    return my_render_template('account.html')
 
