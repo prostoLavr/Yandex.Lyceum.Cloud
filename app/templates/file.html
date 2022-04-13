@@ -13,8 +13,28 @@
                 <p class="lead text-muted"><b>Описание файла</b><br>
                     <textarea name="desc" id="desc" class="form-control">{{ file.desc }} </textarea><br>
                 </p>
-                <p class="lead text-muted"><b>Доступ к файлу</b><br></p>
-                <p>Выбор прав доступа</p>
+                <p class="lead text-muted"><b>Доступ к файлу</b><br>
+                  <div class="form-check">
+                    {% if file.is_open %}
+                        <input class="form-check-input" type="radio" name="access" id="close" value=0>
+                    {% else %}
+                        <input class="form-check-input" type="radio" name="access" id="close" value=0 checked>
+                    {% endif %}
+                    <label class="form-check-label" for="close">
+                      Закрытый (никто не может посмотреть на этот файл)
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    {% if file.is_open %}
+                        <input class="form-check-input" type="radio" name="access" id="open" value=1 checked>
+                    {% else %}
+                        <input class="form-check-input" type="radio" name="access" id="open" value=1>
+                    {% endif %}
+
+                    <label class="form-check-label" for="open">
+                      Открытый (сможте делиться им с другими)
+                    </label>
+                  </div>
                 <input class="btn btn-primary my-2" type=submit value=Сохранить>
             </div>
         </div>
