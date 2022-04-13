@@ -100,6 +100,7 @@ def normalize_filename(filename):
 def save_file(request):
     file = request.files['File']
     desc = request.form["desc"]
+    is_open = int(request.form["access"])
 
     path = uuid.uuid4().hex
     while os.path.exists(path):
@@ -108,7 +109,7 @@ def save_file(request):
     filename = normalize_filiname(file.filename)
 
     file.save(os.path.join(config.files_path, path))
-    file = File(name=filename, path=path, desc=desc, date=datetime.date.today())
+    file = File(name=filename, path=path, desc=desc, date=datetime.date.today(), is_open=is_open)
     db_sess = db_session.create_session()
     db_sess.add(file)
     user = db_sess.query(User).filter_by(id=current_user.id).first()
@@ -156,6 +157,7 @@ def edit_file(file_path, form):
     file = db_sess.query(File).filter_by(path=file_path).one()
     file.name = normalize_filename(form['name'])
     file.desc = form['desc']
+    file.is_open = int(form['access'])
     db_sess.commit()
 
 
