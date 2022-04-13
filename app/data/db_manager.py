@@ -2,7 +2,6 @@ from app import login_manager, db_session
 from flask_login import current_user
 from flask import send_file, render_template
 from werkzeug.utils import secure_filename
-import transliterate
 
 from .users import User
 from .files import File
@@ -89,6 +88,15 @@ def add_new_user(form: dict) -> str:
     return ''
 
 
+def normalize_filename(filename):
+    symbols_to_remove = '{}%^:#!@"&*?/|\\<>,`~$;+' + "'"
+    for i in symbols_to_remove:
+        filename = filename.replace(i, '')
+    if not filename:
+        filename = 'unknown name'
+    return filename
+
+
 def save_file(request):
     file = request.files['File']
     desc = request.form["desc"]
@@ -96,11 +104,8 @@ def save_file(request):
     path = uuid.uuid4().hex
     while os.path.exists(path):
         path = uuid.uuid4().hex
-
-    filename = file.filename
-    if transliterate.detect_language(filename):
-        filename = transliterate.translit(filename, reversed=True)
-    filename = secure_filename(filename)
+    
+    filename = normalize_filiname(file.filename)
 
     file.save(os.path.join(config.files_path, path))
     file = File(name=filename, path=path, desc=desc, date=datetime.date.today())
@@ -149,7 +154,7 @@ def find_file(user, file_path):
 def edit_file(file_path, form):
     db_sess = db_session.create_session()
     file = db_sess.query(File).filter_by(path=file_path).one()
-    file.name = form['name']
+    file.name = normalize_filename(form['name'])
     file.desc = form['desc']
     db_sess.commit()
 
