@@ -1,7 +1,6 @@
 from app import login_manager, db_session
 from flask_login import current_user
 from flask import send_file, render_template
-from werkzeug.utils import secure_filename
 
 from .users import User
 from .files import File
@@ -99,22 +98,21 @@ def normalize_filename(filename):
 
 def save_file(request):
     file = request.files['File']
-    desc = request.form["desc"]
-    is_open = int(request.form["access"])
 
     path = uuid.uuid4().hex
     while os.path.exists(path):
         path = uuid.uuid4().hex
     
-    filename = normalize_filiname(file.filename)
+    filename = normalize_filename(file.filename)
 
     file.save(os.path.join(config.files_path, path))
-    file = File(name=filename, path=path, desc=desc, date=datetime.date.today(), is_open=is_open)
+    file = File(name=filename, path=path, date=datetime.date.today())
     db_sess = db_session.create_session()
     db_sess.add(file)
     user = db_sess.query(User).filter_by(id=current_user.id).first()
     user.add_file(file.id)
     db_sess.commit()
+    return file.path
 
 
 def remove_file(user, file_path):
@@ -136,8 +134,12 @@ def download_file(user, file_path):
     db_sess = db_session.create_session()
     file = db_sess.query(File).filter_by(path=file_path).first()
     db_sess.close()
-    if not file or not user or file.id not in user.get_files() + user.get_given_files():
+    print('file is open = ', file.is_open)
+    if not file or not user:
         return
+    if file.id not in user.get_files() + user.get_given_files() and not file.is_open:
+        return 
+
     full_file_path = os.path.join(config.shorts_files_path, file.path)
     print('download', full_file_path)
     return send_file(full_file_path, download_name=file.name, as_attachment=True)
@@ -149,6 +151,7 @@ def find_file(user, file_path):
     db_sess.close()
     if not file or not user or not (file.id in user.get_files() + user.get_given_files()):
         return
+    print(file.name, 'is', bool(file.desc))
     return file
 
 

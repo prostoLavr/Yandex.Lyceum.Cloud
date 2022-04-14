@@ -29,10 +29,14 @@ class User(SqlAlchemyBase, UserMixin):
         return self
 
     def get_files(self):
-        return [int(i) for i in self.files[:-1].split(';')]
+        if self.files:
+            return [int(i) for i in self.files[:-1].split(';')]
+        return []
 
     def get_given_files(self):
-        return [int(i) for i in self.files[:-1].split(';')]
+        if self.files:
+            return [int(i) for i in self.files[:-1].split(';')]
+        return []
 
     def add_file(self, file_id):
         self.files += (str(file_id) + ';')

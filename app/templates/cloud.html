@@ -23,6 +23,11 @@
             <div class="card">
               <div class="card-body">
                 <p class="card-text">{{ file.name  }}</p>
+                {% if file.desc %}
+                <p class="my-clip text-muted">{{ file.desc }}</p>
+                {% else %}
+                <p class="text-muted">Без описания</p> 
+                {% endif %}
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">
                     <a type="button" href="/download/{{ file.path }}" class="btn btn-sm btn-outline-primary">Скачать</a>

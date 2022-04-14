@@ -5,26 +5,26 @@
 {% block body %}
 <form method=post enctype=multipart/form-data>
     <section class="py-5 text-center container">
-        <div class="row py-lg-5">
+        <div class="row py-lg-3">
             <div class="col-lg-6 col-md-8 mx-auto">
                 <h1 class="fw-light">Редактировать файл</h1>
-                <p class="lead text-muted"><b>Имя файла (латиницей)</b><br>
+                <p class="lead text-muted"><b>Имя файла</b><br>
                     <input class="form-control" type="text" id="name" name="name" value="{{ file.name }}">
                 <p class="lead text-muted"><b>Описание файла</b><br>
-                    <textarea name="desc" id="desc" class="form-control">{{ file.desc }} </textarea><br>
+                    <textarea name="desc" id="desc" class="form-control fixed-size" rows="3" cols="50">{{ file.desc }} </textarea>
                 </p>
                 <p class="lead text-muted"><b>Доступ к файлу</b><br>
-                  <div class="form-check">
+                <div class="form-check">
                     {% if file.is_open %}
                         <input class="form-check-input" type="radio" name="access" id="close" value=0>
                     {% else %}
                         <input class="form-check-input" type="radio" name="access" id="close" value=0 checked>
                     {% endif %}
                     <label class="form-check-label" for="close">
-                      Закрытый (никто не может посмотреть на этот файл)
+                      Закрытый (Файл могу скачать только я)
                     </label>
-                  </div>
-                  <div class="form-check">
+                </div>
+                <div class="form-check">
                     {% if file.is_open %}
                         <input class="form-check-input" type="radio" name="access" id="open" value=1 checked>
                     {% else %}
@@ -32,10 +32,11 @@
                     {% endif %}
 
                     <label class="form-check-label" for="open">
-                      Открытый (сможте делиться им с другими)
+                      Открытый (Файл могут скачать все, у кого есть ссылка)
                     </label>
-                  </div>
-                <input class="btn btn-primary my-2" type=submit value=Сохранить>
+                </div><br>
+                <p class="form-control">{{ link }}</p>
+                <input class="btn btn-primary my-2" type="submit" value=Сохранить>
             </div>
         </div>
     </section>

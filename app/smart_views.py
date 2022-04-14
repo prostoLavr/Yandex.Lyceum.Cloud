@@ -24,8 +24,8 @@ def cloud():
 @app.route('/load', methods=['GET', 'POST'])
 def load():
     if request.method == 'POST':
-        db_manager.save_file(request)
-        return redirect('/cloud')
+        path_to_file = db_manager.save_file(request)
+        return redirect(f'/edit_file/{path_to_file}')
     return my_render_template('load.html', active_page='cloud')
 
 
@@ -118,4 +118,4 @@ def edit_file(file_path):
     file_to_edit = db_manager.find_file(current_user, file_path)
     if not file_to_edit:
         return redirect('/file_not_found')
-    return my_render_template('file.html', file=file_to_edit)
+    return my_render_template('file.html', file=file_to_edit, link=f'lava-land.ru/download/{file_to_edit.path}')

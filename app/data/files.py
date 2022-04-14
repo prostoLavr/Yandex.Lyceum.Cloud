@@ -8,8 +8,9 @@ class File(SqlAlchemyBase):
     date = sa.Column(sa.DateTime)
     is_open = sa.Column(sa.Boolean, default=False)
     name = sa.Column(sa.String, nullable=False)
-    desc = sa.Column(sa.Text)
+    desc = sa.Column(sa.Text, default='')
     path = sa.Column(sa.String, nullable=False)
 
     def __repr__(self):
         return f'<File {self.id} {self.name}>'
+
