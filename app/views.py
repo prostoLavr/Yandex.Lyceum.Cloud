@@ -32,3 +32,8 @@ def support():
 @app.route('/file_not_found')
 def file_not_found():
     return my_render_template('file_not_found.html')
+
+
+@app.route('/get_premium')
+def get_premium():
+    return my_render_template('get_premium.html', active_page='premium')

@@ -41,7 +41,6 @@ def download(file_id):
     res = db_manager.download_file(current_user, file_id)
     if res is None:
         return redirect('/file_not_found')
-    print('res=', res)
     return res
 
 
