@@ -81,7 +81,7 @@ def messenger():
     #     return redirect('/')
     # user_friends = db_manager.get_friends_for_user(current_user.id)
     # return my_render_template('messenger.html', users=user_friends)
-    return my_render_template('messenger_is_not_work.html', active_page='messenger')
+    return my_render_template('no_work.html', active_page='messenger')
 
 
 @app.route('/messenger/<user_id>', methods=['POST', 'GET'])
@@ -93,7 +93,7 @@ def chat(user_id):
     # messages = db_manager.get_messages_for_users(current_user.id, user_id)
     # user_friend = db_manager.load_user(user_id)
     # return my_render_template('chat.html', messages=messages, friend=user_friend, active_page='messanger')
-    return my_render_template('messenger_is_not_work.html', active_page='messenger')
+    return my_render_template('no_work.html', active_page='messenger')
 
 
 @app.route('/')
@@ -107,7 +107,8 @@ def index():
 def account():
     if current_user.is_anonymous:
         return redirect('/')
-    return my_render_template('account.html')
+    # return my_render_template('account.html')
+    return my_render_template('no_work.html')
 
 
 @app.route('/edit_file/<file_path>', methods=['POST', 'GET'])
