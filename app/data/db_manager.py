@@ -158,7 +158,7 @@ def edit_file(file_path, form):
     db_sess = db_session.create_session()
     file = db_sess.query(File).filter_by(path=file_path).one()
     file.name = normalize_filename(form['name'])
-    file.desc = form['desc']
+    file.desc = form['desc'].strip()
     file.is_open = int(form['access'])
     db_sess.commit()
 
