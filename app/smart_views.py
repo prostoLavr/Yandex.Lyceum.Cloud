@@ -119,4 +119,4 @@ def edit_file(file_path):
     file_to_edit = db_manager.find_file(current_user, file_path)
     if not file_to_edit:
         return redirect('/file_not_found')
-    return my_render_template('file.html', file=file_to_edit, link=f'{server_name}/download/{file_to_edit.path}')
+    return my_render_template('file.html', file=file_to_edit, link=f'https://{server_name}/download/{file_to_edit.path}')
