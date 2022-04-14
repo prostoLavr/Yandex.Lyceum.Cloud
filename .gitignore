@@ -4,3 +4,4 @@ __pycache__/
 app/static/files
 ssl/
 certificate/
+venv/
