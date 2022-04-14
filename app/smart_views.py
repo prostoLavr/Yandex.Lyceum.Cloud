@@ -1,4 +1,4 @@
-from . import app
+from . import app, server_name
 from .data import db_manager
 from .data.db_manager import my_render_template
 
@@ -37,11 +37,11 @@ def remove(file_id):
 
 
 @app.route('/download/<string:file_id>')
-@login_required
 def download(file_id):
     res = db_manager.download_file(current_user, file_id)
     if res is None:
         return redirect('/file_not_found')
+    print('res=', res)
     return res
 
 
@@ -118,4 +118,4 @@ def edit_file(file_path):
     file_to_edit = db_manager.find_file(current_user, file_path)
     if not file_to_edit:
         return redirect('/file_not_found')
-    return my_render_template('file.html', file=file_to_edit, link=f'lava-land.ru/download/{file_to_edit.path}')
+    return my_render_template('file.html', file=file_to_edit, link=f'{server_name}/download/{file_to_edit.path}')

@@ -12,7 +12,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{config.db_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_LENGTH'] = 256 * 1024 * 1024
 app.config['UPLOAD_FOLDER'] = config.files_path
-app.config['SECRET_KEY'] = 'hello'
+app.config['SECRET_KEY'] = 'lava-land'
+server_name = '0.0.0.0:8000'
+# server_name = 'lava-land.ru'
 
 
 from . import smart_views, views

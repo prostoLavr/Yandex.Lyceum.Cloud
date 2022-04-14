@@ -137,9 +137,8 @@ def download_file(user, file_path):
     print('file is open = ', file.is_open)
     if not file or not user:
         return
-    if file.id not in user.get_files() + user.get_given_files() and not file.is_open:
-        return 
-
+    if not (file.is_open or user.is_authenticated and file.id in user.get_files() + user.get_given_files()):
+        return
     full_file_path = os.path.join(config.shorts_files_path, file.path)
     print('download', full_file_path)
     return send_file(full_file_path, download_name=file.name, as_attachment=True)
