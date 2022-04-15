@@ -79,7 +79,7 @@ def login():
 def messenger():
     if current_user.is_anonymous:
         return redirect('/')
-    user_friends = db_manager.get_friends_for_user(current_user.id)
+    user_friends = db_manager.get_friends_for_user(current_user)
     return my_render_template('messenger.html', users=user_friends)
 
 

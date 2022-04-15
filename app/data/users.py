@@ -15,6 +15,15 @@ class User(SqlAlchemyBase, UserMixin):
     password = sa.Column(sa.LargeBinary, nullable=False)
     files = sa.Column(sa.Text, nullable=False, default='')  # User's files
     given_files = sa.Column(sa.Text)  # Files that was given by other users
+    friends = sa.Column(sa.Text, nullable=False, default='')
+
+    def get_friends(self):
+        if self.friends:
+            return [int(i) for i in self.friends[:-1].split(';')]
+        return []
+
+    def add_friend(self, user_id):
+        self.friends += (str(user_id) + ';')
 
     def check_password(self, password):
         key_from_db, salt = self.password, self.salt
