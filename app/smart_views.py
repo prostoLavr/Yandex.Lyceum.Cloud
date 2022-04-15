@@ -77,23 +77,21 @@ def login():
 
 @app.route('/messenger')
 def messenger():
-    # if current_user.is_anonymous:
-    #     return redirect('/')
-    # user_friends = db_manager.get_friends_for_user(current_user.id)
-    # return my_render_template('messenger.html', users=user_friends)
-    return my_render_template('messenger_is_not_work.html', active_page='messenger')
+    if current_user.is_anonymous:
+        return redirect('/')
+    user_friends = db_manager.get_friends_for_user(current_user.id)
+    return my_render_template('messenger.html', users=user_friends)
 
 
 @app.route('/messenger/<user_id>', methods=['POST', 'GET'])
 @login_required
 def chat(user_id):
-    # if request.method == 'POST':
-    #     message = request.form['message']
-    #     db_manager.add_message(message, user_id, current_user.id)
-    # messages = db_manager.get_messages_for_users(current_user.id, user_id)
-    # user_friend = db_manager.load_user(user_id)
-    # return my_render_template('chat.html', messages=messages, friend=user_friend, active_page='messanger')
-    return my_render_template('messenger_is_not_work.html', active_page='messenger')
+    if request.method == 'POST':
+        message = request.form['message']
+        db_manager.add_message(message, user_id, current_user.id)
+    messages = db_manager.get_messages_for_users(current_user.id, user_id)
+    user_friend = db_manager.load_user(user_id)
+    return my_render_template('chat.html', messages=messages, friend=user_friend, active_page='messanger')
 
 
 @app.route('/')
