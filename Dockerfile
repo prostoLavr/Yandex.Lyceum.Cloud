@@ -1,5 +1,6 @@
 FROM ubuntu
-RUN apt-get update && apt-get upgrade -y && \
+RUN ln -fs /usr/share/zoneinfo/Asia/Irkutsk /etc/localtime
+RUN apt-get update && \
     apt-get install -y \
     python3 python3-pip  \
     nginx uwsgi uwsgi-plugin-python3
