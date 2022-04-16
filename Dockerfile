@@ -1,6 +1,6 @@
 FROM ubuntu
-RUN apt update && apt upgrade
-RUN apt install -y --no-chage-dir \
+RUN apt-get update && apt-get upgrade
+RUN apt-get install -y --no-chage-dir \
     python3 python3-pip  \
     nginx uwsgi uwsgi-plugin-python3
 
