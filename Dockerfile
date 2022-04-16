@@ -8,7 +8,8 @@ RUN apt-get update && \
 COPY requirements.txt /lavaland/
 RUN python3 -m pip install -r /lavaland/requirements.txt
 
-COPY ssl /etc/nginx/ssl
+RUN mkdir /etc/nginx/ssl
+COPY ./ssl/* /etc/nginx/ssl/*
 COPY nginx.conf /etc/nginx/nginx.conf
 RUN systemclt start nginx
 
