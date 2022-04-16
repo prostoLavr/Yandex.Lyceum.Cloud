@@ -36,7 +36,12 @@
                     <a type="button" href="/edit_file/{{ file.path }}" class="btn btn-sm btn-outline-secondary">Подробнее</a>
                     <a type="button" href="/remove/{{ file.path }}" class="btn btn-sm btn-outline-secondary">Удалить</a>
                   </div>
+<<<<<<< HEAD:app/templates/cloud.html
                   <small class="text-muted">{{ file.date.strftime("%m.%d.%Y") }}</small>
+=======
+                  <small class="text-muted">{{ file.desc }}</small>
+                  <small class="text-muted">{{ file.date.date() }}</small>
+>>>>>>> 53c3fae (add date):templates/account.html
                 </div>
               </div>
             </div>
