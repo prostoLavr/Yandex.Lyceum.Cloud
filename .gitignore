@@ -1,4 +1,5 @@
 .idea/
+*.log
 *.db
 __pycache__/
 app/static/files
