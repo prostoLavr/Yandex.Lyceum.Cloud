@@ -1,6 +1,7 @@
 FROM ubuntu
-RUN apt-get update && apt-get upgrade -y &&  apt-get install -y apt-utils
-RUN apt-get install -y --no-cache-dir \
+RUN apt-get install -y apt-utils
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y \
     python3 python3-pip  \
     nginx uwsgi uwsgi-plugin-python3
 
