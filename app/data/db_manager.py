@@ -25,15 +25,16 @@ def my_render_template(*args, **kwargs):
 
 
 def get_friends_for_user(user):
-    # db_sess = db_session.create_session()
-    # return db_sess.query(User).filter(User.id.in_(user.get_friends())).all()
     db_sess = db_session.create_session()
-    return db_sess.query(User).all()
+    return db_sess.query(User).filter(User.id.in_(user.get_friends())).all()
+
 
 def add_friend(user1, user_2_name):
     db_sess = db_session.create_session()
     user2 = db_sess.query(User).filter_by(name=user_2_name).first()
-    user1.add_fried(user2.id)
+    if not user2:
+        return "Такого юзера нет"
+    user1.add_friend(user2.id)
     db_sess.commit()
 
 def get_messages_for_users(user1_id, user2_id):

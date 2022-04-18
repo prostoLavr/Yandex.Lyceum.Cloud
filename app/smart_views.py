@@ -75,10 +75,16 @@ def login():
     return my_render_template('login.html', message=message)
 
 
-@app.route('/messenger')
+@app.route('/messenger', methods=['POST', 'GET'])
 def messenger():
     if current_user.is_anonymous:
         return redirect('/')
+    if request.method == 'POST':
+        friend_name = request.form.get('Friend_Login')
+        m = db_manager.add_friend(current_user, friend_name)
+        if m:
+            user_friends = db_manager.get_friends_for_user(current_user)
+            return my_render_template('messenger.html', users=user_friends, message=m)
     user_friends = db_manager.get_friends_for_user(current_user)
     return my_render_template('messenger.html', users=user_friends)
 
