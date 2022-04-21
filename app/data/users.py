@@ -11,20 +11,10 @@ class User(SqlAlchemyBase, UserMixin):
     id = sa.Column(sa.Integer, primary_key=True, autoincrement=True, index=True)
     name = sa.Column(sa.String, nullable=False, index=True)
     email = sa.Column(sa.String)
-    user_friends = sa.Column(sa.Text, nullable=False, default="")
     salt = sa.Column(sa.LargeBinary, nullable=False)
     password = sa.Column(sa.LargeBinary, nullable=False)
     files = sa.Column(sa.Text, nullable=False, default='')  # User's files
     given_files = sa.Column(sa.Text)  # Files that was given by other users
-
-    def get_friends(self):
-        print("друзья ", self.user_friends)
-        if self.user_friends:
-            return [int(i) for i in self.user_friends[:-1].split(';')]
-        return []
-
-    def add_friend(self, user_id):
-        self.user_friends += (str(user_id) + ';')
 
     def check_password(self, password):
         key_from_db, salt = self.password, self.salt

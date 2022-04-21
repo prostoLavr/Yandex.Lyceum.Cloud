@@ -5,6 +5,7 @@ from flask import send_file, render_template
 from .users import User
 from .files import File
 from .messages import Message
+from .friends import Friends
 from . import config
 
 import hashlib
@@ -26,7 +27,9 @@ def my_render_template(*args, **kwargs):
 
 def get_friends_for_user(user):
     db_sess = db_session.create_session()
-    return db_sess.query(User).filter(User.id.in_(user.get_friends())).all()
+    friends1 = db_sess.query(Friends.reciver_id).filter_by(sender_id=user.id, accept=True).all()
+    friends2 = db_sess.query(Friends.sender_id).filter_by(receiver_id=user.id, accept=True).all()
+    return friends1 + friends2
 
 
 def add_friend(user1, user_2_name):
@@ -34,7 +37,10 @@ def add_friend(user1, user_2_name):
     user2 = db_sess.query(User).filter_by(name=user_2_name).first()
     if not user2:
         return "Такого юзера нет"
-    user1.add_friend(user2.id)
+    if user2 in get_friends_for_user(user1):
+        return "Такой уже есть в друзьях"
+    friends = Friends(sender_id=user1.id, reciver_id=user2.id)
+    db_sess.add(friends)
     db_sess.commit()
 
 def get_messages_for_users(user1_id, user2_id):
