@@ -1,1 +1,1 @@
-from . import users, files, messages
+from . import users, files, messages, friends

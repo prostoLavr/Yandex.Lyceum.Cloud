@@ -29,16 +29,16 @@ def load():
     return my_render_template('load.html', active_page='cloud')
 
 
-@app.route('/remove/<string:file_id>')
+@app.route('/remove/<string:file_path>')
 @login_required
-def remove(file_id):
-    db_manager.remove_file(current_user, file_id)
+def remove(file_path):
+    db_manager.remove_file(current_user, file_path)
     return redirect('/cloud')
 
 
-@app.route('/download/<string:file_id>')
-def download(file_id):
-    res = db_manager.download_file(current_user, file_id)
+@app.route('/download/<string:file_path>')
+def download(file_path):
+    res = db_manager.download_file(current_user, file_path)
     if res is None:
         return redirect('/file_not_found')
     return res
@@ -75,23 +75,46 @@ def login():
     return my_render_template('login.html', message=message)
 
 
+@app.route('/messenger/accept_req/<string:user_id>')
+@login_required
+def accept_req(user_id):
+    res = db_manager.accept_req(user_id, current_user.id)
+    if res is None:
+        pass
+    return redirect('/messenger')
+
+
+@app.route('/messenger/decline_req/<string:user_id>')
+@login_required
+def decline_req(user_id):
+    res = db_manager.decline_req(user_id, current_user.id)
+    if res is None:
+        pass
+    return redirect('/messenger')
+
+
 @app.route('/messenger', methods=['POST', 'GET'])
 def messenger():
     if current_user.is_anonymous:
         return redirect('/')
+    mes = None
     if request.method == 'POST':
         friend_name = request.form.get('Friend_Login')
         m = db_manager.add_friend(current_user, friend_name)
         if m:
-            user_friends = db_manager.get_friends_for_user(current_user)
-            return my_render_template('messenger.html', users=user_friends, message=m)
+            mes = m
     user_friends = db_manager.get_friends_for_user(current_user)
-    return my_render_template('messenger.html', users=user_friends)
+    user_requests = db_manager.get_friend_requests(current_user)
+    return my_render_template('messenger.html', users=user_friends,
+                              req=user_requests, message=mes)
 
 
 @app.route('/messenger/<user_id>', methods=['POST', 'GET'])
 @login_required
 def chat(user_id):
+    friends = db_manager.get_friends_for_user(current_user)
+    if db_manager.load_user(user_id) not in friends:
+        return redirect('/messenger')
     if request.method == 'POST':
         message = request.form['message']
         db_manager.add_message(message, user_id, current_user.id)
