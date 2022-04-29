@@ -5,6 +5,7 @@ from flask import send_file, render_template
 from .users import User
 from .files import File
 from .messages import Message
+from .friends import Friends
 from . import config
 
 import hashlib
@@ -25,9 +26,58 @@ def my_render_template(*args, **kwargs):
 
 
 def get_friends_for_user(user):
-    # need to add friends system
     db_sess = db_session.create_session()
-    return db_sess.query(User).all()
+    friends1 = db_sess.query(Friends.receiver_id).filter_by(sender_id=user.id, accept=True).all()
+    friends2 = db_sess.query(Friends.sender_id).filter_by(receiver_id=user.id, accept=True).all()
+    req = []
+    for f_id in friends1 + friends2:
+        user = db_sess.query(User).get(f_id)
+        req.append(user)
+    return req
+
+
+def get_friend_requests(user):
+    db_sess = db_session.create_session()
+    requests = db_sess.query(Friends).filter_by(receiver_id=user.id, accept=False).all()
+    req = []
+    for r in requests:
+        user = db_sess.query(User).get(r.sender_id)
+        req.append([r.sender_id, user.name])
+    return req
+
+
+def add_friend(user1, user_2_name):
+    db_sess = db_session.create_session()
+    user2 = db_sess.query(User).filter_by(name=user_2_name).first()
+    if not user2:
+        return "Такого юзера нет"
+    if user2 in get_friends_for_user(user1):
+        return "Такой уже есть в друзьях"
+    friends = Friends(sender_id=user1.id, receiver_id=user2.id)
+    db_sess.add(friends)
+    db_sess.commit()
+
+
+def accept_req(sender_id, receiver_id):
+    db_sess = db_session.create_session()
+    r = db_sess.query(Friends).filter_by(sender_id=sender_id, receiver_id=receiver_id).first()
+    if not r:
+        return "такого запроса нет, взломай себе ...."
+    r.accept = True
+    db_sess.commit()
+
+
+def decline_req(user1_id, user2_id):
+    db_sess = db_session.create_session()
+    r1 = db_sess.query(Friends).filter_by(sender_id=user1_id, receiver_id=user2_id).first()
+    r2 = db_sess.query(Friends).filter_by(sender_id=user2_id, receiver_id=user1_id).first()
+    if not r1 and not r2:
+        return "такого запроса нет, взломай себе ...."
+    if not r1:
+        db_sess.delete(r2)
+    else:
+        db_sess.delete(r1)
+    db_sess.commit()
 
 
 def get_messages_for_users(user1_id, user2_id):

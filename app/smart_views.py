@@ -29,16 +29,16 @@ def load():
     return my_render_template('load.html', active_page='cloud')
 
 
-@app.route('/remove/<string:file_id>')
+@app.route('/remove/<string:file_path>')
 @login_required
-def remove(file_id):
-    db_manager.remove_file(current_user, file_id)
+def remove(file_path):
+    db_manager.remove_file(current_user, file_path)
     return redirect('/cloud')
 
 
-@app.route('/download/<string:file_id>')
-def download(file_id):
-    res = db_manager.download_file(current_user, file_id)
+@app.route('/download/<string:file_path>')
+def download(file_path):
+    res = db_manager.download_file(current_user, file_path)
     if res is None:
         return redirect('/file_not_found')
     return res
@@ -75,25 +75,60 @@ def login():
     return my_render_template('login.html', message=message)
 
 
-@app.route('/messenger')
+@app.route('/messenger/accept_req/<string:user_id>')
+@login_required
+def accept_req(user_id):
+    res = db_manager.accept_req(user_id, current_user.id)
+    if res is None:
+        pass
+    return redirect('/messenger')
+
+
+@app.route('/messenger/decline_req/<string:user_id>')
+@login_required
+def decline_req(user_id):
+    res = db_manager.decline_req(user_id, current_user.id)
+    if res is None:
+        pass
+    return redirect('/messenger')
+
+
+@app.route('/messenger', methods=['POST', 'GET'])
 def messenger():
+<<<<<<< HEAD
     # if current_user.is_anonymous:
     #     return redirect('/')
     # user_friends = db_manager.get_friends_for_user(current_user.id)
     # return my_render_template('messenger.html', users=user_friends)
     return my_render_template('no_work.html', active_page='messenger')
+=======
+    if current_user.is_anonymous:
+        return redirect('/')
+    mes = None
+    if request.method == 'POST':
+        friend_name = request.form.get('Friend_Login')
+        m = db_manager.add_friend(current_user, friend_name)
+        if m:
+            mes = m
+    user_friends = db_manager.get_friends_for_user(current_user)
+    user_requests = db_manager.get_friend_requests(current_user)
+    return my_render_template('messenger.html', users=user_friends,
+                              req=user_requests, message=mes)
+>>>>>>> docker
 
 
 @app.route('/messenger/<user_id>', methods=['POST', 'GET'])
 @login_required
 def chat(user_id):
-    # if request.method == 'POST':
-    #     message = request.form['message']
-    #     db_manager.add_message(message, user_id, current_user.id)
-    # messages = db_manager.get_messages_for_users(current_user.id, user_id)
-    # user_friend = db_manager.load_user(user_id)
-    # return my_render_template('chat.html', messages=messages, friend=user_friend, active_page='messanger')
-    return my_render_template('no_work.html', active_page='messenger')
+    friends = db_manager.get_friends_for_user(current_user)
+    if db_manager.load_user(user_id) not in friends:
+        return redirect('/messenger')
+    if request.method == 'POST':
+        message = request.form['message']
+        db_manager.add_message(message, user_id, current_user.id)
+    messages = db_manager.get_messages_for_users(current_user.id, user_id)
+    user_friend = db_manager.load_user(user_id)
+    return my_render_template('chat.html', messages=messages, friend=user_friend, active_page='messanger')
 
 
 @app.route('/')

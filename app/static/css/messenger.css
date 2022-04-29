@@ -3,6 +3,20 @@ body{
     background-color: #f4f7f6;
     margin-top:20px;
 }
+.friend {
+    float: left; /* Обтекание справа */
+    border: 1px solid #333; /* Параметры рамки вокруг */
+    width: 300px; /* Ширина колонки */
+    padding: 5px; /* Поля вокруг текста */
+    margin: 10px 10px 20px 100px; /* Значения отступов */
+}
+.requests {
+    float: right; /* Обтекание справа */
+    border: 1px solid #333; /* Параметры рамки вокруг */
+    width: 300px; /* Ширина колонки */
+    padding: 5px; /* Поля вокруг текста */
+    margin: 10px 100px 20px 50px; /* Значения отступов */
+}
 .card {
     background: #fff;
     transition: .5s;
@@ -10,7 +24,7 @@ body{
     margin-bottom: 30px;
     border-radius: .55rem;
     position: relative;
-    left: 400px;
+    left: 250px;
     width: 100%;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%);
 }
