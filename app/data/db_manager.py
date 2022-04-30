@@ -25,6 +25,17 @@ def my_render_template(*args, **kwargs):
     return render_template(*args, **kwargs, login=current_user.is_authenticated, pages=is_active_pages)
 
 
+def edit_user(user, name, email, password):
+    error_message = check_incorrect_data(name, password, password)
+    if error_message:
+        return error_message
+    db_sess = db_session.create_session()
+    user = user.with_password(password)
+    user.name = name
+    user.email = email
+    db_sess.commit()
+
+
 def get_friends_for_user(user):
     db_sess = db_session.create_session()
     friends1 = db_sess.query(Friends.receiver_id).filter_by(sender_id=user.id, accept=True).all()
