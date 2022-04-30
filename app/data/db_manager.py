@@ -53,6 +53,8 @@ def add_friend(user1, user_2_name):
         return "Такого юзера нет"
     if user2 in get_friends_for_user(user1):
         return "Такой уже есть в друзьях"
+    if user1 in get_friend_requests(user2):
+        return "Ты уже отправил запрос"
     friends = Friends(sender_id=user1.id, receiver_id=user2.id)
     db_sess.add(friends)
     db_sess.commit()
