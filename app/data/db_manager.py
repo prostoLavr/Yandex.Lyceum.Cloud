@@ -33,7 +33,7 @@ def get_friends_for_user(user):
     for f_id in friends1 + friends2:
         user = db_sess.query(User).get(f_id)
         req.append(user)
-    return req
+    return list(set(req))
 
 
 def get_friend_requests(user):
