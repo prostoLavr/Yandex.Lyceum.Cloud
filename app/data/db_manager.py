@@ -25,12 +25,12 @@ def my_render_template(*args, **kwargs):
     return render_template(*args, **kwargs, login=current_user.is_authenticated, pages=is_active_pages)
 
 
-def edit_user(user, name, email, password):
-    error_message = check_incorrect_data(name, password, password)
+def edit_user(user, name, email, old_password, new_password):
+    error_message = check_incorrect_data(name, old_password, user.password)
     if error_message:
         return error_message
     db_sess = db_session.create_session()
-    user = user.with_password(password)
+    user = user.with_password(new_password)
     user.name = name
     user.email = email
     db_sess.commit()
