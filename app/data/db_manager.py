@@ -25,6 +25,17 @@ def my_render_template(*args, **kwargs):
     return render_template(*args, **kwargs, login=current_user.is_authenticated, pages=is_active_pages)
 
 
+def edit_user(user, name, email, old_password, new_password):
+    error_message = check_incorrect_data(name, old_password, user.password)
+    if error_message:
+        return error_message
+    db_sess = db_session.create_session()
+    user = user.with_password(new_password)
+    user.name = name
+    user.email = email
+    db_sess.commit()
+
+
 def get_friends_for_user(user):
     db_sess = db_session.create_session()
     friends1 = db_sess.query(Friends.receiver_id).filter_by(sender_id=user.id, accept=True).all()
@@ -33,7 +44,7 @@ def get_friends_for_user(user):
     for f_id in friends1 + friends2:
         user = db_sess.query(User).get(f_id)
         req.append(user)
-    return req
+    return list(set(req))
 
 
 def get_friend_requests(user):
@@ -53,6 +64,8 @@ def add_friend(user1, user_2_name):
         return "Такого юзера нет"
     if user2 in get_friends_for_user(user1):
         return "Такой уже есть в друзьях"
+    if user1 in get_friend_requests(user2):
+        return "Ты уже отправил запрос"
     friends = Friends(sender_id=user1.id, receiver_id=user2.id)
     db_sess.add(friends)
     db_sess.commit()
