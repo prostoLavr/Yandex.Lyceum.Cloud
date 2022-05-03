@@ -1,12 +1,18 @@
 # Yandex.Lyceum.Cloud
 
-Installing:
-* packeges:
-  * uwsgi 
-  * uwsgi-plugin-python3 or uwsgi-plugin-python
-* edit uwsgi.ini: <br> if you have uwsgi-plugin-python3 <br>then use "plugins=python3" <br>else use "plugins=python"
+Installing and running:
+* install nginx python3 python3-pip systemctl
+* pip3 install -r waitress/requirements.txt
+* copy lavaland.service to /etc/systemd/system/
+* copy nginx.conf to /etc/nginx/
+* copy ssl certificates to /etc/nginx/ssl
+* systemctl daemon-reload
+* systemctl start lavaland.service
+* systemctl enable lavaland.service
+* systemctl start nginx.service
+* systemctl enable nginx.service
 
-
-Running: 
-*     cd /path/to/Yandex.Lyceum.Cloud
-*      uwsgi --ini ./uwsgi.ini
+Running without nginx:
+* cd waitress
+* pip3 install -r requirements.txt
+* python3 wsgi.py
