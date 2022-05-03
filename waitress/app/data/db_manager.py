@@ -17,7 +17,6 @@ import datetime
 def my_render_template(*args, **kwargs):
     active_page = kwargs.get('active_page')
     page = active_page if active_page else '.'.join(args[0].split('.')[:-1])
-    print('page', page)
     pages = ['cloud', 'messenger', 'premium', 'support', 'about']
     is_active_pages = [False] * len(pages)
     if page in pages:
@@ -197,13 +196,11 @@ def download_file(user, file_path):
     db_sess = db_session.create_session()
     file = db_sess.query(File).filter_by(path=file_path).first()
     db_sess.close()
-    print('file is open = ', file.is_open)
     if not file or not user:
         return
     if not (file.is_open or user.is_authenticated and file.id in user.get_files() + user.get_given_files()):
         return
     full_file_path = os.path.join(config.shorts_files_path, file.path)
-    print('download', full_file_path)
     return send_file(full_file_path, download_name=file.name, as_attachment=True)
 
 
@@ -213,7 +210,6 @@ def find_file(user, file_path):
     db_sess.close()
     if not file or not user or not (file.id in user.get_files() + user.get_given_files()):
         return
-    print(file.name, 'is', bool(file.desc))
     return file
 
 

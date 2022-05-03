@@ -2,7 +2,7 @@
 *.log
 *.db
 __pycache__/
-uwsgi/app/static/files
+waitress/app/static/files
 ssl/
 certificate/
 venv/

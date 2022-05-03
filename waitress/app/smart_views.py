@@ -141,7 +141,6 @@ def account():
 @app.route('/edit_file/<file_path>', methods=['POST', 'GET'])
 def edit_file(file_path):
     if request.method == 'POST':
-        print(request.form)
         db_manager.edit_file(file_path, request.form)
         return redirect('/cloud')
     file_to_edit = db_manager.find_file(current_user, file_path)
