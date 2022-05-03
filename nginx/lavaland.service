@@ -1,0 +1,15 @@
+[Unit]
+Description=WSGI
+After=syslog.target
+
+[Service]
+WorkingDirectory=/sites/lavaland/waitress
+ExecStart=/usr/bin/python3 wsgi.py
+Restart=always
+KillSignal=SIGQUIT
+Type=simple
+StandardError=syslog
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
