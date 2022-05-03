@@ -1,4 +1,4 @@
-from uwsgi.app import login_manager
+from app import login_manager
 from flask_login import current_user
 from flask import send_file, render_template
 
