@@ -4,5 +4,3 @@
 __pycache__/
 waitress/app/static/files
 ssl/
-certificate/
-venv/
