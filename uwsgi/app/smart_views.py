@@ -95,13 +95,6 @@ def decline_req(user_id):
 
 @app.route('/messenger', methods=['POST', 'GET'])
 def messenger():
-<<<<<<< HEAD
-    # if current_user.is_anonymous:
-    #     return redirect('/')
-    # user_friends = db_manager.get_friends_for_user(current_user.id)
-    # return my_render_template('messenger.html', users=user_friends)
-    return my_render_template('no_work.html', active_page='messenger')
-=======
     if current_user.is_anonymous:
         return redirect('/')
     mes = None
@@ -114,7 +107,6 @@ def messenger():
     user_requests = db_manager.get_friend_requests(current_user)
     return my_render_template('messenger.html', users=user_friends,
                               req=user_requests, message=mes)
->>>>>>> docker
 
 
 @app.route('/messenger/<user_id>', methods=['POST', 'GET'])

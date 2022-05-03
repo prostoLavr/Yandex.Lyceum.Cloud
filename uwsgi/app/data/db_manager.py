@@ -1,4 +1,4 @@
-from app import login_manager, db_session
+from uwsgi.app import login_manager
 from flask_login import current_user
 from flask import send_file, render_template
 
@@ -6,7 +6,7 @@ from .users import User
 from .files import File
 from .messages import Message
 from .friends import Friends
-from . import config
+from . import config, db_session
 
 import hashlib
 import os
