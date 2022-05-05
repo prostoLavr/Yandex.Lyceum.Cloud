@@ -79,7 +79,7 @@ def login():
 def index():
     if current_user.is_authenticated:
         return redirect('/cloud')
-    return my_render_template('index.html')
+    return my_render_template('index.html', active_page='cloud')
 
 
 @app.route('/account')
