@@ -82,12 +82,19 @@ def index():
     return my_render_template('index.html', active_page='cloud')
 
 
-@app.route('/account')
+@app.route('/account', methods=['POST', 'GET'])
 def account():
     if current_user.is_anonymous:
         return redirect('/')
-    # return my_render_template('account.html')
-    return my_render_template('no_work.html')
+    if request.method == 'POST':
+        error_message = db_manager.edit_user(request.form)
+        if error_message:
+            return my_render_template('account.html', message=error_message)
+        else:
+            logout_user()
+            return my_render_template('success_edit_account.html')
+    else:
+        return my_render_template('account.html')
 
 
 @app.route('/edit_file/<file_path>', methods=['POST', 'GET'])
