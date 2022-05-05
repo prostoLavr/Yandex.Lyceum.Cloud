@@ -22,16 +22,6 @@ def my_render_template(*args, **kwargs):
     return render_template(*args, **kwargs, login=current_user.is_authenticated, pages=is_active_pages)
 
 
-def edit_user(user, name, email, old_password, new_password):
-    error_message = check_incorrect_data(name, old_password, user.password)
-    if error_message:
-        return error_message
-    db_sess = db_session.create_session()
-    user = user.with_password(new_password)
-    user.name = name
-    user.email = email
-
-
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
@@ -73,6 +63,39 @@ def add_new_user(form: dict) -> str:
     return ''
 
 
+def edit_user(form: dict) -> str:
+    name = form['Login']
+    email = form['Email']
+    old_password = form['OldPassword']
+    password = form['Password']
+    repeat_password = form['RepeatPassword']
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter_by(name=current_user.name).one()
+
+    if not user.check_password(old_password):
+        return 'Неверный пароль'
+    if name:
+        error_message = check_incorrect_name(name)
+        if error_message:
+            return error_message
+        user.name = name
+    if email:
+        user.email = email
+    if password:
+        error_message = check_incorrect_passwords(password, repeat_password)
+        if error_message:
+            return error_message
+        user.with_password(password)
+    try:
+        db_sess.commit()
+    except Exception as e:
+        print('ERROR EDIT REGISTERED USER')
+        print(e.__class__.__name__)
+        print(e)
+        return 'Не удалось изменить аккаунт. Повторите попытку позднее'
+    return ''
+
+
 def normalize_filename(filename):
     symbols_to_remove = '{}%^:#!@"&*?/|\\<>,`~$;+' + "'"
     for i in symbols_to_remove:
@@ -88,7 +111,7 @@ def save_file(request):
     path = uuid.uuid4().hex
     while os.path.exists(path):
         path = uuid.uuid4().hex
-    
+
     filename = normalize_filename(file.filename)
 
     file.save(os.path.join(config.files_path, path))
@@ -159,6 +182,15 @@ def name_in_db(name: str):
 
 
 def check_incorrect_data(name: str, password: str, repeat_password: str) -> str:
+    error = check_incorrect_name(name)
+    if error:
+        return error
+    error = check_incorrect_passwords(password, repeat_password)
+    if error:
+        return error
+
+
+def check_incorrect_name(name: str) -> str:
     if len(name) < 4:
         return 'Логин должен состоять из более чем 4 символов'
     if len(name) > 32:
@@ -167,32 +199,19 @@ def check_incorrect_data(name: str, password: str, repeat_password: str) -> str:
         return 'Имя не должно содержать спец.символов'
     if name_in_db(name):
         return 'Пользователь с таким логином уже существует'
+
+
+def check_incorrect_password(password: str) -> str:
     if len(password) < 4:
         return 'Пароль должен состоять из более чем 4 символов'
-    if len(name) > 100:
+    if len(password) > 100:
         return 'Максимальный размер пароля - 100 символов'
+
+
+def check_incorrect_passwords(password: str, repeat_password: str) -> str:
+    error = check_incorrect_password(password)
+    if error:
+        return error
     if password != repeat_password:
         return 'Пароли не совпадают'
     return ''
-
-
-def index_revert(path: str):
-    for num, i in reversed(tuple(enumerate(path))):
-        if i == '(':
-            return num
-
-
-def is_numbered(path):
-    return path.endswith(')') and '(' in path and path[index_revert(path) + 1:-1].isnumeric()
-
-
-def add_numbered(path):
-    number = 1
-    ext = ''
-    if '.' in path:
-        ext = '.' + path.split('.')[-1]
-        path = '.'.join(path.split('.')[:-1])
-    if is_numbered(path):
-        number = int(path[index_revert(path) + 1:-1]) + 1
-        path = path[:index_revert(path)]
-    return path + f'({number}){ext}'
