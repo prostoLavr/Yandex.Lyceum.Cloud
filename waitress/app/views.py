@@ -9,10 +9,6 @@ def premium():
     return my_render_template('premium.html')
 
 
-@app.route('/about')
-def about():
-    return my_render_template('about.html')
-
 
 @app.route('/politic')
 def politic():

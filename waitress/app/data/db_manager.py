@@ -1,11 +1,9 @@
-from app import login_manager
+from .. import login_manager
 from flask_login import current_user
 from flask import send_file, render_template
 
 from .users import User
 from .files import File
-from .messages import Message
-from .friends import Friends
 from . import config, db_session
 
 import hashlib
@@ -17,7 +15,7 @@ import datetime
 def my_render_template(*args, **kwargs):
     active_page = kwargs.get('active_page')
     page = active_page if active_page else '.'.join(args[0].split('.')[:-1])
-    pages = ['cloud', 'messenger', 'premium', 'support', 'about']
+    pages = ['cloud', 'premium', 'support', 'about']
     is_active_pages = [False] * len(pages)
     if page in pages:
         is_active_pages[pages.index(page)] = True
@@ -32,80 +30,6 @@ def edit_user(user, name, email, old_password, new_password):
     user = user.with_password(new_password)
     user.name = name
     user.email = email
-    db_sess.commit()
-
-
-def get_friends_for_user(user):
-    db_sess = db_session.create_session()
-    friends1 = db_sess.query(Friends.receiver_id).filter_by(sender_id=user.id, accept=True).all()
-    friends2 = db_sess.query(Friends.sender_id).filter_by(receiver_id=user.id, accept=True).all()
-    req = []
-    for f_id in friends1 + friends2:
-        user = db_sess.query(User).get(f_id)
-        req.append(user)
-    return list(set(req))
-
-
-def get_friend_requests(user):
-    db_sess = db_session.create_session()
-    requests = db_sess.query(Friends).filter_by(receiver_id=user.id, accept=False).all()
-    req = []
-    for r in requests:
-        user = db_sess.query(User).get(r.sender_id)
-        req.append([r.sender_id, user.name])
-    return req
-
-
-def add_friend(user1, user_2_name):
-    db_sess = db_session.create_session()
-    user2 = db_sess.query(User).filter_by(name=user_2_name).first()
-    if not user2:
-        return "Такого юзера нет"
-    if user2 in get_friends_for_user(user1):
-        return "Такой уже есть в друзьях"
-    if user1 in get_friend_requests(user2):
-        return "Ты уже отправил запрос"
-    friends = Friends(sender_id=user1.id, receiver_id=user2.id)
-    db_sess.add(friends)
-    db_sess.commit()
-
-
-def accept_req(sender_id, receiver_id):
-    db_sess = db_session.create_session()
-    r = db_sess.query(Friends).filter_by(sender_id=sender_id, receiver_id=receiver_id).first()
-    if not r:
-        return "такого запроса нет, взломай себе ...."
-    r.accept = True
-    db_sess.commit()
-
-
-def decline_req(user1_id, user2_id):
-    db_sess = db_session.create_session()
-    r1 = db_sess.query(Friends).filter_by(sender_id=user1_id, receiver_id=user2_id).first()
-    r2 = db_sess.query(Friends).filter_by(sender_id=user2_id, receiver_id=user1_id).first()
-    if not r1 and not r2:
-        return "такого запроса нет, взломай себе ...."
-    if not r1:
-        db_sess.delete(r2)
-    else:
-        db_sess.delete(r1)
-    db_sess.commit()
-
-
-def get_messages_for_users(user1_id, user2_id):
-    db_sess = db_session.create_session()
-    messages1 = db_sess.query(Message).filter_by(sender_id=user1_id, receiver_id=user2_id).all()
-    messages2 = db_sess.query(Message).filter_by(sender_id=user2_id, receiver_id=user1_id).all()
-    messages = list(set(messages1 + messages2))
-    messages = sorted(messages, key=lambda m: m.sent_date)
-    return messages
-
-
-def add_message(m, id1, id2):
-    db_sess = db_session.create_session()
-    mes = Message(text=m, sender_id=id2, receiver_id=id1)
-    db_sess.add(mes)
-    db_sess.commit()
 
 
 @login_manager.user_loader
