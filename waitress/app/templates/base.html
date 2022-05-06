@@ -43,12 +43,12 @@
               {% if login %}
                 <div class="col-md-3 text-end">
                   <a href="/account"><button type="button" class="btn btn-primary  me-2">Аккаунт</button></a>
-                  <a href="/logout"><button type="button" class="btn btn-outline-primary ">Выйти</button></a>
+                  <a href="/account/logout"><button type="button" class="btn btn-outline-primary ">Выйти</button></a>
                 </div>
               {% else %}
               <div class="col-md-3 text-end">
-                <a href="/login"><button type="button" class="btn btn-outline-primary me-2">Войти</button></a>
-                <a href="/register"><button type="button" class="btn btn-primary">Регистрация</button></a>
+                <a href="/account/login"><button type="button" class="btn btn-outline-primary me-2">Войти</button></a>
+                <a href="/account/register"><button type="button" class="btn btn-primary">Регистрация</button></a>
               </div>
               {% endif %}
             </header>

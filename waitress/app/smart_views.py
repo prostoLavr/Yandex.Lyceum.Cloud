@@ -6,7 +6,7 @@ from .data import db_manager
 from .data.db_manager import my_render_template
 
 
-@app.route('/logout/')
+@app.route('/account/logout/')
 @login_required
 def logout():
     logout_user()
@@ -21,24 +21,24 @@ def cloud():
     return my_render_template('cloud.html', files=files)
 
 
-@app.route('/load', methods=['GET', 'POST'])
+@app.route('/cloud/load', methods=['GET', 'POST'])
 def load():
     if current_user.is_anonymous:
         return redirect('/')
     if request.method == 'POST':
         path_to_file = db_manager.save_file(request)
-        return redirect(f'/edit_file/{path_to_file}')
+        return redirect(f'/cloud/edit_file/{path_to_file}')
     return my_render_template('load.html', active_page='cloud')
 
 
 @login_required
-@app.route('/remove/<string:file_path>')
+@app.route('/cloud/remove/<string:file_path>')
 def remove(file_path):
     db_manager.remove_file(current_user, file_path)
     return redirect('/cloud')
 
 
-@app.route('/download/<string:file_path>')
+@app.route('/cloud/download/<string:file_path>')
 def download(file_path):
     res = db_manager.download_file(current_user, file_path)
     if res is None:
@@ -46,7 +46,7 @@ def download(file_path):
     return res
 
 
-@app.route('/register', methods=['POST', 'GET'])
+@app.route('/account/register', methods=['POST', 'GET'])
 def register():
     if current_user.is_authenticated:
         return redirect('/cloud')
@@ -60,7 +60,7 @@ def register():
         return my_render_template('register.html')
 
 
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/account/login', methods=['POST', 'GET'])
 def login():
     message = ''
     if current_user.is_authenticated:
@@ -147,7 +147,7 @@ def account():
         return my_render_template('account.html')
 
 
-@app.route('/edit_file/<file_path>', methods=['POST', 'GET'])
+@app.route('/cloud/edit_file/<file_path>', methods=['POST', 'GET'])
 def edit_file(file_path):
     if current_user.is_anonymous:
         return redirect('/')
