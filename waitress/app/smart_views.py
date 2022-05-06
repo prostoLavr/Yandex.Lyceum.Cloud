@@ -159,3 +159,27 @@ def edit_file(file_path):
         return redirect('/file_not_found')
     return my_render_template('file.html', file=file_to_edit,
                               link=f'https://{server_name}/download/{file_to_edit.path}')
+
+
+@app.errorhandler(404)
+def page_error(error):
+    return my_render_template('no_work_with_text.html', text='Страница не найдена  :(')
+
+
+@app.errorhandler(413)
+@app.errorhandler(400)
+def request_error(error):
+    return my_render_template('no_work_with_text.html', text='Ошибка запроса  :(')
+
+
+@app.errorhandler(401)
+def unauthorized_error(error):
+    return my_render_template('no_work_with_text.html', text='Кажется вы не авторизованы :(')
+
+
+@app.errorhandler(500)
+@app.errorhandler(502)
+def site_no_work(error):
+    return my_render_template('no_work_with_text.html', text='Кажется на сайте случилась ошибка. '
+                                                             'Скорее всего он слишком сильно загружен. '
+                                                             'Повторите попытку позже  :(')

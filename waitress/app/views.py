@@ -39,7 +39,4 @@ def get_premium():
     return my_render_template('get_premium.html', active_page='premium')
 
 
-@app.errorhandler(413)
-def request_entity_too_large(error):
-    return 'Слишком большой файл :(', 413
 
