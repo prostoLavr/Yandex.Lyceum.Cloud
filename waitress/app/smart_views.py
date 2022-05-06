@@ -1,9 +1,9 @@
+from flask_login import login_required, login_user, current_user, logout_user
+from flask import request, redirect
+
 from . import app, server_name
 from .data import db_manager
 from .data.db_manager import my_render_template
-
-from flask_login import login_required, login_user, current_user, logout_user
-from flask import request, redirect
 
 
 @app.route('/logout/')
@@ -15,7 +15,7 @@ def logout():
 
 @app.route('/cloud')
 def cloud():
-    if not current_user.is_authenticated:
+    if current_user.is_anonymous:
         return redirect('/')
     files = db_manager.get_files_for(current_user)
     return my_render_template('cloud.html', files=files)
@@ -23,14 +23,16 @@ def cloud():
 
 @app.route('/load', methods=['GET', 'POST'])
 def load():
+    if current_user.is_anonymous:
+        return redirect('/')
     if request.method == 'POST':
         path_to_file = db_manager.save_file(request)
         return redirect(f'/edit_file/{path_to_file}')
     return my_render_template('load.html', active_page='cloud')
 
 
-@app.route('/remove/<string:file_path>')
 @login_required
+@app.route('/remove/<string:file_path>')
 def remove(file_path):
     db_manager.remove_file(current_user, file_path)
     return redirect('/cloud')
@@ -147,10 +149,13 @@ def account():
 
 @app.route('/edit_file/<file_path>', methods=['POST', 'GET'])
 def edit_file(file_path):
+    if current_user.is_anonymous:
+        return redirect('/')
     if request.method == 'POST':
         db_manager.edit_file(file_path, request.form)
         return redirect('/cloud')
     file_to_edit = db_manager.find_file(current_user, file_path)
     if not file_to_edit:
         return redirect('/file_not_found')
-    return my_render_template('file.html', file=file_to_edit, link=f'https://{server_name}/download/{file_to_edit.path}')
+    return my_render_template('file.html', file=file_to_edit,
+                              link=f'https://{server_name}/download/{file_to_edit.path}')

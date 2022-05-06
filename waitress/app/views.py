@@ -1,7 +1,7 @@
+from flask import render_template
+
 from . import app
 from .data.db_manager import my_render_template
-
-from flask import render_template
 
 
 @app.route('/premium')

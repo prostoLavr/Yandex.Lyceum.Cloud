@@ -5,14 +5,16 @@ body {
 }
 #my-sidebar {
     float:right;
+    width: 300px; /* Ширина колонки */
+}
+.my-sidebar-part {
+    margin: 5px; /* Поля вокруг текста */
 }
 .friend {
-    border: 1px solid #333; /* Параметры рамки вокруг */
     width: 300px; /* Ширина колонки */
     padding: 5px; /* Поля вокруг текста */
 }
 .requests {
-    border: 1px solid #333; /* Параметры рамки вокруг */
     width: 300px; /* Ширина колонки */
     padding: 5px; /* Поля вокруг текста */
 }

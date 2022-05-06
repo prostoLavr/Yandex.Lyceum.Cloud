@@ -1,7 +1,7 @@
-from app import login_manager
 from flask_login import current_user
 from flask import send_file, render_template
 
+from .. import login_manager
 from .users import User
 from .files import File
 from .messages import Message
