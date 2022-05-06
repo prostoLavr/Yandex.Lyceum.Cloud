@@ -158,7 +158,7 @@ def edit_file(file_path):
     if not file_to_edit:
         return redirect('/file_not_found')
     return my_render_template('file.html', file=file_to_edit,
-                              link=f'https://{server_name}/download/{file_to_edit.path}')
+                              link=f'https://{server_name}/cloud/download/{file_to_edit.path}')
 
 
 @app.errorhandler(404)
