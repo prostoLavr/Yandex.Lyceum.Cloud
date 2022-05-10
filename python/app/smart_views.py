@@ -112,9 +112,7 @@ def messenger():
     mes = None
     if request.method == 'POST':
         friend_name = request.form.get('Friend_Login')
-        m = db_manager.add_friend(current_user, friend_name)
-        if m:
-            mes = m
+        db_manager.add_friend(current_user, friend_name)
     user_friends = db_manager.get_friends_for_user(current_user)
     user_requests = db_manager.get_friend_requests(current_user)
     return my_render_template('messenger.html', users=user_friends,
@@ -142,19 +140,20 @@ def index():
     return my_render_template('index.html')
 
 
-@app.route('/account', methods=['POST', 'GET'])
-def account():
-    if current_user.is_anonymous:
-        return redirect('/')
+@login_required
+@app.route('/account/edit', methods=['POST', 'GET'])
+def account_edit():
     if request.method == 'POST':
         error_message = db_manager.edit_user(request.form)
         if error_message:
-            return my_render_template('account.html', message=error_message)
-        else:
-            logout_user()
-            return my_render_template('success_edit_account.html')
-    else:
-        return my_render_template('account.html')
+            return my_render_template('edit_account.html', message=error_message)
+    return my_render_template('edit_account.html')
+
+
+@login_required
+@app.route('/account', methods=['POST', 'GET'])
+def account():
+    return my_render_template('account.html')
 
 
 @app.route('/cloud/edit_file/<file_path>', methods=['POST', 'GET'])
