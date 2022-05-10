@@ -192,7 +192,7 @@ def normalize_filename(filename):
 
 
 def save_file(request):
-    file = request.files['File']
+    file = request.files['file1']
 
     path = uuid.uuid4().hex
     while os.path.exists(path):

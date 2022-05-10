@@ -31,6 +31,11 @@ def load():
     return my_render_template('load.html', active_page='cloud')
 
 
+@app.route('/cloud/load/success')
+def success_load():
+    return redirect('/cloud')
+
+
 @login_required
 @app.route('/cloud/remove/<string:file_path>')
 def remove(file_path):

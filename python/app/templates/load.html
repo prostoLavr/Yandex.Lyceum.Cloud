@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% block head %}
+<script src="{{url_for('static', filename='js/script.js')}}"></script>
+{% endblock %}
 {% block title %}
 Выложить файл
 {% endblock %}
@@ -7,9 +10,10 @@
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="m-5 fw-light">Загрузка файла</h1>
-        <form method=post  enctype=multipart/form-data>
-            <input type="file" name="File" id="file">
-            <input class="btn btn-primary my-2" type=submit value=Загрузить>
+        <form id="upload_form" enctype="multipart/form-data" method="post">
+          <input type="file" name="file1" id="file1" onchange="uploadFile()"><br>
+          <progress id="progressBar" value="0" max="100" style="width:300px;"></progress>
+          <p id="status"></p>
         </form>
       </div>
     </div>
