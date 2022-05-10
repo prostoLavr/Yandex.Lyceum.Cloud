@@ -2,6 +2,5 @@
 *.log
 *.db
 __pycache__/
-waitress/app/static/files
+python/app/static/files
 ssl/
-venv/

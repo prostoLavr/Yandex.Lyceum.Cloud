@@ -1,10 +1,13 @@
 [Unit]
-Description=WSGI
-After=syslog.target
+Description=WSGI gunicorn
+After=network.target
 
 [Service]
-WorkingDirectory=/sites/lavaland/waitress
-ExecStart=/usr/bin/python3 wsgi.py
+User=lawrence
+Group=www-data
+Environment="PATH=/sites/lavaland/venv/bin"
+WorkingDirectory=/sites/lavaland/python
+ExecStart=/sites/lavaland/venv/bin/gunicorn --workers 3 --bind 0.0.0.0:5000 -m 007 wsgi:app
 Restart=always
 KillSignal=SIGQUIT
 Type=simple
