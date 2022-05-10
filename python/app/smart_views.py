@@ -58,7 +58,7 @@ def register():
     if request.method == 'POST':
         error_message = db_manager.add_new_user(request.form)
         if error_message:
-            return my_render_template('register.html', message=error_message)
+            return my_render_template('register.html', message=error_message, **request.form)
         username = request.form.get('Login')
         password = request.form.get('Password')
         user = db_manager.login_user_by_password(username, password)
@@ -66,13 +66,12 @@ def register():
             login_user(user)
             return redirect('/cloud')
         print("ERROR TO LOGIN REGISTERED USER")
-        return my_render_template('register.html', message='Что-то пошло не так. Повторите попытку позже')
+        return my_render_template('register.html', message='Что-то пошло не так. Повторите попытку позже', **request.form)
     return my_render_template('register.html')
 
 
 @app.route('/account/login', methods=['POST', 'GET'])
 def login():
-    message = ''
     if current_user.is_authenticated:
         return redirect('/cloud')
     if request.method == 'POST':
@@ -84,7 +83,8 @@ def login():
             return redirect('/cloud')
         else:
             message = 'Неверный логин или пароль'
-    return my_render_template('login.html', message=message)
+        return my_render_template('login.html', message=message, username=username, password=password)
+    return my_render_template('login.html')
 
 
 @app.route('/messenger/accept_req/<string:user_id>')

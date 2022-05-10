@@ -8,19 +8,19 @@
         <form class="p-4 p-md-5 border rounded-3 bg-light" method="post">
           <p>{{ message }}</p>
           <div class="form-floating mb-3">
-            <input type="text" name='Login' class="form-control" id="floatingLogin" placeholder="Login">
+            <input value="{{ Login if Login else '' }}" type="text" name='Login' class="form-control" id="floatingLogin" placeholder="Login">
             <label for="floatingLogin">Логин<small>*</small></label>
           </div>
           <div class="form-floating mb-3">
-            <input type="email" name="Email" class="form-control" id="floatingEmail" placeholder="name@example.com">
+            <input value="{{ Email if Email else '' }}" type="email" name="Email" class="form-control" id="floatingEmail" placeholder="name@example.com">
             <label for="floatingEmail">Адрес эл.почты</label>
           </div>
           <div class="form-floating mb-3">
-            <input type="password" name="Password" class="form-control" id="floatingPassword" placeholder="Password">
+            <input value="{{ Password if Password else '' }}" type="password" name="Password" class="form-control" id="floatingPassword" placeholder="Password">
             <label for="floatingPassword">Пароль<small>*</small></label>
           </div>
           <div class="form-floating mb-3">
-            <input type="password" name="RepeatPassword" class="form-control" id="floatingPasswordRepeat" placeholder="Password">
+            <input value="{{ RepeatPassword if RepeatPassword else '' }}" type="password" name="RepeatPassword" class="form-control" id="floatingPasswordRepeat" placeholder="Password">
             <label for="floatingPasswordRepeat">Повторите пароль<small>*</small></label>
           </div>
           <button class="w-100 btn btn-lg btn-primary" type="submit">Создать аккаунт</button>
