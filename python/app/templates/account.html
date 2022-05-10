@@ -1,38 +1,15 @@
 {% extends 'base.html' %}
 {% block title %}
-Регистрация
+Аккаунт
 {% endblock %}
 {% block body %}
-<div class="container col-xl-10 col-xxl-8 px-4 py-5">
-      <div class="col-md-10 mx-auto col-lg-5">
-        <form class="p-4 p-md-5 border rounded-3 bg-light" method="post">
-          <p>{{ message }}</p>
-          <div class="form-floating mb-3">
-            <input type="password" name="OldPassword" class="form-control" id="floatingOldPassword" placeholder="password">
-            <label for="floatingOldPassword">Старый пароль<small>*</small></label>
-          </div>
-          <div class="form-floating mb-3">
-            <input type="text" name='Login' class="form-control" id="floatingLogin" placeholder="Login">
-            <label for="floatingLogin">Новый логин</label>
-          </div>
-          <div class="form-floating mb-3">
-            <input type="email" name="Email" class="form-control" id="floatingEmail" placeholder="name@example.com">
-            <label for="floatingEmail">Новый адрес эл.почты</label>
-          </div>
-          <div class="form-floating mb-3">
-            <input type="password" name="Password" class="form-control" id="floatingPassword"  placeholder="password">
-            <label for="floatingPassword">Новый пароль</label>
-          </div>
-          <div class="form-floating mb-3">
-            <input type="password" name="RepeatPassword" class="form-control" id="floatingPasswordRepeat"  placeholder="password">
-            <label for="floatingPasswordRepeat">Повторите пароль</label>
-          </div>
-          <button class="w-100 btn btn-lg btn-primary" type="submit">Изменить аккаунт</button>
-          <hr class="my-4">
-          <small class="text-muted">Оставьте поле пустым, чтобы не изменять его.</small>
-          <small class="text-muted">Используя аккаунт, Вы подтверждаете согласие с <a href="/politic">Политикой сайта</a></small>
-        </form>
+  <div class="px-4 py-5 my-5 text-center">
+    <h1 class="display-5 fw-bold">Ещё в разработке!</h1>
+    <div class="col-lg-6 mx-auto">
+      <p class="lead mb-4">Тут можно будет посмотреть данные об аккаунте</p>
+      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+        <a href="/account/edit"><button type="button" class="btn btn-primary btn-lg px-4 gap-3">Редактировать</button></a>
       </div>
     </div>
-
+  </div>
 {% endblock %}
