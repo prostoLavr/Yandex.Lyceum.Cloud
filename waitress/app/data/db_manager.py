@@ -114,9 +114,9 @@ def load_user(user_id):
     return db_sess.query(User).get(user_id)
 
 
-def login_user(name, password):
+def login_user_by_password(name, password):
     db_sess = db_session.create_session()
-    user = db_sess.query(User).filter_by(name=name).first()
+    user = db_sess.query(User).filter_by(name=name).one()
     if user is not None:
         key_from_db, salt = user.password, user.salt
         key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000, dklen=128)
