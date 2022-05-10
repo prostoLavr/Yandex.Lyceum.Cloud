@@ -2,6 +2,9 @@
 {% block title %}
 Редактировать файл
 {% endblock %}
+{% block head %}
+<script src="{{url_for('static', filename='js/text_copy.js')}}"></script>
+{% endblock %}
 {% block body %}
 <form method=post enctype=multipart/form-data>
     <section class="py-5 text-center container">
@@ -35,7 +38,8 @@
                       Открытый (Файл могут скачать все, у кого есть ссылка)
                     </label>
                 </div><br>
-                <p class="form-control">{{ link }}</p>
+                <textarea class="form-control">{{ link }}</textarea>
+                <button id="linkButton" type="button" class="btn btn-secondary" onclick="copyText( '{{ link }}' )">Copy link</button>
                 <input class="btn btn-primary my-2" type="submit" value=Сохранить>
             </div>
         </div>
