@@ -5,9 +5,8 @@ After=network.target
 [Service]
 User=lawrence
 Group=www-data
-Environment="PATH=/sites/lavaland/venv/bin"
 WorkingDirectory=/sites/lavaland/python
-ExecStart=/sites/lavaland/venv/bin/gunicorn --workers 3 --bind unix:lavaland.sock -m 007 wsgi:app
+ExecStart=/home/lawrence/.local/bin/gunicorn --workers 3 --bind unix:lavaland.sock -m 007 wsgi:app
 Restart=always
 KillSignal=SIGQUIT
 Type=simple
