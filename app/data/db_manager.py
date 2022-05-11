@@ -6,7 +6,7 @@ from .users import User
 from .files import File
 from .messages import Message
 from .friends import Friends
-from . import config, db_session
+from . import config, db_session, simple_passwords
 
 import hashlib
 import os
@@ -288,10 +288,12 @@ def check_incorrect_name(name: str) -> str:
 
 
 def check_incorrect_password(password: str) -> str:
-    if len(password) < 4:
-        return 'Пароль должен состоять из более чем 4 символов'
+    if len(password) < 6:
+        return 'Пароль должен состоять из более чем 6 символов'
     if len(password) > 100:
         return 'Максимальный размер пароля - 100 символов'
+    if password in simple_passwords:
+        return 'Пароль слишком простой'
 
 
 def check_incorrect_passwords(password: str, repeat_password: str) -> str:

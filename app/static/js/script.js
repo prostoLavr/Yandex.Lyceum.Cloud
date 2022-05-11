@@ -18,7 +18,7 @@ function uploadFile() {
 function progressHandler(event) {
   var percent = (event.loaded / event.total) * 100;
   _("progressBar").value = Math.round(percent);
-  _("status").innerHTML = Math.round(percent) + "% uploaded";
+  _("status").innerHTML = Math.round(percent) + "%";
 }
 
 function completeHandler(event) {
