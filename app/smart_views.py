@@ -70,8 +70,8 @@ def register():
     return my_render_template('register.html')
 
 
-@app.route('/account/login', methods=['POST', 'GET'])
-def login():
+@app.route('/', methods=['POST', 'GET'])
+def index():
     if current_user.is_authenticated:
         return redirect('/cloud')
     if request.method == 'POST':
@@ -131,13 +131,6 @@ def chat(user_id):
     messages = db_manager.get_messages_for_users(current_user.id, user_id)
     user_friend = db_manager.load_user(user_id)
     return my_render_template('chat.html', messages=messages, friend=user_friend, active_page='messanger')
-
-
-@app.route('/')
-def index():
-    if current_user.is_authenticated:
-        return redirect('/cloud')
-    return my_render_template('index.html')
 
 
 @login_required

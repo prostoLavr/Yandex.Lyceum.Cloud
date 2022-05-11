@@ -8,11 +8,11 @@
 <div class="container col-xl-10 col-xxl-8 px-4 py-5">
     <div class="row align-items-center g-lg-5 py-5">
       <div class="col-lg-7 text-center text-lg-start">
-        <h1 class="display-4 fw-bold lh-1 mb-3">Максимальная приватность</h1>
-        <p class="col-lg-10 fs-4">Мы делаем всё, чтобы сохранить Вашу приватность. Но не забывайте о безопастности! Держите в секрете данные своей учётной записи. Обращайте внимание на адрес сайта.</p>
+        <h1 class="display-4 fw-bold lh-1 mb-3">Привет!</h1>
+        <p class="col-lg-10 fs-4">Это описание того что мы делаем. Это описание того что мы делаем. Это описание того что мы делаем. Это описание того что мы делаем. </p>
       </div>
       <div class="col-md-10 mx-auto col-lg-5">
-        <form class="p-4 p-md-5 border rounded-3 bg-light" method="post">
+        <form class="p-4 p-md-5 rounded-3 my-card" method="post">
           <p>{{ message if message else '' }}</p>
           <div class="form-floating mb-3">
             <input value="{{ username if username else '' }}" name="Login" type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
@@ -22,10 +22,16 @@
             <input value="{{ password if password else '' }}" name="Password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
             <label for="floatingPassword">Пароль</label>
           </div>
-          <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
-          <hr class="my-4">
+          <button class="w-100 btn btn-lg btn-primary my-pink-button" type="submit">Войти</button>
+          <hr size="3" class="my-pink-line">
+          <a class="w-100 btn btn-lg btn-outline-secondary" href="/account/register" >Регистрация</a>
           <small class="text-muted">Нажимая кнопку Войти, Вы подтверждаете согласие с <a href="/politic">Политикой сайта</a></small>
         </form>
+      </div>
+      <img src="https://cdn.discordapp.com/attachments/929030760684453890/973922718976196708/unknown.png">
+      <div class="text-center">
+        <h1 class="display-4 fw-bold">Твои файлы всегда под рукой!</h1>
+        <p class="fs-4">Мы предлагаем доступ к облачному хранилищу, которое </p>
       </div>
     </div>
   </div>

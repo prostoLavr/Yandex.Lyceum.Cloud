@@ -9,4 +9,63 @@
 .fixed-size {
     resize: none;
 }
-
+body {
+background: #44453b;
+}
+p {
+color: #FFF;
+}
+h1 {
+color: #FFF;
+}
+h2 {
+color: #FFF;
+}
+h3 {
+color: #FFF;
+}
+h4 {
+color: #FFF;
+}
+a {
+color: #FFF;
+}
+span {
+color: #FFF;
+}
+.my-pink {
+color: #9f4ede;
+}
+.my-pink-link {
+color: #7a1f9c;
+}
+.my-pink-link-active {
+color: #8b44c2;
+}
+.my-pink-link-active:hover {
+color: #8b44c2;
+}
+.my-pink-line {
+    color: #9f4ede;
+    radius: 3;
+    border: 1px solid;
+    border-radius: 7px 7px 7px 7px;
+    height: 3px;
+}
+.my-pink-link:hover {
+color: #9f4ede;
+}
+.my-pink-button {
+    background: #9f4ede;
+    color: #FFF;
+    border: None;
+}
+.my-pink-button:hover {
+    background: #7a1f9c;
+}
+.my-pink-header {
+    border-bottom: 2px solid #7a1f9c;
+}
+.my-card {
+    background: #282921;
+}
