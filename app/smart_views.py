@@ -77,9 +77,10 @@ def index():
     if request.method == 'POST':
         username = request.form.get('Login')
         password = request.form.get('Password')
+        remember_me = request.form.get('RememberMe')
         user = db_manager.login_user_by_password(username, password)
         if user is not None:
-            login_user(user)
+            login_user(user, remember_me)
             return redirect('/cloud')
         else:
             message = 'Неверный логин или пароль'

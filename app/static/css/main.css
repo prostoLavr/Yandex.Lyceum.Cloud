@@ -59,20 +59,33 @@ color: #B35CF7;
 .my-pink-link:hover {
     color: #FFF;
 }
-.my-pink-link:hover:before {
-	width: 100%;
-}
-.my-pink-link::before {
-	transition: width 0.30s;
-}
+
 .my-pink-link-active {
     color: #FFF;
 }
 .my-pink-link-active:hover {
     color: #DD24EE;
 }
+
+/* Только для пк: */
+@media only screen
+and (min-device-width : 1200px) {
 .my-pink-link-active:before {
-	width: 100%;
+	width: 100%;}
+.my-pink-link:hover:before {
+	width: 100%;}
+.my-pink-link::before {
+	transition: width 0.30s;}
+}
+
+.my-pink-outline-button {
+    color: #DD24EE;
+    border-color: #DD24EE;
+}
+.my-pink-outline-button:hover {
+    color: #fff;
+    background-color: #DD24EE;
+    border-color: #DD24EE;
 }
 
 
@@ -102,4 +115,19 @@ color: #B35CF7;
 }
 .my-card {
     background: #1f1f1f;
+}
+.my-big-text {
+word-wrap: break-word;
+}
+.w {
+color: FFF;
+}
+.unselectable {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
 }

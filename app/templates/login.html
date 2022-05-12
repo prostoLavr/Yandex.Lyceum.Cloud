@@ -22,6 +22,11 @@
             <input value="{{ password if password else '' }}" name="Password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
             <label for="floatingPassword">Пароль</label>
           </div>
+          <div class="checkbox mb-3 text-center lead">
+            <label>
+              <input id="RememberMe" type="checkbox" value="remember-me" {% if checked %}checked{% endif %}><span class="w m-2 unselectable">Запомнить меня</span>
+            </label>
+          </div>
           <button class="mb-3 w-100 btn btn-lg btn-primary my-pink-button" type="submit">Войти</button>
           <a class="w-100 btn btn-lg btn-outline-secondary" href="/account/register" >Регистрация</a>
           <hr class="my-pink-line">
