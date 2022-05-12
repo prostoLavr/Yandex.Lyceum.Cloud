@@ -16,13 +16,13 @@
     <p class="text-center lead text-muted">Здесь будут ваши файлы</p>
   </div>
 {% else %}
-  <div class="album py-5 bg-light">
+  <div class="album py-5 my-grey">
     <div class="container">
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
         {% for file in files %}
           <div class="col">
-            <div class="card">
+            <div class="card my-card">
               <div class="card-body">
                 <p class="card-text">{{ file.name  }}</p>
                 {% if file.desc %}

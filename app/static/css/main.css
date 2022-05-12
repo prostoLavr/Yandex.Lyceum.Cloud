@@ -10,7 +10,7 @@
     resize: none;
 }
 body {
-background: #44453b;
+background: #141414;
 }
 p {
 color: #FFF;
@@ -34,38 +34,72 @@ span {
 color: #FFF;
 }
 .my-pink {
-color: #9f4ede;
+color: #B35CF7;
 }
+
 .my-pink-link {
-color: #7a1f9c;
-}
-.my-pink-link-active {
-color: #8b44c2;
-}
-.my-pink-link-active:hover {
-color: #8b44c2;
-}
-.my-pink-line {
-    color: #9f4ede;
-    radius: 3;
-    border: 1px solid;
-    border-radius: 7px 7px 7px 7px;
-    height: 3px;
+    color: #484848;
+	position: relative;
+	font-size: 1.25rem;
+	text-decoration: none;
+	justify-content: center;
 }
 .my-pink-link:hover {
-color: #9f4ede;
+    color: #DD24EE;
 }
+
+.my-pink-link::before {
+	content: '';
+	position: absolute;
+	left: 0; bottom: -5px;
+	width: 0;
+	height: 1.5px;
+	background-color: #DD24EE;
+}
+.my-pink-link:hover {
+    color: #FFF;
+}
+.my-pink-link:hover:before {
+	width: 100%;
+}
+.my-pink-link::before {
+	transition: width 0.30s;
+}
+.my-pink-link-active {
+    color: #FFF;
+}
+.my-pink-link-active:hover {
+    color: #DD24EE;
+}
+.my-pink-link-active:before {
+	width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+.my-pink-line {
+    border: none; /* Убираем границу для браузера Firefox */
+    color: #7A1F9C; /* Цвет линии для остальных браузеров */
+    background-color: #7A1F9C; /* Цвет линии для браузера Firefox и Opera */
+    height: 2px; /* Толщина линии */
+    opacity: 100;
+}
+
 .my-pink-button {
-    background: #9f4ede;
+    background: #7A1F9C;
     color: #FFF;
     border: None;
 }
 .my-pink-button:hover {
-    background: #7a1f9c;
-}
-.my-pink-header {
-    border-bottom: 2px solid #7a1f9c;
+    background: #DD24EE;
 }
 .my-card {
-    background: #282921;
+    background: #1f1f1f;
 }
