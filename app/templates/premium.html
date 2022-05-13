@@ -1,52 +1,24 @@
 {% extends 'base.html' %}
 {% block title %}
-Премиум
+Подписка
+{% endblock %}
+{% block head %}
+<link rel='stylesheet' href="{{ url_for('static', filename='css/premium.css') }}">
+<script src="{{url_for('static', filename='js/premium.js')}}"></script>
 {% endblock %}
 {% block body %}
-<div class="m-5">
-    <h1 class="text-center m-5">Больше специально для тебя</h1>
-    <h2 class="text-center m-5 text-muted">Выбери свой тариф</h2>
-    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
-      <div class="col">
-        <div class="card mb-4 rounded-3 shadow-sm my-card">
-          <div class="card-header py-3">
-            <h4 class="my-0 fw-normal">Бесплатный</h4>
-          </div>
-          <div class="card-body">
-            <h1 class="card-title pricing-card-title">0₽<small class="text-muted fw-light">/мес.</small></h1>
-            <p>5 ГБ</p>
-            <p>Можно делиться файлами</p><br><br>
-            <a href="/account/register"  type="button" class="w-100 btn btn-lg btn-outline-primary">Начать</a>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card mb-4 rounded-3 shadow-sm my-card">
-          <div class="card-header py-3">
-            <h4 class="my-0 fw-normal">Классический</h4>
-          </div>
-          <div class="card-body">
-            <h1 class="card-title pricing-card-title">0₽<small class="text-muted fw-light">/мес.</small></h1>
-            <p>20 ГБ</p>
-            <p>Можно делиться файлами<br>Доступ к мессенджеру</p><br>
-            <a href="/get_premium" class="w-100 btn btn-lg btn-primary">Купить</a>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card mb-4 rounded-3 shadow-sm border-primary my-card">
-          <div class="card-header py-3 text-white bg-primary border-primary">
-            <h4 class="my-0 fw-normal">Профессиональный</h4>
-          </div>
-          <div class="card-body">
-            <h1 class="card-title pricing-card-title">0₽<small class="text-muted fw-light">/мес.</small></h1>
-            <p>∞ ГБ</p>
-            <p>Можно делиться файлами<br>Доступ к мессенджеру<br>Абсолютная и безграничная власть</p>
-            <button type="button" class="w-100 btn btn-lg btn-primary" disabled>Ваш тариф</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<!--<div class="m-5">-->
+<!--    <h1 class="text-center m-5">Больше специально для тебя</h1>-->
+<!--    <h2 class="text-center m-5 text-muted">Выбери свой тариф</h2>-->
+<!--    <form class="row row-cols-1 row-cols-md-1 mb-3 text-center" onsubmit="return false" oninput="level.value = flevel.valueAsNumber">-->
+<!--      <input name="flevel" id="flying" type="range" min="5" max="100" value="20" step="1"><br>-->
+<!--      <h1><output for="flying" name="level">20</output> ГБ</h1>-->
+<!--    </form>-->
+<!--</div>-->
+<div class="ctrl">
+  <span id="view">0</span>
+  <input id="num" type=number min="0" max="1000" step="100" value="0">
+  <input id="range" type="range" min="0" max="1000" step="100" value="0">
+</div>
 {% endblock %}
 

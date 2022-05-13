@@ -113,6 +113,9 @@ and (min-device-width : 1200px) {
 .my-pink-button:hover {
     background: #DD24EE;
 }
+.my-pink-checkbox {
+    accent-color: #7A1F9C;
+}
 .my-card {
     background: #1f1f1f;
 }
