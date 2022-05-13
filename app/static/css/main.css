@@ -38,7 +38,7 @@ color: #B35CF7;
 }
 
 .my-pink-link {
-    color: #484848;
+    color: #585858;
 	position: relative;
 	font-size: 1.25rem;
 	text-decoration: none;
@@ -111,6 +111,7 @@ and (min-device-width : 1200px) {
     border: None;
 }
 .my-pink-button:hover {
+    color: #FFF;
     background: #DD24EE;
 }
 .my-pink-checkbox {
@@ -123,7 +124,17 @@ and (min-device-width : 1200px) {
 word-wrap: break-word;
 }
 .w {
-color: FFF;
+    color: FFF;
+}
+.g {
+    color: #FFF;
+    background: #1f1f1f;
+    border: none;
+}
+.g:focus {
+    color: #FFF;
+    background: #1f1f1f;
+    border: none;
 }
 .unselectable {
   -webkit-touch-callout: none; /* iOS Safari */

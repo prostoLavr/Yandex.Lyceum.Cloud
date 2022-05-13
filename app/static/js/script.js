@@ -3,7 +3,6 @@ function _(el) {
 }
 function uploadFile() {
   var file = _("file1").files[0];
-  // alert(file.name+" | "+file.size+" | "+file.type);
   var formdata = new FormData();
   formdata.append("file1", file);
   var ajax = new XMLHttpRequest();
@@ -11,7 +10,7 @@ function uploadFile() {
   ajax.addEventListener("load", completeHandler, false);
   ajax.addEventListener("error", errorHandler, false);
   ajax.addEventListener("abort", abortHandler, false);
-  ajax.open("POST", window.location.href); // http://www.developphp.com/video/JavaScript/File-Upload-Progress-Bar-Meter-Tutorial-Ajax-PHP
+  ajax.open("POST", window.location.href);
   ajax.send(formdata);
 }
 
@@ -26,9 +25,9 @@ function completeHandler(event) {
 }
 
 function errorHandler(event) {
-  _("status").innerHTML = "Upload Failed";
+  _("status").innerHTML = "Ошибка загрузки";
 }
 
 function abortHandler(event) {
-  _("status").innerHTML = "Upload Aborted";
+  _("status").innerHTML = "Загрузка прервана";
 }

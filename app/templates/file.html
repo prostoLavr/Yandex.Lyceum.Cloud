@@ -11,12 +11,12 @@
         <div class="row py-lg-3">
             <div class="col-lg-6 col-md-8 mx-auto">
                 <h1 class="fw-light">Редактировать файл</h1>
-                <p class="lead text-muted"><b>Имя файла</b><br>
-                    <input class="form-control" type="text" id="name" name="name" value="{{ file.name }}">
-                <p class="lead text-muted"><b>Описание файла</b><br>
-                    <textarea name="desc" id="desc" class="form-control fixed-size" rows="3" cols="50">{{ file.desc }} </textarea>
+                <p class="lead"><b>Имя файла</b><br>
+                    <input class="form-control g" type="text" id="name" name="name" value="{{ file.name }}">
+                <p class="lead"><b>Описание файла</b><br>
+                    <textarea name="desc" id="desc" class="form-control fixed-size g" rows="3" cols="50">{{ file.desc }} </textarea>
                 </p>
-                <p class="lead text-muted"><b>Доступ к файлу</b><br>
+                <p class="lead"><b>Доступ к файлу</b><br>
                 <div class="form-check">
                     {% if file.is_open %}
                         <input class="form-check-input" type="radio" name="access" id="close" value=0>
@@ -24,7 +24,7 @@
                         <input class="form-check-input" type="radio" name="access" id="close" value=0 checked>
                     {% endif %}
                     <label class="form-check-label" for="close">
-                      Закрытый (Файл могу скачать только я)
+                        <span class="w">Закрытый (Файл могу скачать только я)</span>
                     </label>
                 </div>
                 <div class="form-check">
@@ -34,11 +34,11 @@
                         <input class="form-check-input" type="radio" name="access" id="open" value=1>
                     {% endif %}
 
-                    <label class="form-check-label" for="open">
-                      Открытый (Файл могут скачать все, у кого есть ссылка)
+                    <label class="form-check-label w" for="open">
+                        <span class="w">Открытый (Файл могут скачать все, у кого есть ссылка)</span>
                     </label>
                 </div><br>
-                <p class="my-big-text form-control">{{ link }}</p>
+                <p class="my-big-text form-control g">{{ link }}</p>
                 <button id="linkButton" type="button" class="btn btn-secondary" onclick="copyText( '{{ link }}' )">Скопировать ссылку</button>
                 <input class="btn btn-primary my-2" type="submit" value=Сохранить>
             </div>
