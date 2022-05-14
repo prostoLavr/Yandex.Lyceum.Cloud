@@ -141,6 +141,9 @@ def account_edit():
         error_message = db_manager.edit_user(request.form)
         if error_message:
             return my_render_template('edit_account.html', message=error_message)
+        if error_message is None:
+            return redirect('/')
+        return redirect('/account')
     return my_render_template('edit_account.html')
 
 

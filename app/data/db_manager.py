@@ -149,7 +149,9 @@ def add_new_user(form: dict) -> str:
     return ''
 
 
-def edit_user(form: dict) -> str:
+def edit_user(form: dict) -> str or None:
+    if current_user.is_anonymous:
+        return
     name = form['Login']
     email = form['Email']
     old_password = form['OldPassword']
