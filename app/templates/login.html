@@ -8,8 +8,8 @@
 <div class="container col-xl-10 col-xxl-8 px-4 py-5">
     <div class="row align-items-center g-lg-5 py-5">
       <div class="col-lg-7 text-center text-lg-start">
-        <h1 class="display-4 fw-bold lh-1 mb-3">Привет!</h1>
-        <p class="col-lg-10 fs-4">Это описание того что мы делаем. Это описание того что мы делаем. Это описание того что мы делаем. Это описание того что мы делаем. </p>
+        <h1 class="display-4 fw-bold lh-1 mb-3">В облачном хранилище файлы всегда под рукой</h1>
+        <p class="col-lg-10 fs-4">Наш продукт предлагает практичные решения: теперь не нужно тратить своё время, все операции делаются в пару кликов.</p>
       </div>
       <div class="col-md-10 mx-auto col-lg-5">
         <form class="p-4 p-md-5 rounded-3 my-card" method="post">
@@ -33,11 +33,15 @@
           <small class="text-muted">Нажимая кнопку Войти, Вы подтверждаете согласие с <a href="/politic">Политикой сайта</a></small>
         </form>
       </div>
-      <img src="https://cdn.discordapp.com/attachments/929030760684453890/973922718976196708/unknown.png">
       <div class="text-center">
-        <h1 class="display-4 fw-bold">Твои файлы всегда под рукой!</h1>
-        <p class="fs-4">Мы предлагаем доступ к облачному хранилищу, которое </p>
+        <h1 class="display-4 fw-bold ">Даже на мобильных устройствах</h1>
       </div>
+      <img src="{{ url_for('static', filename='images/login2.png') }}">
+      <div class="text-center">
+        <h1 class="display-4 fw-bold">Безопасность. Всегда.</h1>
+      </div>
+      <img src="{{ url_for('static', filename='images/login1.png') }}">
+
     </div>
   </div>
 {% endblock %}
