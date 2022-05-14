@@ -4,24 +4,23 @@
 {% endblock %}
 {% block head %}
 <link rel='stylesheet' href="{{ url_for('static', filename='css/premium.css') }}">
-<script src="{{url_for('static', filename='js/premium.js')}}"></script>
+<script src="{{url_for('static', filename='js/premium.js')}}" defer></script>
 {% endblock %}
 {% block body %}
 <div class="align-items-center container px-5 py-5">
   <h1 class="text-center m-5">Выбери свой тариф</h1>
-  <form class="row row-cols-1 row-cols-md-1 mb-3 text-center" onsubmit="return false" oninput="level.value = flevel.valueAsNumber">
-    <input name="flevel" id="flying" type="range" min="5" max="100" value="20" step="1"><br>
-    <h1><output for="flying" name="level">20</output> ГБ</h1>
+  <form class="row row-cols-1 row-cols-md-1 mb-3 text-center">
+
+    <input id="range" type="range" min="5" max="100" step="1" value="20">
+    <input id="num" type=number min="5" max="100" step="1" value="20">
+    <span id="view">20 ГБ</span>
     <div class="py-5 text-center text-end">
       <button class="btn btn-lg my-pink-button">Оформить подписку</button>
       <a href="#" class="btn my-pink-outline-button btn-lg">Хочу больше места</a>
     </div>
   </form>
 </div>
-<!--<div class="ctrl">-->
-<!--  <span id="view">0</span>-->
-<!--  <input id="num" type=number min="0" max="1000" step="100" value="0">-->
-<!--  <input id="range" type="range" min="0" max="1000" step="100" value="0">-->
-<!--</div>-->
+
+
 {% endblock %}
 

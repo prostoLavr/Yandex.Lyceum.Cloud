@@ -22,3 +22,6 @@ input {
 .good .option {
   display: none;
 }
+#num {
+width: 5em;
+}
