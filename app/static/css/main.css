@@ -9,30 +9,7 @@
 .fixed-size {
     resize: none;
 }
-body {
-background: #141414;
-}
-p {
-color: #FFF;
-}
-h1 {
-color: #FFF;
-}
-h2 {
-color: #FFF;
-}
-h3 {
-color: #FFF;
-}
-h4 {
-color: #FFF;
-}
-a {
-color: #FFF;
-}
-span {
-color: #FFF;
-}
+
 .my-pink {
 color: #B35CF7;
 }
@@ -44,6 +21,7 @@ color: #B35CF7;
 	text-decoration: none;
 	justify-content: center;
 }
+
 .my-pink-link:hover {
     color: #DD24EE;
 }
@@ -56,6 +34,7 @@ color: #B35CF7;
 	height: 1.5px;
 	background-color: #DD24EE;
 }
+
 .my-pink-link:hover {
     color: #FFF;
 }
@@ -83,7 +62,6 @@ and (min-device-width : 1200px) {
     border-color: #DD24EE;
 }
 .my-pink-outline-button:hover {
-    color: #fff;
     background-color: #DD24EE;
     border-color: #DD24EE;
 }
@@ -117,8 +95,6 @@ and (min-device-width : 1200px) {
 .my-pink-checkbox {
     accent-color: #7A1F9C;
 }
-.my-card {
-    background: #1f1f1f;
 }
 .my-big-text {
 word-wrap: break-word;

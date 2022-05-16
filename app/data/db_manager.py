@@ -1,5 +1,5 @@
 from flask_login import current_user
-from flask import send_file, render_template
+from flask import send_file, render_template, request
 
 from .. import login_manager
 from .users import User
@@ -21,7 +21,13 @@ def my_render_template(*args, **kwargs):
     is_active_pages = [False] * len(pages)
     if page in pages:
         is_active_pages[pages.index(page)] = True
-    return render_template(*args, **kwargs, login=current_user.is_authenticated, pages=is_active_pages)
+    try:
+        theme = current_user.theme
+    except AttributeError:
+        current_user.theme = True
+        theme = current_user.theme
+    return render_template(*args, **kwargs, login=current_user.is_authenticated, pages=is_active_pages,
+                           dark=theme, url=request.path)
 
 
 # def edit_user(user, name, email, old_password, new_password):

@@ -166,3 +166,13 @@ def edit_file(file_path):
     return my_render_template('file.html', file=file_to_edit,
                               link=f'https://{server_name}/cloud/download/{file_to_edit.path}')
 
+
+@app.route('/light', methods=['POST'])
+def light_theme():
+    try:
+        print(current_user.theme)
+    except AttributeError:
+        print('no theme')
+    current_user.theme = 1
+    return redirect(request.args.get('url'))
+
