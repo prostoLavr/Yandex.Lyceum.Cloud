@@ -300,6 +300,12 @@ def check_incorrect_password(password: str) -> str:
         return 'Пароль должен состоять из более чем 6 символов'
     if len(password) > 100:
         return 'Максимальный размер пароля - 100 символов'
+    if password.isalpha():
+        return 'в пароле должны быть цифры'
+    if password.isdigit():
+        return 'в пароле должны быть буквы'
+    if password.isalnum():
+        return 'в пароле должны быть спец символы'
     if password in simple_passwords:
         return 'Пароль слишком простой'
 
