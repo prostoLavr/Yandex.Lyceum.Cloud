@@ -13,7 +13,6 @@ class User(SqlAlchemyBase, UserMixin):
     email = sa.Column(sa.String)
     salt = sa.Column(sa.LargeBinary, nullable=False)
     password = sa.Column(sa.LargeBinary, nullable=False)
-    theme = sa.Column(sa.Boolean, nullable=False, default=False)
     files = sa.Column(sa.Text, nullable=False, default='')  # User's files
     given_files = sa.Column(sa.Text)  # Files that was given by other users
 

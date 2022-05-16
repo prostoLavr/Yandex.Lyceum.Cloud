@@ -35,3 +35,16 @@ color: #FFF;
 .my-card {
     background: #1f1f1f;
 }
+.w {
+    color: FFF;
+}
+.g {
+    color: #FFF;
+    background: #1f1f1f;
+    border: none;
+
+}
+.g:focus {
+    color: #FFF;
+    background: #1f1f1f;
+    border: none;
