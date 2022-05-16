@@ -140,11 +140,11 @@ def account_edit():
     if request.method == 'POST':
         error_message = db_manager.edit_user(request.form)
         if error_message:
-            return my_render_template('edit_account.html', message=error_message)
+            return my_render_template('edit_account.html', message=error_message, user=current_user)
         if error_message is None:
             return redirect('/')
         return redirect('/account')
-    return my_render_template('edit_account.html')
+    return my_render_template('edit_account.html', user=current_user)
 
 
 @login_required

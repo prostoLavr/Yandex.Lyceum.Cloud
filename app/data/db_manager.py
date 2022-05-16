@@ -168,7 +168,7 @@ def edit_user(form: dict) -> str or None:
 
     if not user.check_password(old_password):
         return 'Неверный пароль'
-    if name:
+    if name != user.name:
         error_message = check_incorrect_name(name)
         if error_message:
             return error_message
@@ -293,6 +293,7 @@ def check_incorrect_name(name: str) -> str:
         return 'Имя не должно содержать спец.символов'
     if name_in_db(name):
         return 'Пользователь с таким логином уже существует'
+
 
 
 def check_incorrect_password(password: str) -> str:
