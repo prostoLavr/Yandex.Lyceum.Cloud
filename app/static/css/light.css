@@ -7,4 +7,5 @@
 }
 .my-card {
     background: #EEE;
+    --bs-bg-opacity: 1;
 }

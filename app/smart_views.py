@@ -169,10 +169,10 @@ def edit_file(file_path):
 
 @app.route('/light', methods=['POST'])
 def light_theme():
-    try:
-        print(current_user.theme)
-    except AttributeError:
-        print('no theme')
-    current_user.theme = 1
+    # try:
+    #     print(current_user.theme)
+    # except AttributeError:
+    #     print('no theme')
+    # current_user.theme = 1
     return redirect(request.args.get('url'))
 
