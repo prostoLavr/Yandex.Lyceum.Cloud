@@ -1,19 +1,19 @@
 from flask_login import login_required, login_user, current_user, logout_user
 from flask import request, redirect
 
-from . import app, server_name
+from . import wsgi_app, server_name
 from .data import db_manager
 from .data.db_manager import my_render_template
 
 
-@app.route('/account/logout/')
+@wsgi_app.route('/account/logout/')
 @login_required
 def logout():
     logout_user()
     return redirect('/')
 
 
-@app.route('/cloud')
+@wsgi_app.route('/cloud')
 def cloud():
     if current_user.is_anonymous:
         return redirect('/')
@@ -21,7 +21,7 @@ def cloud():
     return my_render_template('cloud.html', files=files)
 
 
-@app.route('/cloud/load', methods=['GET', 'POST'])
+@wsgi_app.route('/cloud/load', methods=['GET', 'POST'])
 def load():
     if current_user.is_anonymous:
         return redirect('/')
@@ -31,19 +31,19 @@ def load():
     return my_render_template('load.html', active_page='cloud')
 
 
-@app.route('/cloud/load/success')
+@wsgi_app.route('/cloud/load/success')
 def success_load():
     return redirect('/cloud')
 
 
 @login_required
-@app.route('/cloud/remove/<string:file_path>')
+@wsgi_app.route('/cloud/remove/<string:file_path>')
 def remove(file_path):
     db_manager.remove_file(current_user, file_path)
     return redirect('/cloud')
 
 
-@app.route('/cloud/download/<string:file_path>')
+@wsgi_app.route('/cloud/download/<string:file_path>')
 def download(file_path):
     res = db_manager.download_file(current_user, file_path)
     if res is None:
@@ -51,7 +51,7 @@ def download(file_path):
     return res
 
 
-@app.route('/account/register', methods=['POST', 'GET'])
+@wsgi_app.route('/account/register', methods=['POST', 'GET'])
 def register():
     if current_user.is_authenticated:
         return redirect('/cloud')
@@ -70,7 +70,7 @@ def register():
     return my_render_template('register.html')
 
 
-@app.route('/', methods=['POST', 'GET'])
+@wsgi_app.route('/', methods=['POST', 'GET'])
 def index():
     if current_user.is_authenticated:
         return redirect('/cloud')
@@ -88,7 +88,7 @@ def index():
     return my_render_template('login.html')
 
 
-@app.route('/messenger/accept_req/<string:user_id>')
+@wsgi_app.route('/messenger/accept_req/<string:user_id>')
 @login_required
 def accept_req(user_id):
     res = db_manager.accept_req(user_id, current_user.id)
@@ -97,7 +97,7 @@ def accept_req(user_id):
     return redirect('/messenger')
 
 
-@app.route('/messenger/decline_req/<string:user_id>')
+@wsgi_app.route('/messenger/decline_req/<string:user_id>')
 @login_required
 def decline_req(user_id):
     res = db_manager.decline_req(user_id, current_user.id)
@@ -106,7 +106,7 @@ def decline_req(user_id):
     return redirect('/messenger')
 
 
-@app.route('/messenger', methods=['POST', 'GET'])
+@wsgi_app.route('/messenger', methods=['POST', 'GET'])
 def messenger():
     if current_user.is_anonymous:
         return redirect('/')
@@ -120,7 +120,7 @@ def messenger():
                               req=user_requests, message=mes)
 
 
-@app.route('/messenger/<user_id>', methods=['POST', 'GET'])
+@wsgi_app.route('/messenger/<user_id>', methods=['POST', 'GET'])
 @login_required
 def chat(user_id):
     friends = db_manager.get_friends_for_user(current_user)
@@ -135,7 +135,7 @@ def chat(user_id):
 
 
 @login_required
-@app.route('/account/edit', methods=['POST', 'GET'])
+@wsgi_app.route('/account/edit', methods=['POST', 'GET'])
 def account_edit():
     if request.method == 'POST':
         error_message = db_manager.edit_user(request.form)
@@ -148,12 +148,12 @@ def account_edit():
 
 
 @login_required
-@app.route('/account', methods=['POST', 'GET'])
+@wsgi_app.route('/account', methods=['POST', 'GET'])
 def account():
     return my_render_template('account.html')
 
 
-@app.route('/cloud/edit_file/<file_path>', methods=['POST', 'GET'])
+@wsgi_app.route('/cloud/edit_file/<file_path>', methods=['POST', 'GET'])
 def edit_file(file_path):
     if current_user.is_anonymous:
         return redirect('/')
@@ -167,7 +167,7 @@ def edit_file(file_path):
                               link=f'https://{server_name}/cloud/download/{file_to_edit.path}')
 
 
-@app.route('/light', methods=['POST'])
+@wsgi_app.route('/light', methods=['POST'])
 def light_theme():
     # try:
     #     print(current_user.theme)
