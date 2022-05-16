@@ -26,7 +26,7 @@ def my_render_template(*args, **kwargs):
     # except AttributeError:
     #     current_user.theme = True
     #     theme = current_user.theme
-    theme = 0
+    theme = 1
     return render_template(*args, **kwargs, login=current_user.is_authenticated, pages=is_active_pages,
                            dark=theme, url=request.path)
 
