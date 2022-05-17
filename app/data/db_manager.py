@@ -303,13 +303,11 @@ def check_incorrect_password(password: str) -> str:
     if len(password) > 100:
         return 'Максимальный размер пароля - 100 символов'
     if password.isalpha():
-        return 'в пароле должны быть цифры'
+        return 'Пароль должен содержать цифры'
     if password.isdigit():
-        return 'в пароле должны быть буквы'
+        return 'Пароль должен содержать буквы'
     if password.isalnum():
-        return 'в пароле должны быть спец символы'
-    if password in simple_passwords:
-        return 'Пароль слишком простой'
+        return 'Пароль должен содержать специальные символы'
 
 
 def check_incorrect_passwords(password: str, repeat_password: str) -> str:

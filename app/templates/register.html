@@ -14,21 +14,22 @@
           <p>{{ message }}</p>
           <div class="form-floating mb-3">
             <input value="{{ Login if Login else '' }}" type="text" name='Login' class="form-control" id="floatingLogin" placeholder="Login">
-            <label for="floatingLogin">Логин<small>*</small></label>
+            <label for="floatingLogin">Придумайте логин</label>
           </div>
           <div class="form-floating mb-3">
             <input value="{{ Email if Email else '' }}" type="email" name="Email" class="form-control" id="floatingEmail" placeholder="name@example.com">
-            <label for="floatingEmail">Адрес эл.почты</label>
+            <label for="floatingEmail">Email <small>(Не обязательно)</small></label>
           </div>
           <div class="form-floating mb-3">
             <input value="{{ Password if Password else '' }}" type="password" name="Password" class="form-control" id="floatingPassword" placeholder="Password">
-            <label for="floatingPassword">Пароль<small>*</small></label>
+            <label for="floatingPassword">Придумайте пароль</label>
           </div>
+
           <div class="form-floating mb-3">
             <input value="{{ RepeatPassword if RepeatPassword else '' }}" type="password" name="RepeatPassword" class="form-control" id="floatingPasswordRepeat" placeholder="Password">
-            <label for="floatingPasswordRepeat">Повторите пароль<small>*</small></label>
+            <label for="floatingPasswordRepeat">Повторите пароль</label>
           </div>
-          <p style="color:#FFF">В пароле должны присутствовать спец символы, буквы и цифры</p>
+          <p class="w"><small>Пароль должен содержать не менее шести знаков, включать буквы, цифры и специальные символы</small></p>
           <button class="mb-3 w-100 btn btn-lg btn-primary my-pink-button" type="submit">Создать аккаунт</button>
           <a class="w-100 btn btn-lg btn-outline-secondary" href="/" >Войти</a>
           <hr class="my-pink-line">
