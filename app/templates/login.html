@@ -3,23 +3,27 @@
 Вход
 {% endblock %}
 {% block head %}
+<script src="{{url_for('static', filename='js/login.js')}}" defer></script>
+<link rel='stylesheet' href="{{ url_for('static', filename='css/image.css') }}">
 {% endblock %}
 {% block body %}
 <div class="container col-xl-10 col-xxl-8 px-4 py-5">
     <div class="row align-items-center g-lg-5 py-5">
       <div class="col-lg-7 text-center text-lg-start">
-        <h1 class="display-4 fw-bold lh-1 mb-3">В облачном хранилище файлы всегда под рукой</h1>
-        <p class="col-lg-10 fs-4">Наш продукт предлагает практичные решения: теперь не нужно тратить своё время, все операции делаются в пару кликов.</p>
+        <h1 class="display-5 fw-bold">В облачном хранилище файлы всегда под рукой</h1>
+        <p class="col-md-8 fs-4">Наш продукт предлагает практичные решения: теперь не нужно тратить своё время, все операции делаются в пару кликов.</p>
+        <button type="button" class="scroll_down" id="scroll_down"></button>
+        <!-- end Scroll Down Button -->
       </div>
       <div class="col-md-10 mx-auto col-lg-5">
         <form class="p-4 p-md-5 rounded-3 my-card" method="post">
           <p>{{ message if message else '' }}</p>
           <div class="form-floating mb-3">
-            <input value="{{ username if username else '' }}" name="Login" type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
+            <input value="{{ form.get('Login') if form and form.get('Login') else '' }}" name="Login" type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
             <label for="floatingInput">Логин</label>
           </div>
           <div class="form-floating mb-3">
-            <input value="{{ password if password else '' }}" name="Password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+            <input value="{{ form.get('Password') if form and form.get('Password') else '' }}" name="Password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
             <label for="floatingPassword">Пароль</label>
           </div>
           <div class="checkbox mb-3 text-center lead">
@@ -28,21 +32,46 @@
             </label>
           </div>
           <button class="mb-3 w-100 btn btn-lg btn-primary my-pink-button" type="submit">Войти</button>
-          <a class="w-100 btn btn-lg btn-outline-secondary" href="/account/register" >Регистрация</a>
+          <a class="w-100 btn btn-lg my-outline-button" href="/account/register" >Регистрация</a>
           <hr class="my-pink-line">
-          <small class="text-muted">Нажимая кнопку Войти, Вы подтверждаете согласие с <a href="/politic">Политикой сайта</a></small>
+          <small>Нажимая кнопку Войти, Вы подтверждаете согласие с <a href="/politic">Политикой сайта</a></small>
         </form>
       </div>
-      <div class="text-center">
-        <h1 class="display-4 fw-bold ">Даже на мобильных устройствах</h1>
-      </div>
-      <img src="{{ url_for('static', filename='images/login2.png') }}">
-      <div class="text-center">
-        <h1 class="display-4 fw-bold">Безопасность. Всегда.</h1>
-      </div>
-      <img src="{{ url_for('static', filename='images/login1.png') }}">
+      
 
-    </div>
+      <div class="text-center">
+            <h2 class="display-5 fw-bold">Go further with Bootstrap Themes</h2>
+            <p class="col-md-8 fs-4 mx-auto lead">
+              Need something more than these examples? Take Bootstrap to the next level with premium themes from the official Bootstrap Themes marketplace. They’re built as their own extended frameworks, rich with new components and plugins, documentation, and powerful build tools.
+            </p>
+            <a href="#" class="btn btn-lg my-pink-button mb-3">Browse themes</a>
+      </div>
+
+      <div class="p-5 mb-4 my-card rounded-3">
+        <div class="container-fluid py-5">
+          <h1 class="display-5 fw-bold">Custom jumbotron</h1>
+          <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your liking.</p>
+          <a href="#" class="btn my-pink-button btn-lg">Example button</a>
+        </div>
+      </div>
+
+      <div class="text-center">
+            <h2 class="display-5 fw-bold">Go further with Bootstrap Themes</h2>
+            <p class="col-md-8 fs-4 mx-auto lead">
+              Need something more than these examples? Take Bootstrap to the next level with premium themes from the official Bootstrap Themes marketplace. They’re built as their own extended frameworks, rich with new components and plugins, documentation, and powerful build tools.
+            </p>
+            <a href="#" class="btn btn-lg my-pink-button mb-3">Browse themes</a>
+            <a href="#" class="btn btn-lg my-outline-button mb-3">Browse themes</a>
+      </div>
+
+      <div class="p-5 mb-4 my-card rounded-3">
+        <div class="container-fluid py-5">
+          <h1 class="display-5 fw-bold">Custom jumbotron</h1>
+          <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your liking.</p>
+          <a href="#" class="btn my-pink-button btn-lg">Example button</a>
+        </div>
+      </div>
+
   </div>
 
 {% endblock %}

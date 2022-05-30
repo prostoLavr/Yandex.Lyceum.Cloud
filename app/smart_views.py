@@ -4,6 +4,7 @@ from flask import request, redirect
 from . import wsgi_app, server_name
 from .data import db_manager
 from .data.db_manager import my_render_template
+from .data.exceptions import IncorrectData
 
 
 @wsgi_app.route('/account/logout/')
@@ -55,19 +56,24 @@ def download(file_path):
 def register():
     if current_user.is_authenticated:
         return redirect('/cloud')
-    if request.method == 'POST':
-        error_message = db_manager.add_new_user(request.form)
-        if error_message:
-            return my_render_template('register.html', message=error_message, **request.form)
-        username = request.form.get('Login')
-        password = request.form.get('Password')
+    if request.method == 'GET':
+        return my_render_template('register.html')
+
+    username = request.form.get('Login')
+    password = request.form.get('Password')
+    try:
+        db_manager.add_new_user(request.form)
         user = db_manager.login_user_by_password(username, password)
-        if user is not None:
-            login_user(user)
-            return redirect('/cloud')
-        print("ERROR TO LOGIN REGISTERED USER")
-        return my_render_template('register.html', message='Что-то пошло не так. Повторите попытку позже', **request.form)
-    return my_render_template('register.html')
+        login_user(user)
+    except IncorrectData as e:
+        return my_render_template('register.html', message=e, **request.form)
+    except Exception as e:
+        # TODO: logs
+        print('ERROR')
+        print(e.__name__, e, '\n')
+        return my_render_template('register.html', message='Что-то пошло не так. Повторите попытку позже.',
+                                  **request.form)
+    return redirect('/cloud')
 
 
 @wsgi_app.route('/', methods=['POST', 'GET'])
@@ -75,16 +81,20 @@ def index():
     if current_user.is_authenticated:
         return redirect('/cloud')
     if request.method == 'POST':
-        username = request.form.get('Login')
-        password = request.form.get('Password')
-        remember_me = request.form.get('RememberMe')
-        user = db_manager.login_user_by_password(username, password)
-        if user is not None:
-            login_user(user, remember_me)
-            return redirect('/cloud')
-        else:
-            message = 'Неверный логин или пароль'
-        return my_render_template('login.html', message=message, username=username, password=password)
+        try:
+            username = request.form.get('Login')
+            password = request.form.get('Password')
+            remember_me = request.form.get('RememberMe')
+            user = db_manager.login_user_by_password(username, password)
+            login_user(user, remember=bool(remember_me))
+        except IncorrectData as e:
+            return my_render_template('login.html', message=e, form=request.form)
+        except Exception as e:
+            # TODO: logs
+            print('ERROR')
+            print(e.__name__, e, '\n')
+            return my_render_template('register.html', message='Что-то пошло не так. Повторите попытку позже.',
+                                      **request.form)
     return my_render_template('login.html')
 
 
@@ -138,10 +148,12 @@ def chat(user_id):
 @wsgi_app.route('/account/edit', methods=['POST', 'GET'])
 def account_edit():
     if request.method == 'POST':
-        error_message = db_manager.edit_user(request.form)
-        if error_message:
-            return my_render_template('edit_account.html', message=error_message, user=current_user)
-        if error_message is None:
+        try:
+            db_manager.edit_user(request.form)
+        except IncorrectData as e:
+            return my_render_template('edit_account.html', message=e, user=current_user)
+        except Exception:
+            # TODO: behavior
             return redirect('/')
         return redirect('/account')
     return my_render_template('edit_account.html', user=current_user)

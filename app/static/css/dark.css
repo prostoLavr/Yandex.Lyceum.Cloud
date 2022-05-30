@@ -1,6 +1,12 @@
 body {
+  background: -webkit-linear-gradient(right, #915160, #2f5ba1);
+  background: linear-gradient(270deg, #915160, #2f5ba1);
+ } 
+/*
+body {
 background: #141414;
 }
+*/
 p {
 color: #FFF;
 }
@@ -33,7 +39,9 @@ color: #FFF;
     color: #fff;
 }
 .my-card {
-    background: #1f1f1f;
+    border: 1px solid transparent;
+    border-radius: .3rem;
+    border-color: #FFF;
 }
 .w {
     color: FFF;

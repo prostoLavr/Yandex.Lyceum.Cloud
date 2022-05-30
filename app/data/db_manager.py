@@ -1,12 +1,14 @@
 from flask_login import current_user
 from flask import send_file, render_template, request
+from sqlalchemy.exc import NoResultFound
 
 from .. import login_manager
 from .users import User
 from .files import File
 from .messages import Message
 from .friends import Friends
-from . import config, db_session, simple_passwords
+from . import config, db_session
+from .exceptions import IncorrectData
 
 import hashlib
 import os
@@ -123,37 +125,30 @@ def load_user(user_id):
 
 def login_user_by_password(name, password):
     db_sess = db_session.create_session()
-    user = db_sess.query(User).filter_by(name=name).first()
-    if user is not None:
-        key_from_db, salt = user.password, user.salt
-        key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000, dklen=128)
-        if key_from_db == key:
-            return user
-    return None
+    try:
+        user = db_sess.query(User).filter_by(name=name).one()
+    except NoResultFound:
+        raise IncorrectData('Неверный логин')
+    key_from_db, salt = user.password, user.salt
+    key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000, dklen=128)
+    if key_from_db != key:
+        raise IncorrectData('Неверный пароль')
+    return user
 
 
-def add_new_user(form: dict) -> str:
+def add_new_user(form: dict):
     name = form['Login']
     email = form['Email']
     password = form['Password']
     repeat_password = form['RepeatPassword']
 
-    error_message = check_incorrect_data(name, password, repeat_password)
-    if error_message:
-        return error_message
+    check_incorrect_data(name, password, repeat_password)
 
     user = User().with_password(password)
     user.name, user.email = name, email
-    try:
-        db_sess = db_session.create_session()
-        db_sess.add(user)
-        db_sess.commit()
-    except Exception as e:
-        print('ERROR ADD REGISTERED USER TO DB')
-        print(e.__class__.__name__)
-        print(e)
-        return 'Не удалось создать аккаунт. Повторите попытку позднее'
-    return ''
+    db_sess = db_session.create_session()
+    db_sess.add(user)
+    db_sess.commit()
 
 
 def edit_user(form: dict) -> str or None:
@@ -168,27 +163,16 @@ def edit_user(form: dict) -> str or None:
     user = db_sess.query(User).filter_by(name=current_user.name).one()
 
     if not user.check_password(old_password):
-        return 'Неверный пароль'
-    if name != user.name:
-        error_message = check_incorrect_name(name)
-        if error_message:
-            return error_message
+        raise IncorrectData('Неверный пароль')
+    if name:
+        check_incorrect_name(name)
         user.name = name
     if email:
         user.email = email
     if password:
-        error_message = check_incorrect_passwords(password, repeat_password)
-        if error_message:
-            return error_message
+        check_incorrect_passwords(password, repeat_password)
         user.with_password(password)
-    try:
-        db_sess.commit()
-    except Exception as e:
-        print('ERROR EDIT REGISTERED USER')
-        print(e.__class__.__name__)
-        print(e)
-        return 'Не удалось изменить аккаунт. Повторите попытку позднее'
-    return ''
+    db_sess.commit()
 
 
 def normalize_filename(filename):
@@ -206,7 +190,7 @@ def save_file(request):
     path = uuid.uuid4().hex
     while os.path.exists(path):
         path = uuid.uuid4().hex
-    
+
     filename = normalize_filename(file.filename)
 
     file.save(os.path.join(config.files_path, path))
@@ -276,47 +260,39 @@ def name_in_db(name: str):
     return name.lower() in map(lambda x: x.name.lower(), db_sess.query(User).all())
 
 
-def check_incorrect_data(name: str, password: str, repeat_password: str) -> str:
-    error = check_incorrect_name(name)
-    if error:
-        return error
-    error = check_incorrect_passwords(password, repeat_password)
-    if error:
-        return error
+def check_incorrect_data(name: str, password: str, repeat_password: str):
+    check_incorrect_name(name)
+    check_incorrect_password(password)
+    check_incorrect_passwords(password, repeat_password)
 
 
-def check_incorrect_name(name: str) -> str:
+def check_incorrect_name(name: str):
     if len(name) < 4:
-        return 'Логин должен состоять из более чем 4 символов'
+        raise IncorrectData('Логин должен состоять из более чем 4 символов')
     if len(name) > 32:
-        return 'Максимальный размер логина - 32 символа'
+        raise IncorrectData('Максимальный размер логина - 32 символа')
     if not name.isalnum():
-        return 'Имя не должно содержать спец.символов'
+        raise IncorrectData('Имя не должно содержать спец.символов')
     if name_in_db(name):
-        return 'Пользователь с таким логином уже существует'
+        raise IncorrectData('Пользователь с таким логином уже существует')
 
 
-
-def check_incorrect_password(password: str) -> str:
+def check_incorrect_password(password: str):
     if len(password) < 6:
-        return 'Пароль должен состоять из более чем 6 символов'
+        raise IncorrectData('Пароль должен состоять из более чем 6 символов')
     if len(password) > 100:
-        return 'Максимальный размер пароля - 100 символов'
+        raise IncorrectData('Максимальный размер пароля - 100 символов')
     if password.isalpha():
-        return 'Пароль должен содержать цифры'
+        raise IncorrectData('Пароль должен содержать цифры')
     if password.isdigit():
-        return 'Пароль должен содержать буквы'
+        raise IncorrectData('Пароль должен содержать буквы')
     if password.isalnum():
-        return 'Пароль должен содержать специальные символы'
+        raise IncorrectData('Пароль должен содержать специальные символы')
 
 
-def check_incorrect_passwords(password: str, repeat_password: str) -> str:
-    error = check_incorrect_password(password)
-    if error:
-        return error
+def check_incorrect_passwords(password: str, repeat_password: str):
     if password != repeat_password:
-        return 'Пароли не совпадают'
-    return ''
+        raise IncorrectData('Пароли не совпадают')
 
 
 def index_revert(path: str):
