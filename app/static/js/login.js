@@ -1,5 +1,5 @@
 mobileCheck = function() {
-    var isMobile = (/iphone|ipod|android|ie|blackberry|fennec/).test
+    var isMobile = (/iphone|ipod|ipad|android|ie|blackberry|fennec/).test
          (navigator.userAgent.toLowerCase());
     return isMobile;
 }
