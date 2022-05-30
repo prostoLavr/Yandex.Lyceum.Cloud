@@ -5,8 +5,8 @@ After=network.target
 [Service]
 User=lawrence
 Group=www-data
-WorkingDirectory=/sites/lavaland/python
-ExecStart=/home/lawrence/.local/bin/gunicorn --limit-request-field_size 17179869184 --workers 1 --bind unix:lavaland.sock -m 777 wsgi:app
+WorkingDirectory=/sites/test_lavaland
+ExecStart=/usr/bin/gunicorn --limit-request-field_size 17179869184 --workers 1 --bind unix:lavaland.sock -m 777 wsgi:wsgi_app
 Restart=always
 KillSignal=SIGQUIT
 Type=simple
