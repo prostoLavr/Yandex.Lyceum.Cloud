@@ -2,7 +2,7 @@
 *.log
 *.db
 __pycache__/
-python/app/static/files
+/app/db/files
 ssl/
 venv/
 lavaland.service

@@ -1,0 +1,53 @@
+/* Только для пк: */
+@media only screen
+and (min-device-width : 1200px) {
+    .box {
+      position: relative;
+      overflow: hidden;
+    }
+    .box:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 1;
+      opacity: 0;
+      transition: all 0.4s ease-in-out;
+      width: 100%
+    }
+    .box-inner img {
+      transition: all 0.4s ease-in-out;
+    }
+    .text {
+      position: absolute;
+
+      right: 5%;
+      top: 80%;
+      margin-top: -40px;
+      text-align: center;
+      z-index: 2;
+    }
+    .text h2 {
+      color: white;
+      display: inline-block;
+      font-size: 50px;
+      line-height: 75px;
+      font-weight: 400;
+    border-width: 1px 0;
+      border-color: rgba(255,255,255,0.5);
+      border-style: solid;
+      opacity: 0;
+      transition: all 0.4s ease-in-out;
+    }
+    .box:hover:before {
+      opacity: 1;
+    }
+    .box:hover img {
+    }
+    .box:hover .text h2 {
+      opacity: 1;
+    }
+}
