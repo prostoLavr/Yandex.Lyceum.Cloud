@@ -4,7 +4,6 @@ const view = document.getElementById('view');
 const set = val => {
   num.value = val;
   rng.value = val;
-  view.textContent = val + ' ГБ';
 }
 
 rng.addEventListener('input', () => set(rng.value));

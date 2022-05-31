@@ -2,18 +2,13 @@
 {% block title %}
 Вход
 {% endblock %}
-{% block head %}
-<script src="{{url_for('static', filename='js/login.js')}}" defer></script>
-<link rel='stylesheet' href="{{ url_for('static', filename='css/image.css') }}">
-{% endblock %}
 {% block body %}
-<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+<link rel='stylesheet' href="{{ url_for('static', filename='css/login.css') }}">
+<div class="container col-xl-10 col-xxl-8 px-4">
     <div class="row align-items-center g-lg-5 py-5">
       <div class="col-lg-7 text-center text-lg-start">
         <h1 class="display-5 fw-bold">В облачном хранилище файлы всегда под рукой</h1>
         <p class="col-md-8 fs-4">Наш продукт предлагает практичные решения: теперь не нужно тратить своё время, все операции делаются в пару кликов.</p>
-        <button type="button" class="scroll_down" id="scroll_down"></button>
-        <!-- end Scroll Down Button -->
       </div>
       <div class="col-md-10 mx-auto col-lg-5">
         <form class="p-4 p-md-5 rounded-3 my-card" method="post">
@@ -33,12 +28,10 @@
           </div>
           <button class="mb-3 w-100 btn btn-lg btn-primary my-pink-button" type="submit">Войти</button>
           <a class="w-100 btn btn-lg my-outline-button" href="/account/register" >Регистрация</a>
-          <hr class="my-pink-line">
+          <hr class="my-line">
           <small>Нажимая кнопку Войти, Вы подтверждаете согласие с <a href="/politic">Политикой сайта</a></small>
         </form>
       </div>
-      
-
       <div class="text-center">
             <h2 class="display-5 fw-bold">Go further with Bootstrap Themes</h2>
             <p class="col-md-8 fs-4 mx-auto lead">
