@@ -17,14 +17,14 @@
         <input type="text" name='Friend_Login' class="form-control" id="floatingLogin" placeholder="Friend_Login">
         <label for="floatingLogin">Логин друга</label>
     </div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Добавить</button>
+    <button class="w-100 btn btn-lg my-pink-button" type="submit">Добавить</button>
 </form>
 <form class="p-4 p-md-5 rounded-3 my-sidebar-part my-card">
 <div class="people-list">
     <h2>Заявки в друзья</h2>
     <ul class="list-unstyled chat-list mt-2 mb-0">
         {% if not req %}
-            Пока нет заявок в друзья
+        <p>Пока нет заявок в друзья</p>
         {% endif %}
         {% for r in req %}
         <li class="clearfix">

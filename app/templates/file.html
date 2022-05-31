@@ -3,7 +3,7 @@
 Редактировать файл
 {% endblock %}
 {% block head %}
-<script src="{{url_for('static', filename='js/text_copy.js')}}"></script>
+<script src="{{url_for('static', filename='js/text_copy.js')}}" defer></script>
 {% endblock %}
 {% block body %}
 <form method=post enctype=multipart/form-data>
@@ -39,8 +39,11 @@
                     </label>
                 </div><br>
                 <p class="my-big-text form-control g">{{ link }}</p>
-                <button id="linkButton" type="button" class="btn btn-secondary" onclick="copyText( '{{ link }}' )">Скопировать ссылку</button>
-                <input class="btn btn-primary my-2" type="submit" value=Сохранить>
+
+                <div class="btn-group">
+                  <button id="linkButton" type="button" class="btn my-outline-button" onclick="copyText( '{{ link }}' )">Скопировать ссылку</button>
+                  <input class="btn my-pink-outline-button" type="submit" value=Сохранить>
+                </div>
             </div>
         </div>
     </section>

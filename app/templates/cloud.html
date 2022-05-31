@@ -13,7 +13,7 @@
   </section>
 {% if not files %}
   <div class="py-5 my-grey">
-    <p class="text-center lead text-muted">Здесь будут ваши файлы</p>
+    <p class="text-center lead">Здесь будут ваши файлы</p>
   </div>
 {% else %}
   <div class="album py-5 my-grey">
@@ -22,21 +22,21 @@
 
         {% for file in files %}
           <div class="col">
-            <div class="card my-card">
+            <div class="my-card">
               <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                   <p class="my-clip card-text">{{ file.name  }}</p>
-                  <small class="text-muted">{{ file.date.date() }}</small>
+                  <small >{{'0' if file.date.day < 10 else ''}}{{ file.date.day }}.{{'0' if file.date.month < 10 else ''}}{{ file.date.month }}</small>
                 </div>
                 {% if file.desc %}
-                <p class="my-clip text-muted">{{ file.desc }}</p>
+                <p class="my-clip">{{ file.desc }}</p>
                 {% else %}
-                <p class="text-muted">Без описания</p> 
+                <p>Без описания</p>
                 {% endif %}
                 <div class="btn-group">
-                  <a type="button" href="/cloud/download/{{ file.path }}" class="btn btn-sm btn-outline-primary my-pink-outline-button">Скачать</a>
-                  <a type="button" href="/cloud/edit_file/{{ file.path }}" class="btn btn-sm btn-outline-secondary">Подробнее</a>
-                  <a type="button" href="/cloud/remove/{{ file.path }}" class="btn btn-sm btn-outline-secondary">Удалить</a>
+                  <a type="button" href="/cloud/download/{{ file.path }}" class="btn btn-sm my-pink-outline-button">Скачать</a>
+                  <a type="button" href="/cloud/edit_file/{{ file.path }}" class="btn btn-sm my-outline-button">Подробнее</a>
+                  <a type="button" href="/cloud/remove/{{ file.path }}" class="btn btn-sm my-outline-button">Удалить</a>
                 </div>
               </div>
             </div>

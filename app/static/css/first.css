@@ -1,0 +1,38 @@
+body {
+  background: -webkit-linear-gradient(right, #915160, #2f5ba1);
+  background: linear-gradient(270deg, #915160, #2f5ba1);
+ }
+.my-card {
+    border: 1px solid transparent;
+    border-radius: .3rem;
+    border-color: #FFF;
+}
+p, h1, h2, h3, h4, a, span, small{
+color: #FFF;
+}
+.my-pink-button {
+    background: #7A1F9C;
+    color: #FFF;
+    border: None;
+}
+.my-pink-link {
+    color: #FFF;
+	position: relative;
+	font-size: 1.25rem;
+	text-decoration: none;
+	justify-content: center;
+}
+.my-pink-link-active {
+    color: #DD24EE;
+}
+.my-outline-button{
+    color: #FFF;
+    border-color: #FFF;
+}
+.my-line {
+    border: none; /* Убираем границу для браузера Firefox */
+    color: #FFF; /* Цвет линии для остальных браузеров */
+    background-color: #FFF; /* Цвет линии для браузера Firefox и Opera */
+    height: 2px; /* Толщина линии */
+    opacity: 100;
+}
