@@ -29,7 +29,7 @@ color: #FFF;
     color: #FFF;
     border-color: #FFF;
 }
-.my-line {
+hr {
     border: none; /* Убираем границу для браузера Firefox */
     color: #FFF; /* Цвет линии для остальных браузеров */
     background-color: #FFF; /* Цвет линии для браузера Firefox и Opera */

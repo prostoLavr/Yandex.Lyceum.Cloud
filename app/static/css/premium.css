@@ -20,7 +20,7 @@ input[type="range"] {
     margin-right: auto;
   -webkit-appearance: none;
   height: 7px;
-  background: #7A1F9C;
+    background: #7A1F9C;
   border-radius: 0.3rem;
 }
 input[type="number"] {
