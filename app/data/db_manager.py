@@ -17,9 +17,11 @@ import datetime
 
 
 def my_render_template(*args, **kwargs):
-    active_page = kwargs.get('active_page')
+    active_page: str or None = kwargs.get('active_page')
+    if active_page and active_page.startswith('/'):
+        active_page = active_page[1:]
     page = active_page if active_page else '.'.join(args[0].split('.')[:-1])
-    pages = ['cloud', 'messenger', 'premium', 'support', 'about']
+    pages = ['index', 'cloud', 'messenger', 'premium', 'support']
     is_active_pages = [False] * len(pages)
     if page in pages:
         is_active_pages[pages.index(page)] = True
@@ -29,7 +31,9 @@ def my_render_template(*args, **kwargs):
     #     current_user.theme = True
     #     theme = current_user.theme
     theme = 1
-    return render_template(*args, **kwargs, login=current_user.is_authenticated, pages=is_active_pages,
+    return render_template(*args, **kwargs,
+                           login=current_user.is_authenticated,
+                           pages=is_active_pages,
                            dark=theme, url=request.path)
 
 
@@ -180,7 +184,7 @@ def normalize_filename(filename):
     for i in symbols_to_remove:
         filename = filename.replace(i, '')
     if not filename:
-        filename = 'unknown name'
+        filename = 'Без имени'
     return filename
 
 

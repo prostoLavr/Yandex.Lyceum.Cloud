@@ -14,33 +14,28 @@
         <div class=" container">
             <header class="my-pink-header my-header d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4">
               <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-                <span class="nav-link fs-3 my-pink-link">lava-land.ru</span>
+                <span class="nav-link fs-3 my-pink-link {{ 'my-pink-link-active' if pages[0] else ''}}">lava-land.ru</span>
               </a>
               <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                {% if pages[0] %}
+                {% if pages[1] %}
                   <li><a href="/cloud" class="nav-link px-2 fs-5 my-pink-link my-pink-link-active">Хранилище</a></li>
                 {% else %}
                   <li><a href="/cloud" class="nav-link px-2 fs-5 my-pink-link">Хранилище</a></li>
                 {% endif %}
-                {% if pages[1] %}
+                {% if pages[2] %}
                   <li><a href="/messenger" class="nav-link px-2 fs-5 my-pink-link my-pink-link-active">Мессенджер</a></li>
                 {% else %}
                   <li><a href="/messenger" class="nav-link px-2 fs-5 my-pink-link">Мессенджер</a></li>
                 {% endif %}
-                {% if pages[2] %}
+                {% if pages[3] %}
                   <li><a href="/premium" class="nav-link px-2 fs-5 my-pink-link my-pink-link-active">Подписка</a></li>
                 {% else %}
                   <li><a href="/premium" class="nav-link px-2 fs-5 my-pink-link">Подписка</a></li>
                 {% endif %}
-                {% if pages[3] %}
+                {% if pages[4] %}
                   <li><a href="/support" class="nav-link px-2 fs-5 my-pink-link my-pink-link-active">Поддержка</a></li>
                 {% else %}
                   <li><a href="/support" class="nav-link px-2 fs-5 my-pink-link">Поддержка</a></li>
-                {% endif %}
-                {% if pages[4] %}
-                  <li><a href="/about" class="nav-link px-2 fs-5 my-pink-link my-pink-link-active">О нас</a></li>
-                {% else %}
-                  <li><a href="/about" class="nav-link px-2 fs-5 my-pink-link">О нас</a></li>
                 {% endif %}
               </ul>
               <div class="col-md-3 text-end">
@@ -51,7 +46,20 @@
               </div>
             </header>
         </div>
+        
         {% block body %}{% endblock %}
+        <div class="container  my-bottem-dark">
+          <footer class="py-3 my-4">
+            <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+              <li class="nav-item"><a href="#" class="my-pink-link px-2">Home</a></li>
+              <li class="nav-item"><a href="#" class="my-pink-link px-2">Features</a></li>
+              <li class="nav-item"><a href="#" class="my-pink-link px-2">Pricing</a></li>
+              <li class="nav-item"><a href="#" class="my-pink-link px-2">FAQs</a></li>
+              <li class="nav-item"><a href="#" class="my-pink-link px-2">About</a></li>
+            </ul>
+            <p class="text-center">© 2022 Company, Inc</p>
+          </footer>
+        </div>
     </body>
 </html>
 

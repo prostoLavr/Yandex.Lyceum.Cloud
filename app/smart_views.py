@@ -17,7 +17,7 @@ def logout():
 @wsgi_app.route('/cloud')
 def cloud():
     if current_user.is_anonymous:
-        return redirect('/')
+        return redirect('/login?page=/cloud')
     files = db_manager.get_files_for(current_user)
     return my_render_template('cloud.html', files=files)
 
@@ -54,10 +54,13 @@ def download(file_path):
 
 @wsgi_app.route('/account/register', methods=['POST', 'GET'])
 def register():
+    active_page = request.args.get('page')
+    if active_page is None:
+        active_page = '/index'
     if current_user.is_authenticated:
-        return redirect('/cloud')
+        return redirect(active_page)
     if request.method == 'GET':
-        return my_render_template('register.html')
+        return my_render_template('register.html', active_page=active_page)
 
     username = request.form.get('Login')
     password = request.form.get('Password')
@@ -66,20 +69,32 @@ def register():
         user = db_manager.login_user_by_password(username, password)
         login_user(user)
     except IncorrectData as e:
-        return my_render_template('register.html', message=e, **request.form)
+        return my_render_template('register.html', message=e, **request.form,
+                                  active_page=active_page)
     except Exception as e:
         # TODO: logs
         print('ERROR')
         print(e.__name__, e, '\n')
-        return my_render_template('register.html', message='Что-то пошло не так. Повторите попытку позже.',
+        return my_render_template('register.html',
+                                  message='Что-то пошло не так. Повторите попытку позже.',
+                                  active_page=active_page,
                                   **request.form)
     return redirect('/cloud')
 
 
 @wsgi_app.route('/', methods=['POST', 'GET'])
+@wsgi_app.route('/index', methods=['POST', 'GET'])
 def index():
+    return my_render_template('about.html', active_page='/index')
+
+
+@wsgi_app.route('/login', methods=['POST', 'GET'])
+def login():
+    active_page = request.args.get('page')
+    if active_page is None:
+        active_page = '/cloud'
     if current_user.is_authenticated:
-        return redirect('/cloud')
+        return redirect(active_page)
     if request.method == 'POST':
         try:
             username = request.form.get('Login')
@@ -88,14 +103,20 @@ def index():
             user = db_manager.login_user_by_password(username, password)
             login_user(user, remember=bool(remember_me))
         except IncorrectData as e:
-            return my_render_template('login.html', message=e, form=request.form)
+            return my_render_template('login.html', message=e,
+                                      form=request.form,
+                                      active_page=active_page)
         except Exception as e:
             # TODO: logs
             print('ERROR')
             print(e.__name__, e, '\n')
-            return my_render_template('register.html', message='Что-то пошло не так. Повторите попытку позже.',
-                                      **request.form)
-    return my_render_template('login.html')
+            return my_render_template('login.html',
+                                      message='Что-то пошло не так. Повторите попытку позже.',
+                                      form=request.form,
+                                      active_page=active_page)
+        else:
+            return redirect(active_page)
+    return my_render_template('login.html', active_page=active_page)
 
 
 @wsgi_app.route('/messenger/accept_req/<string:user_id>')
@@ -119,7 +140,7 @@ def decline_req(user_id):
 @wsgi_app.route('/messenger', methods=['POST', 'GET'])
 def messenger():
     if current_user.is_anonymous:
-        return redirect('/')
+        return redirect('/login?page=/messenger')
     mes = None
     if request.method == 'POST':
         friend_name = request.form.get('Friend_Login')
@@ -141,7 +162,8 @@ def chat(user_id):
         db_manager.add_message(message, user_id, current_user.id)
     messages = db_manager.get_messages_for_users(current_user.id, user_id)
     user_friend = db_manager.load_user(user_id)
-    return my_render_template('chat.html', messages=messages, friend=user_friend, active_page='messanger')
+    return my_render_template('chat.html', messages=messages,
+                              friend=user_friend, active_page='messanger')
 
 
 @login_required
@@ -151,7 +173,8 @@ def account_edit():
         try:
             db_manager.edit_user(request.form)
         except IncorrectData as e:
-            return my_render_template('edit_account.html', message=e, user=current_user)
+            return my_render_template('edit_account.html', message=e,
+                                      user=current_user)
         except Exception:
             # TODO: behavior
             return redirect('/')
@@ -168,7 +191,7 @@ def account():
 @wsgi_app.route('/cloud/edit_file/<file_path>', methods=['POST', 'GET'])
 def edit_file(file_path):
     if current_user.is_anonymous:
-        return redirect('/')
+        return redirect('/?page=/cloud')
     if request.method == 'POST':
         db_manager.edit_file(file_path, request.form)
         return redirect('/cloud')
@@ -176,7 +199,8 @@ def edit_file(file_path):
     if not file_to_edit:
         return redirect('/file_not_found')
     return my_render_template('file.html', file=file_to_edit,
-                              link=f'https://{server_name}/cloud/download/{file_to_edit.path}')
+                              link=f'https://{server_name}/cloud/'
+                                   f'download/{file_to_edit.path}')
 
 
 @wsgi_app.route('/light', methods=['POST'])
