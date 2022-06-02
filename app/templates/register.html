@@ -18,7 +18,7 @@
           </div>
           <div class="form-floating mb-3">
             <input value="{{ Email if Email else '' }}" type="email" name="Email" class="form-control" id="floatingEmail" placeholder="name@example.com">
-            <label for="floatingEmail">Email <small>(Не обязательно)</small></label>
+            <label for="floatingEmail">Email <small class='dark'>(Не обязательно)</small></label>
           </div>
           <div class="form-floating mb-3">
             <input value="{{ Password if Password else '' }}" type="password" name="Password" class="form-control" id="floatingPassword" placeholder="Password">
@@ -31,9 +31,9 @@
           </div>
           <p class="w"><small>Пароль должен содержать не менее шести знаков, включать буквы, цифры и специальные символы</small></p>
           <button class="mb-3 w-100 btn btn-lg btn-primary my-pink-button" type="submit">Создать аккаунт</button>
-          <a class="w-100 btn btn-lg btn-outline-secondary" href="/" >Войти</a>
+          <a class="w-100 btn btn-lg my-outline-button" href="/{{'?page=' + active_page if active_page else ''}}" >Уже есть аккаунт</a>
           <hr class="my-pink-line">
-          <small class="text-muted">Создав аккаунт, Вы подтверждаете согласие с <a href="/politic">Политикой сайта</a></small>
+          <small>Создав аккаунт, Вы подтверждаете согласие с <a href="/politic">Политикой сайта</a></small>
         </form>
       </div>
     </div>

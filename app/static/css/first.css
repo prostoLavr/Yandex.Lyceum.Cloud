@@ -15,12 +15,15 @@ color: #FFF;
     color: #FFF;
     border: None;
 }
+.header-link {
+	font-size: 1.25rem;
+	justify-content: center;
+    
+}
 .my-pink-link {
     color: #FFF;
 	position: relative;
-	font-size: 1.25rem;
 	text-decoration: none;
-	justify-content: center;
 }
 .my-pink-link-active {
     color: #DD24EE;
@@ -35,4 +38,7 @@ hr {
     background-color: #FFF; /* Цвет линии для браузера Firefox и Opera */
     height: 2px; /* Толщина линии */
     opacity: 100;
+}
+.dark {
+    color: black;
 }
