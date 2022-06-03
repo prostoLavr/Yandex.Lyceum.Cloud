@@ -92,7 +92,7 @@ def index():
 def login():
     active_page = request.args.get('page')
     if active_page is None:
-        active_page = '/cloud'
+        active_page = '/index'
     if current_user.is_authenticated:
         return redirect(active_page)
     if request.method == 'POST':
