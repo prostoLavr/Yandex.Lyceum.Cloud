@@ -10,3 +10,86 @@
     resize: none;
 }
 
+.my-pink {
+color: #B35CF7;
+}
+.my-pink-link:hover {
+    color: #DD24EE;
+}
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.my-pink-link::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: -5px;
+	width: 0;
+	height: 1.5px;
+	background-color: #DD24EE;
+}
+
+.my-input:focus {
+    color: #FFF;
+    border: none;
+    background: rgba(255, 255, 255, 0);
+    border: 1px solid #FFF;
+    border-radius: .3rem;
+    border-color: #FFF;
+}
+.my-input:-webkit-autofill,
+.my-input:-webkit-autofill:hover,
+.my-input:-webkit-autofill:focus,
+.my-input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0) inset;
+    -webkit-text-fill-color: #FFF;
+}
+/* Только для пк: */
+@media only screen
+and (min-device-width : 1200px) {
+.my-pink-link-active:before {
+	width: 100%;}
+.my-pink-link:hover:before {
+	width: 100%;}
+.my-pink-link::before {
+	transition: width 0.30s;}
+}
+.my-pink-checkbox {
+    accent-color: #7A1F9C;
+}
+.my-outline-button:hover {
+  color: #000;
+  background-color: #FFF;
+}
+.my-pink-outline-button {
+    color: #DD24EE;
+    border-color: #DD24EE;
+}
+.my-pink-outline-button:hover {
+    background-color: #DD24EE;
+    border-color: #DD24EE;
+}
+
+.my-pink-button:hover {
+    color: #FFF;
+    background: #DD24EE;
+}
+
+.my-big-text {
+word-wrap: break-word;
+}
+
+.my-pink-link:hover {
+    color: #DD24EE;
+}
+.my-pink-outline-button:hover {
+    color: #fff;
+}
+

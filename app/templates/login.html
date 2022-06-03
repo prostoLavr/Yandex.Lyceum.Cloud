@@ -2,31 +2,51 @@
 {% block title %}
 Вход
 {% endblock %}
-{% block head %}
-{% endblock %}
 {% block body %}
-<div class="container col-xl-10 col-xxl-8 px-4 py-5">
-    <div class="row align-items-center g-lg-5 py-5">
-      <div class="col-lg-7 text-center text-lg-start">
-        <h1 class="display-4 fw-bold lh-1 mb-3">Максимальная приватность</h1>
-        <p class="col-lg-10 fs-4">Мы делаем всё, чтобы сохранить Вашу приватность. Но не забывайте о безопастности! Держите в секрете данные своей учётной записи. Обращайте внимание на адрес сайта.</p>
-      </div>
-      <div class="col-md-10 mx-auto col-lg-5">
-        <form class="p-4 p-md-5 border rounded-3 bg-light" method="post">
-          <p>{{ message if message else '' }}</p>
-          <div class="form-floating mb-3">
-            <input value="{{ username if username else '' }}" name="Login" type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
-            <label for="floatingInput">Логин</label>
-          </div>
-          <div class="form-floating mb-3">
-            <input value="{{ password if password else '' }}" name="Password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
-            <label for="floatingPassword">Пароль</label>
-          </div>
-          <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
-          <hr class="my-4">
-          <small class="text-muted">Нажимая кнопку Войти, Вы подтверждаете согласие с <a href="/politic">Политикой сайта</a></small>
-        </form>
+<div class="container col-xl-10 col-xxl-8 px-4">
+  <div class="row align-items-center g-lg-5 py-3">
+    <div class="col-lg-7 text-center text-lg-start">
+      <h1 class="display-5 fw-bold">В облачном хранилище файлы всегда под рукой</h1>
+      <p class="col-md-8 fs-4">Наш продукт предлагает практичные решения: теперь не нужно тратить своё время, все операции делаются в пару кликов.</p>
+    </div>
+    <div class="col-md-10 mx-auto col-lg-5">
+      <form class="p-4 p-md-5 rounded-3 my-card" method="post">
+        <p>{{ message if message else '' }}</p>
+        <div class="form-floating mb-3">
+          <input value="{{ form.get('Login') if form and form.get('Login') else '' }}" name="Login" type="text" class="form-control my-input" id="floatingInput" placeholder="name@example.com">
+          <label class="my-input-label" for="floatingInput">Логин</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input value="{{ form.get('Password') if form and form.get('Password') else '' }}" name="Password" type="password" class="form-control my-input" id="floatingPassword" placeholder="Password">
+          <label class="my-input-label" for="floatingPassword">Пароль</label>
+        </div>
+        <div class="checkbox mb-3 text-center lead">
+          <label>
+            <input id="RememberMe" type="checkbox" class="my-pink-checkbox" value="remember-me" {% if checked %}checked{% endif %}><span class="w m-2 unselectable">Запомнить меня</span>
+          </label>
+        </div>
+        <button class="mb-3 w-100 btn btn-lg btn-primary my-pink-button" type="submit">Войти</button>
+        <a class="w-100 btn btn-lg my-outline-button mb-3" href="/account/register{{'?page=' + active_page if active_page else ''}}" >Регистрация</a>
+        <small>Нажимая кнопку Войти, Вы подтверждаете согласие с <a href="/politic">Политикой сайта</a></small>
+      </form>
+    </div>
+    <div class="text-center py-3">
+      <h2 class="display-5 fw-bold">Больше возможностей</h2>
+      <p class="col-md-12 fs-4 mx-auto lead">
+        Ещё не знаете о возможностях lava-land.ru? - Посейтите главную страницу. А также рекомендуем посмотреть раздел "Что нового" во вкладке Поддержка, там вы узнаете о новых возможностях, сможете задать вопрос или рассказать о ваших пожеланиях
+      </p>
+        <a href="/index" class="btn btn-lg my-pink-button mb-3">Узнать больше</a>
+    </div>
+
+    <div class="p-3 mb-4 my-card rounded-3">
+      <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">Фото коллекции</h1>
+        <p class="col-md-8 fs-4">
+            Мы планируем запустить новый сервис "Фото коллекции". Создавайте альбомы, делитесь ими с друзьями и близкими, или создайте сеймейный фото-альбом, и не только. О ваших пожеланиях пишите на почту help@lava-land.ru
+        </p>
       </div>
     </div>
   </div>
+</div>
+
 {% endblock %}

@@ -1,12 +1,15 @@
 from flask_login import current_user
-from flask import send_file, render_template
+from flask import send_file, render_template, request
+from sqlalchemy.exc import NoResultFound
 
 from .. import login_manager
 from .users import User
 from .files import File
 from .messages import Message
 from .friends import Friends
+from .user_files import UserFiles
 from . import config, db_session
+from .exceptions import IncorrectData
 
 import hashlib
 import os
@@ -15,24 +18,25 @@ import datetime
 
 
 def my_render_template(*args, **kwargs):
-    active_page = kwargs.get('active_page')
+    active_page: str or None = kwargs.get('active_page')
+    if active_page and active_page.startswith('/'):
+        active_page = active_page[1:]
     page = active_page if active_page else '.'.join(args[0].split('.')[:-1])
-    pages = ['cloud', 'messenger', 'premium', 'support', 'about']
+    pages = ['index', 'cloud', 'messenger', 'premium', 'support']
     is_active_pages = [False] * len(pages)
     if page in pages:
         is_active_pages[pages.index(page)] = True
-    return render_template(*args, **kwargs, login=current_user.is_authenticated, pages=is_active_pages)
+    # try:
+    #     theme = current_user.theme
+    # except AttributeError:
+    #     current_user.theme = True
+    #     theme = current_user.theme
+    theme = 1
+    return render_template(*args, **kwargs,
+                           login=current_user.is_authenticated,
+                           pages=is_active_pages,
+                           dark=theme, url=request.path)
 
-
-# def edit_user(user, name, email, old_password, new_password):
-#     error_message = check_incorrect_data(name, old_password, user.password)
-#     if error_message:
-#         return error_message
-#     db_sess = db_session.create_session()
-#     user = user.with_password(new_password)
-#     user.name = name
-#     user.email = email
-#     db_sess.commit()
 
 
 def get_friends_for_user(user):
@@ -116,40 +120,35 @@ def load_user(user_id):
 
 def login_user_by_password(name, password):
     db_sess = db_session.create_session()
-    user = db_sess.query(User).filter_by(name=name).first()
-    if user is not None:
-        key_from_db, salt = user.password, user.salt
-        key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000, dklen=128)
-        if key_from_db == key:
-            return user
-    return None
+    try:
+        user = db_sess.query(User).filter_by(name=name).one()
+    except NoResultFound:
+        raise IncorrectData('Неверный логин')
+    key_from_db, salt = user.password, user.salt
+    key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000, dklen=128)
+    if key_from_db != key:
+        raise IncorrectData('Неверный пароль')
+    return user
 
 
-def add_new_user(form: dict) -> str:
+def add_new_user(form: dict):
     name = form['Login']
     email = form['Email']
     password = form['Password']
     repeat_password = form['RepeatPassword']
 
-    error_message = check_incorrect_data(name, password, repeat_password)
-    if error_message:
-        return error_message
+    check_incorrect_data(name, password, repeat_password)
 
     user = User().with_password(password)
     user.name, user.email = name, email
-    try:
-        db_sess = db_session.create_session()
-        db_sess.add(user)
-        db_sess.commit()
-    except Exception as e:
-        print('ERROR ADD REGISTERED USER TO DB')
-        print(e.__class__.__name__)
-        print(e)
-        return 'Не удалось создать аккаунт. Повторите попытку позднее'
-    return ''
+    db_sess = db_session.create_session()
+    db_sess.add(user)
+    db_sess.commit()
 
 
-def edit_user(form: dict) -> str:
+def edit_user(form: dict) -> str or None:
+    if current_user.is_anonymous:
+        return
     name = form['Login']
     email = form['Email']
     old_password = form['OldPassword']
@@ -159,27 +158,16 @@ def edit_user(form: dict) -> str:
     user = db_sess.query(User).filter_by(name=current_user.name).one()
 
     if not user.check_password(old_password):
-        return 'Неверный пароль'
+        raise IncorrectData('Неверный пароль')
     if name:
-        error_message = check_incorrect_name(name)
-        if error_message:
-            return error_message
+        check_incorrect_name(name)
         user.name = name
     if email:
         user.email = email
     if password:
-        error_message = check_incorrect_passwords(password, repeat_password)
-        if error_message:
-            return error_message
+        check_incorrect_passwords(password, repeat_password)
         user.with_password(password)
-    try:
-        db_sess.commit()
-    except Exception as e:
-        print('ERROR EDIT REGISTERED USER')
-        print(e.__class__.__name__)
-        print(e)
-        return 'Не удалось изменить аккаунт. Повторите попытку позднее'
-    return ''
+    db_sess.commit()
 
 
 def normalize_filename(filename):
@@ -187,7 +175,7 @@ def normalize_filename(filename):
     for i in symbols_to_remove:
         filename = filename.replace(i, '')
     if not filename:
-        filename = 'unknown name'
+        filename = 'Без имени'
     return filename
 
 
@@ -197,7 +185,7 @@ def save_file(request):
     path = uuid.uuid4().hex
     while os.path.exists(path):
         path = uuid.uuid4().hex
-    
+
     filename = normalize_filename(file.filename)
 
     file.save(os.path.join(config.files_path, path))
@@ -205,22 +193,30 @@ def save_file(request):
     db_sess = db_session.create_session()
     db_sess.add(file)
     user = db_sess.query(User).filter_by(id=current_user.id).first()
-    user.add_file(file.id)
+    user_file = UserFiles(user_id=user.id, file_id=file.id)
+    db_sess.add(user_file)
     db_sess.commit()
     return file.path
+
+
+def get_files_id(user):
+    db_sess = db_session.create_session()
+    user_files_id = db_sess.query(UserFiles.file_id).filter_by(user_id=user.id)
+    return map(lambda a: a[0], user_files_id)
 
 
 def remove_file(user, file_path):
     db_sess = db_session.create_session()
     file = db_sess.query(File).filter_by(path=file_path).first()
     db_sess.close()
-    if file.id not in user.get_files():
+    if file.id not in get_files_id(user):
         return
     try:
         os.remove(os.path.join(config.files_path, file.path))
     except FileNotFoundError:
         print(f'Файл {file.path} не существует')
-    user.remove_file(file.id)
+    user_file = db_sess.query(UserFiles).filter_by(user_id=user.id, file_id=file.id).first()
+    db_sess.delete(user_file)
     db_sess.delete(file)
     db_sess.commit()
 
@@ -231,7 +227,7 @@ def download_file(user, file_path):
     db_sess.close()
     if not file or not user:
         return
-    if not (file.is_open or user.is_authenticated and file.id in user.get_files() + user.get_given_files()):
+    if not (file.is_open or user.is_authenticated and file.id in get_files_id(user)):
         return
     full_file_path = os.path.join(config.shorts_files_path, file.path)
     return send_file(full_file_path, download_name=file.name, as_attachment=True)
@@ -241,7 +237,7 @@ def find_file(user, file_path):
     db_sess = db_session.create_session()
     file = db_sess.query(File).filter_by(path=file_path).first()
     db_sess.close()
-    if not file or not user or not (file.id in user.get_files() + user.get_given_files()):
+    if not file or not user or not (file.id in get_files_id(user)):
         return
     return file
 
@@ -256,10 +252,8 @@ def edit_file(file_path, form):
 
 
 def get_files_for(user):
-    if not user.files:
-        return []
     db_sess = db_session.create_session()
-    return db_sess.query(File).filter(File.id.in_(user.get_files())).all()
+    return db_sess.query(File).filter(File.id.in_(get_files_id(user))).all()
 
 
 def name_in_db(name: str):
@@ -267,40 +261,39 @@ def name_in_db(name: str):
     return name.lower() in map(lambda x: x.name.lower(), db_sess.query(User).all())
 
 
-def check_incorrect_data(name: str, password: str, repeat_password: str) -> str:
-    error = check_incorrect_name(name)
-    if error:
-        return error
-    error = check_incorrect_passwords(password, repeat_password)
-    if error:
-        return error
+def check_incorrect_data(name: str, password: str, repeat_password: str):
+    check_incorrect_name(name)
+    check_incorrect_password(password)
+    check_incorrect_passwords(password, repeat_password)
 
 
-def check_incorrect_name(name: str) -> str:
+def check_incorrect_name(name: str):
     if len(name) < 4:
-        return 'Логин должен состоять из более чем 4 символов'
+        raise IncorrectData('Логин должен состоять из более чем 4 символов')
     if len(name) > 32:
-        return 'Максимальный размер логина - 32 символа'
+        raise IncorrectData('Максимальный размер логина - 32 символа')
     if not name.isalnum():
-        return 'Имя не должно содержать спец.символов'
+        raise IncorrectData('Имя не должно содержать спец.символов')
     if name_in_db(name):
-        return 'Пользователь с таким логином уже существует'
+        raise IncorrectData('Пользователь с таким логином уже существует')
 
 
-def check_incorrect_password(password: str) -> str:
-    if len(password) < 4:
-        return 'Пароль должен состоять из более чем 4 символов'
+def check_incorrect_password(password: str):
+    if len(password) < 6:
+        raise IncorrectData('Пароль должен состоять из более чем 6 символов')
     if len(password) > 100:
-        return 'Максимальный размер пароля - 100 символов'
+        raise IncorrectData('Максимальный размер пароля - 100 символов')
+    if password.isalpha():
+        raise IncorrectData('Пароль должен содержать цифры')
+    if password.isdigit():
+        raise IncorrectData('Пароль должен содержать буквы')
+    if password.isalnum():
+        raise IncorrectData('Пароль должен содержать специальные символы')
 
 
-def check_incorrect_passwords(password: str, repeat_password: str) -> str:
-    error = check_incorrect_password(password)
-    if error:
-        return error
+def check_incorrect_passwords(password: str, repeat_password: str):
     if password != repeat_password:
-        return 'Пароли не совпадают'
-    return ''
+        raise IncorrectData('Пароли не совпадают')
 
 
 def index_revert(path: str):

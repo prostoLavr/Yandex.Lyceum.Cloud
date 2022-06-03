@@ -7,36 +7,36 @@
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">Ваше хранилище</h1>
-        <a href="/cloud/load"><p class="lead btn btn-primary my-2">Загрузить файл</p></a>
+        <a href="/cloud/load" class="lead btn btn-primary my-2 my-pink-button">Загрузить файл</a>
       </div>
     </div>
   </section>
 {% if not files %}
-  <div class="py-5 bg-light">
-    <p class="text-center lead text-muted">Здесь будут ваши файлы</p>
+  <div class="py-5 my-grey">
+    <p class="text-center lead">Здесь будут ваши файлы</p>
   </div>
 {% else %}
-  <div class="album py-5 bg-light">
+  <div class="album py-5 my-grey">
     <div class="container">
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
         {% for file in files %}
           <div class="col">
-            <div class="card">
+            <div class="my-card">
               <div class="card-body">
-                <p class="card-text">{{ file.name  }}</p>
-                {% if file.desc %}
-                <p class="my-clip text-muted">{{ file.desc }}</p>
-                {% else %}
-                <p class="text-muted">Без описания</p> 
-                {% endif %}
                 <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <a type="button" href="/cloud/download/{{ file.path }}" class="btn btn-sm btn-outline-primary">Скачать</a>
-                    <a type="button" href="/cloud/edit_file/{{ file.path }}" class="btn btn-sm btn-outline-secondary">Подробнее</a>
-                    <a type="button" href="/cloud/remove/{{ file.path }}" class="btn btn-sm btn-outline-secondary">Удалить</a>
-                  </div>
-                  <small class="text-muted">{{ file.date.date() }}</small>
+                  <p class="my-clip card-text">{{ file.name  }}</p>
+                  <small >{{'0' if file.date.day < 10 else ''}}{{ file.date.day }}.{{'0' if file.date.month < 10 else ''}}{{ file.date.month }}</small>
+                </div>
+                {% if file.desc %}
+                <p class="my-clip">{{ file.desc }}</p>
+                {% else %}
+                <p>Без описания</p>
+                {% endif %}
+                <div class="btn-group">
+                  <a type="button" href="/cloud/download/{{ file.path }}" class="btn btn-sm my-pink-outline-button">Скачать</a>
+                  <a type="button" href="/cloud/edit_file/{{ file.path }}" class="btn btn-sm my-outline-button">Подробнее</a>
+                  <a type="button" href="/cloud/remove/{{ file.path }}" class="btn btn-sm my-outline-button">Удалить</a>
                 </div>
               </div>
             </div>

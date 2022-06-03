@@ -5,18 +5,18 @@
 {% block body %}
 <div class="container col-xl-10 col-xxl-8 px-4 py-5">
       <div class="col-md-10 mx-auto col-lg-5">
-        <form class="p-4 p-md-5 border rounded-3 bg-light" method="post">
+        <form class="p-4 p-md-5 rounded-3 my-card" method="post">
           <p>{{ message }}</p>
           <div class="form-floating mb-3">
             <input type="password" name="OldPassword" class="form-control" id="floatingOldPassword" placeholder="password">
             <label for="floatingOldPassword">Старый пароль<small>*</small></label>
           </div>
           <div class="form-floating mb-3">
-            <input type="text" name='Login' class="form-control" id="floatingLogin" placeholder="Login">
+            <input type="text" name='Login' class="form-control" id="floatingLogin" placeholder="Login" value={{user.name}}>
             <label for="floatingLogin">Новый логин</label>
           </div>
           <div class="form-floating mb-3">
-            <input type="email" name="Email" class="form-control" id="floatingEmail" placeholder="name@example.com">
+            <input type="email" name="Email" class="form-control" id="floatingEmail" placeholder="name@example.com" value={{user.email}}>
             <label for="floatingEmail">Новый адрес эл.почты</label>
           </div>
           <div class="form-floating mb-3">
@@ -27,10 +27,10 @@
             <input type="password" name="RepeatPassword" class="form-control" id="floatingPasswordRepeat"  placeholder="password">
             <label for="floatingPasswordRepeat">Повторите пароль</label>
           </div>
-          <button class="w-100 btn btn-lg btn-primary" type="submit">Изменить аккаунт</button>
+          <button class="w-100 btn btn-lg my-pink-button" type="submit">Изменить аккаунт</button>
           <hr class="my-4">
-          <small class="text-muted">Оставьте поле пустым, чтобы не изменять его.</small>
-          <small class="text-muted">Используя аккаунт, Вы подтверждаете согласие с <a href="/politic">Политикой сайта</a></small>
+          <small>Оставьте поле пустым, чтобы не изменять его.</small>
+          <small>Используя аккаунт, Вы подтверждаете согласие с <a href="/politic">Политикой сайта</a></small>
         </form>
       </div>
     </div>

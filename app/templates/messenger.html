@@ -8,7 +8,7 @@
 <link rel='stylesheet' href="{{ url_for('static', filename='css/messenger.css') }}">
 <div class="m-5">
     <aside id="my-sidebar">
-<form class="p-4 p-md-5 border rounded-3 bg-light my-sidebar-part" method="post">
+<form class="p-4 p-md-5 rounded-3 my-sidebar-part my-card" method="post">
     <h1>Добавить друга</h1>
     {% if message %}
         <p>{{ message }}</p>
@@ -17,14 +17,14 @@
         <input type="text" name='Friend_Login' class="form-control" id="floatingLogin" placeholder="Friend_Login">
         <label for="floatingLogin">Логин друга</label>
     </div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Добавить</button>
+    <button class="w-100 btn btn-lg my-pink-button" type="submit">Добавить</button>
 </form>
-<form class="p-4 p-md-5 border rounded-3 bg-light my-sidebar-part">
+<form class="p-4 p-md-5 rounded-3 my-sidebar-part my-card">
 <div class="people-list">
     <h2>Заявки в друзья</h2>
     <ul class="list-unstyled chat-list mt-2 mb-0">
         {% if not req %}
-            Пока нет заявок в друзья
+        <p>Пока нет заявок в друзья</p>
         {% endif %}
         {% for r in req %}
         <li class="clearfix">
@@ -51,6 +51,9 @@
                                 <input type="text" class="form-control" placeholder="Search...">
                             </div>
                             <ul class="list-unstyled chat-list mt-2 mb-0">
+                                {% if not users %}
+                                    <h4>У тебя пока нет друзей (</h4>
+                                {% endif %}
                                 {% for user in users %}
                                     <li class="clearfix" onclick="location.href='/messenger/{{ user.id }}';">
                                         <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar">

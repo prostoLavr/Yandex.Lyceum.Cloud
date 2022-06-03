@@ -9,5 +9,5 @@ function copyText(link) {
     el.setSelectionRange(0, 99999);
     document.execCommand("copy");
     document.body.removeChild(el);
-    document.getElementById("linkButton").textContent = "Link copied!"
+    document.getElementById("linkButton").textContent = "Ссылка скопирована!"
 }
