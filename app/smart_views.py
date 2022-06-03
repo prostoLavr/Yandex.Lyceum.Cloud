@@ -74,7 +74,7 @@ def register():
     except Exception as e:
         # TODO: logs
         print('ERROR')
-        print(e.__name__, e, '\n')
+        print(e.__class__.__name__, e, '\n')
         return my_render_template('register.html',
                                   message='Что-то пошло не так. Повторите попытку позже.',
                                   active_page=active_page,
