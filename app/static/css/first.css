@@ -1,14 +1,26 @@
 body {
   background: -webkit-linear-gradient(right, #915160, #2f5ba1);
   background: linear-gradient(270deg, #915160, #2f5ba1);
+  margin-bottom: 10rem;
  }
 .my-card {
     border: 1px solid transparent;
     border-radius: .3rem;
     border-color: #FFF;
 }
-p, h1, h2, h3, h4, a, span, small{
+p, h1, h2, h3, h4, a, span, small, label{
 color: #FFF;
+}
+.my-input-label {
+    color: #999;
+}
+.my-input {
+    color: #FFF;
+    border: none;
+    background: rgba(255, 255, 255, 0);
+    border: 1px solid #FFF;
+    border-radius: .3rem;
+    border-color: #FFF;
 }
 .my-pink-button {
     background: #7A1F9C;

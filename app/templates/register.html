@@ -3,7 +3,7 @@
 Регистрация
 {% endblock %}
 {% block body %}
-<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+<div class="container col-xl-10 col-xxl-8 px-4 py-3">
   <div class="row align-items-center">
       <div class="col-lg-7 text-center text-lg-start">
         <h1 class="display-4 fw-bold lh-1 mb-3">Максимальная приватность</h1>
@@ -13,26 +13,26 @@
         <form class="p-4 p-md-5 rounded-3 my-card" method="post">
           <p>{{ message }}</p>
           <div class="form-floating mb-3">
-            <input value="{{ Login if Login else '' }}" type="text" name='Login' class="form-control" id="floatingLogin" placeholder="Login">
-            <label for="floatingLogin">Придумайте логин</label>
+            <input value="{{ Login if Login else '' }}" type="text" name='Login' class="form-control my-input" id="floatingLogin" placeholder="Login">
+            <label for="floatingLogin" class="my-input-label">Придумайте логин</label>
           </div>
           <div class="form-floating mb-3">
-            <input value="{{ Email if Email else '' }}" type="email" name="Email" class="form-control" id="floatingEmail" placeholder="name@example.com">
-            <label for="floatingEmail">Email <small class='dark'>(Не обязательно)</small></label>
+            <input value="{{ Email if Email else '' }}" type="email" name="Email" class="form-control my-input" id="floatingEmail" placeholder="name@example.com">
+            <label for="floatingEmail" class="my-input-label">Email <small class="my-input-label">(Не обязательно)</small></label>
           </div>
           <div class="form-floating mb-3">
-            <input value="{{ Password if Password else '' }}" type="password" name="Password" class="form-control" id="floatingPassword" placeholder="Password">
-            <label for="floatingPassword">Придумайте пароль</label>
+            <input value="{{ Password if Password else '' }}" type="password" name="Password" class="form-control my-input" id="floatingPassword" placeholder="Password">
+            <label for="floatingPassword" class="my-input-label">Придумайте пароль</label>
           </div>
 
           <div class="form-floating mb-3">
-            <input value="{{ RepeatPassword if RepeatPassword else '' }}" type="password" name="RepeatPassword" class="form-control" id="floatingPasswordRepeat" placeholder="Password">
-            <label for="floatingPasswordRepeat">Повторите пароль</label>
+            <input value="{{ RepeatPassword if RepeatPassword else '' }}" type="password" name="RepeatPassword" class="form-control my-input" id="floatingPasswordRepeat" placeholder="Password">
+            <label for="floatingPasswordRepeat" class="my-input-label">Повторите пароль</label>
           </div>
           <p class="w"><small>Пароль должен содержать не менее шести знаков, включать буквы, цифры и специальные символы</small></p>
           <button class="mb-3 w-100 btn btn-lg btn-primary my-pink-button" type="submit">Создать аккаунт</button>
-          <a class="w-100 btn btn-lg my-outline-button" href="/{{'?page=' + active_page if active_page else ''}}" >Уже есть аккаунт</a>
-          <hr class="my-pink-line">
+          <a class="w-100 btn btn-lg my-outline-button mb-3" href="/login{{'?page=' + active_page if active_page else ''}}" >Уже есть аккаунт</a>
+
           <small>Создав аккаунт, Вы подтверждаете согласие с <a href="/politic">Политикой сайта</a></small>
         </form>
       </div>

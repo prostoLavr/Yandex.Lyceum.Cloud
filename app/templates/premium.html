@@ -11,14 +11,14 @@
   <h1 class="text-center m-5">Выбери свой тариф</h1>
   <form class="row my-card row-cols-1 row-cols-md-1 mb-3 text-center">
 
-    <input class="my-5" id="range" type="range" min="5" max="100" step="1" value="20">
+    <input class="slider my-5" id="range" type="range" min="5" max="100" step="1" value="20">
     <div class="my-div py-1 row row-cols-2 text-center">
-      <input id="num" type="number" min="5" max="100" step="1" value="20">
-      <span id="my-span">ГБ</span>
+      <input id="num" class="my-input" type="number" min="5" max="100" step="1" value="20">
+      <span id="my-span unselectable">ГБ</span>
     </div>
     <div class="py-5 mb-2 text-center text-end">
       <button class="btn btn-lg my-pink-button">Оформить подписку</button>
-      <a href="#" class="btn my-pink-outline-button btn-lg">Хочу больше места</a>
+      <a href="/get_premium" class="btn my-pink-outline-button btn-lg">Хочу больше места</a>
     </div>
   </form>
 </div>
