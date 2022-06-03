@@ -193,8 +193,6 @@ def edit_file(file_path):
     if current_user.is_anonymous:
         return redirect('/?page=/cloud')
     if request.method == 'POST':
-        print(f'{file_path=}')
-        print(f'{request.form=}')
         try:
             db_manager.edit_file(file_path, request.form)
         except Exception as e:
@@ -221,5 +219,6 @@ def light_theme():
 @wsgi_app.route('/premium', methods=["POST", "GET"])
 def premium():
     if request.method == "POST":
+        print('here')
         return redirect("/get_premium")
     return my_render_template('premium.html')
