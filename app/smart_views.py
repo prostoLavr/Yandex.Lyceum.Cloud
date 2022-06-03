@@ -144,7 +144,7 @@ def messenger():
     mes = None
     if request.method == 'POST':
         friend_name = request.form.get('Friend_Login')
-        db_manager.add_friend(current_user, friend_name)
+        mes = db_manager.add_friend(current_user, friend_name)
     user_friends = db_manager.get_friends_for_user(current_user)
     user_requests = db_manager.get_friend_requests(current_user)
     return my_render_template('messenger.html', users=user_friends,
