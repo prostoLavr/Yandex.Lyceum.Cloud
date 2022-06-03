@@ -21,7 +21,25 @@ input[type="range"] {
   border-radius: 0.3rem;
 }
 input[type="number"] {
+    text-align: center;
     width: 5rem;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+input[type="number"]:hover,
+input[type="number"]:focus {
+  -moz-appearance: number-input;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -35,7 +53,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 
-input[type=range]::-webkit-slider-runnable-track  {
+input[type="range"]::-webkit-slider-runnable-track  {
   -webkit-appearance: none;
   box-shadow: none;
   border: none;

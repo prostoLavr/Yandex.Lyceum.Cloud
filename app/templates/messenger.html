@@ -6,63 +6,65 @@
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 <link rel='stylesheet' href="{{ url_for('static', filename='css/messenger.css') }}">
+<h1 class="text-center">Этот раздел находится в разработке</h1>
 <div class="m-5">
     <aside id="my-sidebar">
-<form class="p-4 p-md-5 rounded-3 my-sidebar-part my-card" method="post">
-    <h1>Добавить друга</h1>
-    {% if message %}
-        <p>{{ message }}</p>
-    {% endif %}
-    <div class="form-floating mb-3">
-        <input type="text" name='Friend_Login' class="my-input form-control" id="floatingLogin" placeholder="Friend_Login">
-        <label class="my-input-label" for="floatingLogin">Логин друга</label>
-    </div>
-    <button class="w-100 btn btn-lg my-pink-button" type="submit">Добавить</button>
-</form>
-<form class="p-4 p-md-5 rounded-3 my-sidebar-part my-card">
-<div class="people-list">
-    <h2>Заявки в друзья</h2>
-    <ul class="list-unstyled chat-list mt-2 mb-0">
-        {% if not req %}
-        <p>Пока нет заявок в друзья</p>
+    <form class="p-4 p-md-5 rounded-3 my-sidebar-part my-card" method="post">
+        <h1>Добавить друга</h1>
+        {% if message %}
+            <p>{{ message }}</p>
         {% endif %}
-        {% for r in req %}
-        <li class="clearfix">
-            <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar">
-            <div class="about">
-                <div class="name">{{r[1]}}</div>
-                <a type="button" href="/messenger/accept_req/{{ r[0] }}" class="btn btn-sm btn-outline-primary">accept</a>
-                <a type="button" href="/messenger/decline_req/{{ r[0] }}" class="btn btn-sm btn-outline-secondary">decline</a>
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
-</div>
-</form>
+        <div class="form-floating mb-3">
+            <input type="text" name='Friend_Login' class="my-input form-control" id="floatingLogin" placeholder="Friend_Login">
+            <label class="my-input-label" for="floatingLogin">Логин друга</label>
+        </div>
+        <button class="w-100 btn btn-lg my-pink-button" type="submit">Добавить</button>
+    </form>
+    <form class="p-4 p-md-5 rounded-3 my-sidebar-part my-card">
+    <div class="people-list">
+        <h2>Заявки в друзья</h2>
+        <ul class="list-unstyled chat-list mt-2 mb-0">
+            {% if not req %}
+            <p>Пока нет заявок в друзья</p>
+            {% endif %}
+            {% for r in req %}
+            <li class="clearfix my-card">
+                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar">
+                <div class="about">
+                    <div class="name">{{r[1]}}</div>
+                    <a type="button" href="/messenger/accept_req/{{ r[0] }}" class="btn btn-sm my-pink-button my-1">Принять</a>
+                    <a type="button" href="/messenger/decline_req/{{ r[0] }}" class="btn btn-sm my-pink-button">Отклонить</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    </form>
     </aside>
-            <div class="row clearfix">
-                <div class="col-lg-12">
-                    <div class="card chat-app">
-                        <div class="people-list">
-                            <div class="input-group">
-                                <input type="text" class="mb-2 my-input form-control" placeholder="Искать...">
-                            </div>
-                            <ul class="list-unstyled chat-list mt-2 mb-0">
-                                {% if not users %}
-                                    <h4>У тебя пока нет друзей (</h4>
-                                {% endif %}
-                                {% for user in users %}
-                                    <li class="clearfix" onclick="location.href='/messenger/{{ user.id }}';">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar">
-                                        <div class="about">
-                                            <div class="name">{{user.name}}</div>
-                                        </div>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
+    <div class="row clearfix">
+        <div class="col-lg-12">
+            <div class="card chat-app">
+                <div class="people-list">
+                    <div class="input-group">
+                        <input type="text" class="mb-2 my-input form-control" placeholder="Искать...">
                     </div>
+                    {% if not users %}
+                            <h4>У тебя пока нет друзей (</h4>
+                    {% else %}
+                        <ul class="list-unstyled chat-list mt-2 mb-0">
+                            {% for user in users %}
+                                <li class="my-card clearfix" onclick="location.href='/messenger/{{ user.id }}';">
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar">
+                                    <div class="about">
+                                        <div class="name">{{user.name}}</div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
             </div>
         </div>
+    </div>
+</div>
 {% endblock %}

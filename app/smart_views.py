@@ -174,7 +174,7 @@ def account_edit():
             db_manager.edit_user(request.form)
         except IncorrectData as e:
             return my_render_template('edit_account.html', message=e,
-                                      user=current_user)
+                                      user=current_user, **request.form)
         except Exception:
             # TODO: behavior
             return redirect('/')

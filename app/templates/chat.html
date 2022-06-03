@@ -2,11 +2,11 @@
 {% block title %}
 Мессенджер
 {% endblock %}
-{% block body %}
-
+{% block head %}
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-<link rel='stylesheet' href="{{ url_for('static', filename='css/messenger.css') }}">
-
+<link rel='stylesheet' href="/static/css/messenger.css">
+{% endblock %}
+{% block body %}
 <div class="chat">
     <div class="chat-header clearfix">
         <div class="row">
@@ -15,11 +15,11 @@
                     <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
                 </a>
                 <div class="chat-about">
-                    <h6 class="m-b-0">{{friend.name}}</h6>
+                    <p class="m-b-0">{{friend.name}}</p>
                 </div>
             </div>
             <div class="col-lg-6 hidden-sm float-right">
-                <a type="button" href="/messenger/decline_req/{{ friend.id }}" class="btn btn-sm btn-outline-secondary">Удалить из друзей</a>
+                <button onclick="confirm_click('/messenger/decline_req/{{ friend.id }}')" class="btn btn-sm my-outline-button">Удалить из друзей</button>
             </div>
         </div>
     </div>
@@ -29,14 +29,14 @@
             {% if mes.sender_id == friend.id %}
                 <li class="clearfix">
                     <div class="message-data">
-                        <span class="message-data-time">{{ mes.sent_date.strftime('%H:%M') }}</span>
+                        <span>{{ mes.sent_date.strftime('%H:%M') }}</span>
                     </div>
                     <div class="message my-message">{{ mes.text }}</div>
                 </li>
             {% else %}
                 <li class="clearfix">
                     <div class="message-data text-right">
-                        <span class="message-data-time">{{ mes.sent_date.strftime('%H:%M') }}</span>
+                        <span>{{ mes.sent_date.strftime('%H:%M') }}</span>
                         <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
                     </div>
                     <div class="message other-message float-right"> {{ mes.text }} </div>
@@ -46,12 +46,9 @@
         </ul>
     </div>
     <div class="chat-message clearfix">
-        <div class="input-group mb-0">
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fa fa-send"></i></span>
-            </div>
+        <div class="mx-5">
             <form method="post">
-                <input name="message" type="text" class="form-control" placeholder="Enter text here...">
+                <input name="message" type="text" class="chat-input form-control my-input" placeholder="Напишите сообщение...">
             </form>
         </div>
     </div>

@@ -8,24 +8,24 @@
         <form class="p-4 p-md-5 rounded-3 my-card" method="post">
           <p>{{ message }}</p>
           <div class="form-floating mb-3">
-            <input type="password" name="OldPassword" class="form-control" id="floatingOldPassword" placeholder="password">
-            <label for="floatingOldPassword">Старый пароль<small>*</small></label>
+            <input type="password" name="OldPassword" class="form-control my-input" id="floatingOldPassword" placeholder="password">
+            <label class="my-input-label" for="floatingOldPassword">Старый пароль<small>*</small></label>
           </div>
           <div class="form-floating mb-3">
-            <input type="text" name='Login' class="form-control" id="floatingLogin" placeholder="Login" value={{user.name}}>
-            <label for="floatingLogin">Новый логин</label>
+            <input type="text" name='Login' class="form-control my-input" id="floatingLogin" placeholder="Login" value="{{Login}}">
+            <label class="my-input-label" for="floatingLogin">Логин</label>
           </div>
           <div class="form-floating mb-3">
-            <input type="email" name="Email" class="form-control" id="floatingEmail" placeholder="name@example.com" value={{user.email}}>
-            <label for="floatingEmail">Новый адрес эл.почты</label>
+            <input type="email" name="Email" class="form-control my-input" id="floatingEmail" placeholder="name@example.com" value="{{Email}}">
+            <label class="my-input-label" for="floatingEmail">Адрес эл.почты</label>
           </div>
           <div class="form-floating mb-3">
-            <input type="password" name="Password" class="form-control" id="floatingPassword"  placeholder="password">
-            <label for="floatingPassword">Новый пароль</label>
+            <input type="password" name="Password" class="form-control my-input" id="floatingPassword" value="{{Password}}" placeholder="password">
+            <label class="my-input-label" for="floatingPassword">Новый пароль</label>
           </div>
           <div class="form-floating mb-3">
-            <input type="password" name="RepeatPassword" class="form-control" id="floatingPasswordRepeat"  placeholder="password">
-            <label for="floatingPasswordRepeat">Повторите пароль</label>
+            <input type="password" name="RepeatPassword" class="form-control my-input" id="floatingPasswordRepeat" value="{{RepeatPassword}}" placeholder="password">
+            <label class="my-input-label" for="floatingPasswordRepeat">Повторите пароль</label>
           </div>
           <button class="w-100 btn btn-lg my-pink-button" type="submit">Изменить аккаунт</button>
           <hr class="my-4">

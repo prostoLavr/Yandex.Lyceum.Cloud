@@ -13,7 +13,6 @@ class User(SqlAlchemyBase, UserMixin):
     email = sa.Column(sa.String)
     salt = sa.Column(sa.LargeBinary, nullable=False)
     password = sa.Column(sa.LargeBinary, nullable=False)
-    given_files = sa.Column(sa.Text)  # Files that was given by other users
 
     def check_password(self, password):
         key_from_db, salt = self.password, self.salt
