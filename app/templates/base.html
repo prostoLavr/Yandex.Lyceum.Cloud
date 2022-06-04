@@ -42,14 +42,18 @@
                 {% if login %}
                   <a href="/account" type="button" class="btn me-2 my-outline-button">Аккаунт</a>
                   <a href="/account/logout" type="button" class="btn my-pink-button">Выйти</a>
+                {% else %}
+                  <a href="/login{{'?page=' + active_page if active_page else ''}}" type="button" class="btn my-pink-button">Вход в аккаунт</a>
+                  <a href="/account/register{{'?page=' + active_page if active_page else ''}}" type="button" class="btn me-2 my-outline-button">Регистрация</a>
                 {% endif %}
               </div>
             </header>
         </div>
         
         {% block body %}{% endblock %}
-        <div class="container  my-bottem-dark">
-          <footer class="py-3 my-4">
+<!--
+        <div class="my-bottem-dark">
+          <footer class="py-5">
             <ul class="nav justify-content-center border-bottom pb-3 mb-3">
               <li class="nav-item"><a href="#" class="my-pink-link px-2">Home</a></li>
               <li class="nav-item"><a href="#" class="my-pink-link px-2">Features</a></li>
@@ -60,6 +64,7 @@
             <p class="text-center">© 2022 Company, Inc</p>
           </footer>
         </div>
+-->
     </body>
 </html>
 

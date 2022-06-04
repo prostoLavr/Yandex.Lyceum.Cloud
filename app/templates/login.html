@@ -3,7 +3,6 @@
 Вход
 {% endblock %}
 {% block body %}
-<link rel='stylesheet' href="{{ url_for('static', filename='css/login.css') }}">
 <div class="container col-xl-10 col-xxl-8 px-4">
   <div class="row align-items-center g-lg-5 py-3">
     <div class="col-lg-7 text-center text-lg-start">
@@ -14,12 +13,12 @@
       <form class="p-4 p-md-5 rounded-3 my-card" method="post">
         <p>{{ message if message else '' }}</p>
         <div class="form-floating mb-3">
-          <input value="{{ form.get('Login') if form and form.get('Login') else '' }}" name="Login" type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
-          <label for="floatingInput">Логин</label>
+          <input value="{{ form.get('Login') if form and form.get('Login') else '' }}" name="Login" type="text" class="form-control my-input" id="floatingInput" placeholder="name@example.com">
+          <label class="my-input-label" for="floatingInput">Логин</label>
         </div>
         <div class="form-floating mb-3">
-          <input value="{{ form.get('Password') if form and form.get('Password') else '' }}" name="Password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
-          <label for="floatingPassword">Пароль</label>
+          <input value="{{ form.get('Password') if form and form.get('Password') else '' }}" name="Password" type="password" class="form-control my-input" id="floatingPassword" placeholder="Password">
+          <label class="my-input-label" for="floatingPassword">Пароль</label>
         </div>
         <div class="checkbox mb-3 text-center lead">
           <label>
@@ -28,7 +27,6 @@
         </div>
         <button class="mb-3 w-100 btn btn-lg btn-primary my-pink-button" type="submit">Войти</button>
         <a class="w-100 btn btn-lg my-outline-button mb-3" href="/account/register{{'?page=' + active_page if active_page else ''}}" >Регистрация</a>
-<!--        <hr class="my-line">-->
         <small>Нажимая кнопку Войти, Вы подтверждаете согласие с <a href="/politic">Политикой сайта</a></small>
       </form>
     </div>

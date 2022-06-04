@@ -6,43 +6,39 @@
 <script src="{{url_for('static', filename='js/text_copy.js')}}" defer></script>
 {% endblock %}
 {% block body %}
+<link rel='stylesheet' href="/static/css/file.css">
 <form method=post enctype=multipart/form-data>
-    <section class="py-5 text-center container">
+    <section class="py-5  container">
         <div class="row py-lg-3">
             <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="fw-light">Редактировать файл</h1>
-                <p class="lead"><b>Имя файла</b><br>
-                    <input class="form-control g" type="text" id="name" name="name" value="{{ file.name }}">
-                <p class="lead"><b>Описание файла</b><br>
-                    <textarea name="desc" id="desc" class="form-control fixed-size g" rows="3" cols="50">{{ file.desc }} </textarea>
-                </p>
-                <p class="lead"><b>Доступ к файлу</b><br>
-                <div class="form-check">
-                    {% if file.is_open %}
-                        <input class="form-check-input" type="radio" name="access" id="close" value=0>
-                    {% else %}
-                        <input class="form-check-input" type="radio" name="access" id="close" value=0 checked>
-                    {% endif %}
-                    <label class="form-check-label" for="close">
-                        <span class="w">Закрытый (Файл могу скачать только я)</span>
-                    </label>
+                <div class=text-center>
+                    <h1 class="fw-light">Редактировать файл</h1>
+                    <p class="lead"><b>Имя файла</b><br>
+                        <input class="my-input form-control g" type="text" id="name" name="name" value="{{ file.name }}">
+                    <p class="lead"><b>Описание файла</b><br>
+                        <textarea name="desc" id="desc" class="my-input form-control fixed-size g" rows="3" cols="50">{{ file.desc }} </textarea>
+                    </p>
+                    <p class="lead"><b>Кому доступен файл</b> (Сохраните, чтобы изменения вступили в силу)<br>
                 </div>
                 <div class="form-check">
-                    {% if file.is_open %}
-                        <input class="form-check-input" type="radio" name="access" id="open" value=1 checked>
-                    {% else %}
-                        <input class="form-check-input" type="radio" name="access" id="open" value=1>
-                    {% endif %}
-
-                    <label class="form-check-label w" for="open">
-                        <span class="w">Открытый (Файл могут скачать все, у кого есть ссылка)</span>
-                    </label>
+                    <div class="radio-item">
+                        <input type="radio" id="ritema" name="access" value="0" {{ "" if file.is_open else "checked" }}>
+                        <label for="ritema">Только мне</label>
+                    </div>
+                </div>
+                <div class="form-check">
+                    <div class="radio-item">
+                        <input type="radio" id="ritemb" name="access" value="1" {{ "checked" if file.is_open else "" }}>
+                        <label for="ritemb">Всем</label>
+                    </div>    
                 </div><br>
-                <p class="my-big-text form-control g">{{ link }}</p>
+                <div class="text-center">
+                    <p class="my-input my-big-text form-control g">{{ link }}</p>
 
-                <div class="btn-group">
-                  <button id="linkButton" type="button" class="btn my-outline-button" onclick="copyText( '{{ link }}' )">Скопировать ссылку</button>
-                  <input class="btn my-pink-outline-button" type="submit" value=Сохранить>
+                    <div class="btn-group">
+                      <button id="linkButton" type="button" class="btn my-outline-button" onclick="copyText( '{{ link }}' )">Скопировать ссылку</button>
+                      <input class="btn my-pink-outline-button" type="submit" value="Сохранить изменения">
+                    </div>
                 </div>
             </div>
         </div>

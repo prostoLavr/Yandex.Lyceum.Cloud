@@ -16,7 +16,14 @@ color: #B35CF7;
 .my-pink-link:hover {
     color: #DD24EE;
 }
-
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 .my-pink-link::before {
 	content: '';
 	position: absolute;
@@ -28,7 +35,22 @@ color: #B35CF7;
 	background-color: #DD24EE;
 }
 
-
+.my-input:focus {
+    color: #FFF;
+    border: none;
+    background: rgba(255, 255, 255, 0);
+    border: 1px solid #FFF;
+    border-radius: .3rem;
+    border-color: #FFF;
+}
+.my-input:-webkit-autofill,
+.my-input:-webkit-autofill:hover,
+.my-input:-webkit-autofill:focus,
+.my-input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0) inset;
+    -webkit-text-fill-color: #FFF;
+}
 /* Только для пк: */
 @media only screen
 and (min-device-width : 1200px) {
@@ -71,11 +93,3 @@ word-wrap: break-word;
     color: #fff;
 }
 
-.my-bottem-dark {
-/*
-  background: #466368;
-  background: -webkit-linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
-  background:    -moz-linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1);
-  background:         linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
-*/
-}

@@ -4,10 +4,6 @@ from . import wsgi_app
 from .data.db_manager import my_render_template
 
 
-@wsgi_app.route('/premium')
-def premium():
-    return my_render_template('premium.html')
-
 
 @wsgi_app.route('/about')
 def about():

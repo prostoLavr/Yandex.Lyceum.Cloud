@@ -144,7 +144,7 @@ def messenger():
     mes = None
     if request.method == 'POST':
         friend_name = request.form.get('Friend_Login')
-        db_manager.add_friend(current_user, friend_name)
+        mes = db_manager.add_friend(current_user, friend_name)
     user_friends = db_manager.get_friends_for_user(current_user)
     user_requests = db_manager.get_friend_requests(current_user)
     return my_render_template('messenger.html', users=user_friends,
@@ -193,7 +193,12 @@ def edit_file(file_path):
     if current_user.is_anonymous:
         return redirect('/?page=/cloud')
     if request.method == 'POST':
-        db_manager.edit_file(file_path, request.form)
+        print(f'{file_path=}')
+        print(f'{request.form=}')
+        try:
+            db_manager.edit_file(file_path, request.form)
+        except Exception as e:
+            return f'{e.__class__.__name__}\n{e}'
         return redirect('/cloud')
     file_to_edit = db_manager.find_file(current_user, file_path)
     if not file_to_edit:
@@ -212,3 +217,9 @@ def light_theme():
     # current_user.theme = 1
     return redirect(request.args.get('url'))
 
+
+@wsgi_app.route('/premium', methods=["POST", "GET"])
+def premium():
+    if request.method == "POST":
+        return redirect("/get_premium")
+    return my_render_template('premium.html')

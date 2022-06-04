@@ -7,6 +7,7 @@ from .users import User
 from .files import File
 from .messages import Message
 from .friends import Friends
+from .user_files import UserFiles
 from . import config, db_session
 from .exceptions import IncorrectData
 
@@ -36,16 +37,6 @@ def my_render_template(*args, **kwargs):
                            pages=is_active_pages,
                            dark=theme, url=request.path)
 
-
-# def edit_user(user, name, email, old_password, new_password):
-#     error_message = check_incorrect_data(name, old_password, user.password)
-#     if error_message:
-#         return error_message
-#     db_sess = db_session.create_session()
-#     user = user.with_password(new_password)
-#     user.name = name
-#     user.email = email
-#     db_sess.commit()
 
 
 def get_friends_for_user(user):
@@ -202,22 +193,30 @@ def save_file(request):
     db_sess = db_session.create_session()
     db_sess.add(file)
     user = db_sess.query(User).filter_by(id=current_user.id).first()
-    user.add_file(file.id)
+    user_file = UserFiles(user_id=user.id, file_id=file.id)
+    db_sess.add(user_file)
     db_sess.commit()
     return file.path
+
+
+def get_files_id(user):
+    db_sess = db_session.create_session()
+    user_files_id = db_sess.query(UserFiles.file_id).filter_by(user_id=user.id)
+    return map(lambda a: a[0], user_files_id)
 
 
 def remove_file(user, file_path):
     db_sess = db_session.create_session()
     file = db_sess.query(File).filter_by(path=file_path).first()
     db_sess.close()
-    if file.id not in user.get_files():
+    if file.id not in get_files_id(user):
         return
     try:
         os.remove(os.path.join(config.files_path, file.path))
     except FileNotFoundError:
         print(f'Файл {file.path} не существует')
-    user.remove_file(file.id)
+    user_file = db_sess.query(UserFiles).filter_by(user_id=user.id, file_id=file.id).first()
+    db_sess.delete(user_file)
     db_sess.delete(file)
     db_sess.commit()
 
@@ -228,7 +227,7 @@ def download_file(user, file_path):
     db_sess.close()
     if not file or not user:
         return
-    if not (file.is_open or user.is_authenticated and file.id in user.get_files() + user.get_given_files()):
+    if not (file.is_open or user.is_authenticated and file.id in get_files_id(user)):
         return
     full_file_path = os.path.join(config.shorts_files_path, file.path)
     return send_file(full_file_path, download_name=file.name, as_attachment=True)
@@ -238,7 +237,7 @@ def find_file(user, file_path):
     db_sess = db_session.create_session()
     file = db_sess.query(File).filter_by(path=file_path).first()
     db_sess.close()
-    if not file or not user or not (file.id in user.get_files() + user.get_given_files()):
+    if not file or not user or not (file.id in get_files_id(user)):
         return
     return file
 
@@ -253,10 +252,8 @@ def edit_file(file_path, form):
 
 
 def get_files_for(user):
-    if not user.files:
-        return []
     db_sess = db_session.create_session()
-    return db_sess.query(File).filter(File.id.in_(user.get_files())).all()
+    return db_sess.query(File).filter(File.id.in_(get_files_id(user))).all()
 
 
 def name_in_db(name: str):
