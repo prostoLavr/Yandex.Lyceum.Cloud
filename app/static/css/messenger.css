@@ -59,12 +59,12 @@ body {
 }
 
 .people-list .chat-list li:hover {
-    background: #efefef;
+    background-color: rgba(180, 180, 180, 0.2);
     cursor: pointer
 }
 
 .people-list .chat-list li.active {
-    background: #efefef
+    background-color: rgba(180, 180, 180, 0.2)
 }
 
 .people-list .chat-list li .name {
@@ -226,13 +226,13 @@ body {
 }
 
 .clearfix:after {
-    visibility: hidden;
     display: block;
     font-size: 0;
     content: " ";
     clear: both;
     height: 0
 }
+
 
 @media only screen and (max-width: 767px) {
     .chat-app .people-list {
