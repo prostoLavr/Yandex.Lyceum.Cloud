@@ -49,11 +49,11 @@
                         <input type="text" class="mb-2 my-input form-control" placeholder="Искать...">
                     </div>
                     {% if not users %}
-                            <h4>У тебя пока нет друзей (</h4>
+                            <h4>Ты пока что не добавил никого в друзья :(</h4>
                     {% else %}
-                        <ul class="list-unstyled chat-list mt-2 mb-0">
+                        <ul class="list-unstyled chat-list mt-2">
                             {% for user in users %}
-                                <li class="my-input clearfix" onclick="location.href='/messenger/{{ user.id }}';">
+                                <li class="my-input clearfix my-2" onclick="location.href='/messenger/{{ user.id }}';">
                                     <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar">
                                     <div class="about">
                                         <div class="name">{{user.name}}</div>
