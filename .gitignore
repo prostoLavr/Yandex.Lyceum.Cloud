@@ -5,3 +5,4 @@ __pycache__/
 /app/db/files
 ssl/
 venv/
+lavaland.service
