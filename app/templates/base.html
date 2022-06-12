@@ -1,10 +1,27 @@
 <!doctype html>
 <html lang="ru">
     <head>
+        <!-- Yandex.Metrika counter -->
+        <!--
+            <script type="text/javascript" >
+               (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+               m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+               (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+               ym(89140572, "init", {
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+               });
+            </script>
+            <noscript><div><img src="https://mc.yandex.ru/watch/89140572" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+        -->
+        <!-- /Yandex.Metrika counter -->
         <meta charset="UTF-8">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link rel='stylesheet' href="{{ url_for('static', filename='css/first.css') }}">
-
+        <script src="{{url_for('static', filename='js/confirm.js')}}" defer></script>
         <title>{% block title %}{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         {% block head %}{% endblock %}
@@ -41,10 +58,10 @@
               <div class="col-md-3 text-end">
                 {% if login %}
                   <a href="/account" type="button" class="btn me-2 my-outline-button">Аккаунт</a>
-                  <a href="/account/logout" type="button" class="btn my-pink-button">Выйти</a>
+                  <button onclick="confirm_click('/account/logout')" class="btn my-pink-button">Выйти</button>
                 {% else %}
                   <a href="/login{{'?page=' + active_page if active_page else ''}}" type="button" class="btn my-pink-button">Вход в аккаунт</a>
-                  <a href="/account/register{{'?page=' + active_page if active_page else ''}}" type="button" class="btn me-2 my-outline-button">Регистрация</a>
+                  <a href="/register{{'?page=' + active_page if active_page else ''}}" type="button" class="btn me-2 my-outline-button">Регистрация</a>
                 {% endif %}
               </div>
             </header>

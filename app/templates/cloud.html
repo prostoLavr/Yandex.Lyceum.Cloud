@@ -36,7 +36,7 @@
                 <div class="btn-group">
                   <a type="button" href="/cloud/download/{{ file.path }}" class="btn btn-sm my-pink-outline-button">Скачать</a>
                   <a type="button" href="/cloud/edit_file/{{ file.path }}" class="btn btn-sm my-outline-button">Подробнее</a>
-                  <a type="button" href="/cloud/remove/{{ file.path }}" class="btn btn-sm my-outline-button">Удалить</a>
+                  <button onclick="confirm_click('/cloud/remove/{{ file.path }}')" class="btn btn-sm my-outline-button">Удалить</button>
                 </div>
               </div>
             </div>

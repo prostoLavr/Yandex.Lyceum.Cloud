@@ -7,7 +7,7 @@
 <script src="{{url_for('static', filename='js/premium.js')}}" defer></script>
 {% endblock %}
 {% block body %}
-<div class="align-items-center container px-5 py-5">
+<div class="align-items-center container px-5 ">
   <h1 class="text-center m-5">Выбери свой тариф</h1>
   <form class="row my-card row-cols-1 row-cols-md-1 mb-3 text-center">
 
@@ -16,9 +16,9 @@
       <input id="num" class="my-input" type="number" min="5" max="100" step="1" value="20">
       <span id="my-span unselectable">ГБ</span>
     </div>
-    <div class="py-5 mb-2 text-center text-end">
-      <button class="btn btn-lg my-pink-button">Оформить подписку</button>
-      <a href="/get_premium" class="btn my-pink-outline-button btn-lg">Хочу больше места</a>
+    <div class="py-4 mb-2 text-center text-end">
+      <a href="/get_premium" class="btn btn-lg my-pink-button mt-2">Оформить подписку</a>
+      <a href="/get_premium" class="btn my-pink-outline-button btn-lg mt-2">Хочу больше 100 ГБ</a>
     </div>
   </form>
 </div>

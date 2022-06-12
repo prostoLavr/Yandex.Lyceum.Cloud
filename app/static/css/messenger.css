@@ -1,3 +1,5 @@
+.chat-input {
+width: 100%;
 }
 body {
     background-color: #f4f7f6;
@@ -5,18 +7,18 @@ body {
 }
 #my-sidebar {
     float:right;
-    width: 300px; /* Ширина колонки */
+    width: 300px;
 }
 .my-sidebar-part {
-    margin: 5px; /* Поля вокруг текста */
+    margin: 5px;
 }
 .friend {
-    width: 300px; /* Ширина колонки */
-    padding: 5px; /* Поля вокруг текста */
+    width: 300px;
+    padding: 5px;
 }
 .requests {
-    width: 300px; /* Ширина колонки */
-    padding: 5px; /* Поля вокруг текста */
+    width: 300px;
+    padding: 5px;
 }
 .card {
     background: #fff;
@@ -57,12 +59,12 @@ body {
 }
 
 .people-list .chat-list li:hover {
-    background: #efefef;
+    background-color: rgba(180, 180, 180, 0.2);
     cursor: pointer
 }
 
 .people-list .chat-list li.active {
-    background: #efefef
+    background-color: rgba(180, 180, 180, 0.2)
 }
 
 .people-list .chat-list li .name {
@@ -224,13 +226,13 @@ body {
 }
 
 .clearfix:after {
-    visibility: hidden;
     display: block;
     font-size: 0;
     content: " ";
     clear: both;
     height: 0
 }
+
 
 @media only screen and (max-width: 767px) {
     .chat-app .people-list {

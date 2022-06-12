@@ -2,9 +2,9 @@
     list-style: disc;
 }
 .my-clip {
-    white-space: nowrap; /* Запрещаем перенос строк */
-    overflow: hidden; /* Обрезаем все, что не помещается в область */
-    text-overflow: ellipsis; /* Добавляем многоточие */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .fixed-size {
     resize: none;
@@ -34,8 +34,10 @@ color: #B35CF7;
 	height: 1.5px;
 	background-color: #DD24EE;
 }
-
-.my-input:focus {
+.my-pink-link:active, my-pink-link:focus {
+    color: #DD24EE;
+}
+.my-input:focus, my-input:active, my-input:hover {
     color: #FFF;
     border: none;
     background: rgba(255, 255, 255, 0);
@@ -51,6 +53,9 @@ color: #B35CF7;
     -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0) inset;
     -webkit-text-fill-color: #FFF;
 }
+
+
+
 /* Только для пк: */
 @media only screen
 and (min-device-width : 1200px) {
@@ -61,6 +66,9 @@ and (min-device-width : 1200px) {
 .my-pink-link::before {
 	transition: width 0.30s;}
 }
+
+
+
 .my-pink-checkbox {
     accent-color: #7A1F9C;
 }

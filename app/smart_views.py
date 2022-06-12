@@ -52,7 +52,7 @@ def download(file_path):
     return res
 
 
-@wsgi_app.route('/account/register', methods=['POST', 'GET'])
+@wsgi_app.route('/register', methods=['POST', 'GET'])
 def register():
     active_page = request.args.get('page')
     if active_page is None:
@@ -92,7 +92,7 @@ def index():
 def login():
     active_page = request.args.get('page')
     if active_page is None:
-        active_page = '/cloud'
+        active_page = '/index'
     if current_user.is_authenticated:
         return redirect(active_page)
     if request.method == 'POST':
@@ -174,7 +174,7 @@ def account_edit():
             db_manager.edit_user(request.form)
         except IncorrectData as e:
             return my_render_template('edit_account.html', message=e,
-                                      user=current_user)
+                                      user=current_user, **request.form)
         except Exception:
             # TODO: behavior
             return redirect('/')
@@ -193,8 +193,6 @@ def edit_file(file_path):
     if current_user.is_anonymous:
         return redirect('/?page=/cloud')
     if request.method == 'POST':
-        print(f'{file_path=}')
-        print(f'{request.form=}')
         try:
             db_manager.edit_file(file_path, request.form)
         except Exception as e:
@@ -221,5 +219,6 @@ def light_theme():
 @wsgi_app.route('/premium', methods=["POST", "GET"])
 def premium():
     if request.method == "POST":
+        print('here')
         return redirect("/get_premium")
     return my_render_template('premium.html')
