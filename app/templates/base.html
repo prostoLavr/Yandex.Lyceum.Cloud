@@ -61,7 +61,7 @@
                   <button onclick="confirm_click('/account/logout')" class="btn my-pink-button">Выйти</button>
                 {% else %}
                   <a href="/login{{'?page=' + active_page if active_page else ''}}" type="button" class="btn my-pink-button">Вход в аккаунт</a>
-                  <a href="/account/register{{'?page=' + active_page if active_page else ''}}" type="button" class="btn me-2 my-outline-button">Регистрация</a>
+                  <a href="/register{{'?page=' + active_page if active_page else ''}}" type="button" class="btn me-2 my-outline-button">Регистрация</a>
                 {% endif %}
               </div>
             </header>
