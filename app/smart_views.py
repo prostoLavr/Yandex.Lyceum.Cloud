@@ -52,7 +52,7 @@ def download(file_path):
     return res
 
 
-@wsgi_app.route('/account/register', methods=['POST', 'GET'])
+@wsgi_app.route('/register', methods=['POST', 'GET'])
 def register():
     active_page = request.args.get('page')
     if active_page is None:
