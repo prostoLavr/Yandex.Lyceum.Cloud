@@ -79,7 +79,7 @@ def register():
                                   message='Что-то пошло не так. Повторите попытку позже.',
                                   active_page=active_page,
                                   **request.form)
-    return redirect('/cloud')
+    return redirect(active_page)
 
 
 @wsgi_app.route('/', methods=['POST', 'GET'])

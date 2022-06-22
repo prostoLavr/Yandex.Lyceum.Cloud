@@ -188,10 +188,7 @@ def save_file(request):
         path = uuid.uuid4().hex
 
     filename = normalize_filename(file.filename)
-
-    file.save(os.path.join(config.files_path, 'temp_' + path))
-    Compressor.compress('temp_' + path)
-    os.remove(os.path.join(config.files_path, 'temp_' + path))
+    file.save(os.path.join(config.files_path, path))
     file = File(name=filename, path=path, date=datetime.date.today())
     db_sess = db_session.create_session()
     db_sess.add(file)
@@ -215,8 +212,7 @@ def remove_file(user, file_path):
     if file.id not in get_files_id(user):
         return
     try:
-        Compressor.delete_file(file.path)
-        # os.remove(os.path.join(config.files_path, file.path))
+        os.remove(os.path.join(config.files_path, file.path))
     except FileNotFoundError:
         print(f'Файл {file.path} не существует')
     user_file = db_sess.query(UserFiles).filter_by(user_id=user.id, file_id=file.id).first()
@@ -233,8 +229,8 @@ def download_file(user, file_path):
         return
     if not (file.is_open or user.is_authenticated and file.id in get_files_id(user)):
         return
-    # full_file_path = os.path.join(config.shorts_files_path, file.path)
-    return send_file(Compressor.get_file(file.path), download_name=file.name, as_attachment=True)
+    full_file_path = os.path.join(config.shorts_files_path, file.path)
+    return send_file(full_file_path, as_attachment=True)
 
 
 def find_file(user, file_path):
